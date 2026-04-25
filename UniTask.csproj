@@ -75,8 +75,8 @@
     <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\UniTask.WhenAll.cs" />
     <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\UniTask.Bridge.cs" />
     <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\_InternalVisibleTo.cs" />
-    <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\UniTask.WhenEach.cs" />
     <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\Internal\WeakDictionary.cs" />
+    <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\UniTask.WhenEach.cs" />
     <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\MoveNextSource.cs" />
     <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\UnityAsyncExtensions.AsyncInstantiate.cs" />
     <Compile Include="Assets\唐老师框架升级版\依赖的插件\Unitask\Runtime\Internal\ValueStopwatch.cs" />
@@ -497,8 +497,20 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.1\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="DOTweenEditor">
+      <HintPath>Assets\唐老师框架升级版\依赖的插件\DOTween\Editor\DOTweenEditor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections@1.2.4\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Excel">
+      <HintPath>Assets\唐老师框架升级版\依赖的插件\ExcelDll\Excel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Assets\唐老师框架升级版\依赖的插件\ExcelDll\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
@@ -525,28 +537,16 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.1\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.TextureAssets">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.1\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DOTweenEditor">
-      <HintPath>Assets\唐老师框架升级版\依赖的插件\DOTween\Editor\DOTweenEditor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="DOTween">
       <HintPath>Assets\唐老师框架升级版\依赖的插件\DOTween\DOTween.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Excel">
-      <HintPath>Assets\唐老师框架升级版\依赖的插件\ExcelDll\Excel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>Assets\唐老师框架升级版\依赖的插件\ExcelDll\ICSharpCode.SharpZipLib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.2\Runtime\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.TextureAssets">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.1\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
