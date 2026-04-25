@@ -1,0 +1,9 @@
+{
+    "excelPath": "D:/Unity_Project/IKUN_Game/Assets/资源统一放置点/Excel导表管理/Excel表",
+    "dataClassPath": "D:/Unity_Project/IKUN_Game/Assets/资源统一放置点/Excel导表管理/数据类",
+    "dataContainerPath": "D:/Unity_Project/IKUN_Game/Assets/资源统一放置点/Excel导表管理/容器类",
+    "binaryOutputPath": "D:/球球大作战根目录/球球大作战客户端/Assets/资源统一放置点/Excel导出二进制",
+    "jsonOutputPath": "D:/Unity_Project/IKUN_Game/Assets/资源统一放置点/Excel导表管理/json数据",
+    "editorResRootPath": "Assets/资源统一放置点",
+    "abResourceConfigPath": "Assets/资源统一放置点/AB包配置文件/ABResourceConfig.json"
+}
