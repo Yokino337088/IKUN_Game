@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 3770760220
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 41100be9861661097ae5639d649e332f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 41100be9861661097ae5639d649e332f
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- "Assets/\u827A\u672F\u8D44\u4EA7/\u539F\u7248/\u53EA\u56E0\u4F60\u592A\u7F8E\uFF08\u9E21\u4F60\u592A\u7F8E\uFF09\u539F\u7248/jntm.WAV"
+- "Assets/\u827A\u672F\u8D44\u4EA7/\u539F\u7248/\u53EA\u56E0\u4F60\u592A\u7F8E\uFF08\u9E21\u4F60\u592A\u7F8E\uFF09\u539F\u7248/ji.WAV"
+- "Assets/\u827A\u672F\u8D44\u4EA7/\u539F\u7248/\u53EA\u56E0\u4F60\u592A\u7F8E\uFF08\u9E21\u4F60\u592A\u7F8E\uFF09\u539F\u7248/mei.WAV"
+- "Assets/\u827A\u672F\u8D44\u4EA7/\u539F\u7248/\u53EA\u56E0\u4F60\u592A\u7F8E\uFF08\u9E21\u4F60\u592A\u7F8E\uFF09\u539F\u7248/punch.WAV"
+- "Assets/\u827A\u672F\u8D44\u4EA7/\u539F\u7248/\u53EA\u56E0\u4F60\u592A\u7F8E\uFF08\u9E21\u4F60\u592A\u7F8E\uFF09\u539F\u7248/ni.WAV"
+- "Assets/\u827A\u672F\u8D44\u4EA7/\u539F\u7248/\u53EA\u56E0\u4F60\u592A\u7F8E\uFF08\u9E21\u4F60\u592A\u7F8E\uFF09\u539F\u7248/tai.WAV"
+Dependencies: []

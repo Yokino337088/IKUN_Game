@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 3518229240
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 70f6fa8b69d6857d1d2b1cd9823a5f4a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 70f6fa8b69d6857d1d2b1cd9823a5f4a
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/baby.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u5170\u4EAD\u5E8F.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u98DE\u673A\u573A.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u7EA2\u989C\u5982\u971C.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u4EBA\u9E21\u4E4B\u6B4C.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u77ED\u88D9\u9E21.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u738B\u5983.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u84B8\u6C7D\u9E21.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u8D8A\u5357\u795E\u66F2.mp3"
+Dependencies: []

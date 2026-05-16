@@ -1,0 +1,99 @@
+{
+    "resources": [
+        {
+            "ResourceName": "迷宫玩家",
+            "ResourcePath": "Assets/资源统一放置点/游戏物体/第四章物体/迷宫玩家.prefab",
+            "ABPackageName": "chapter_four"
+        },
+        {
+            "ResourceName": "迷宫篮球",
+            "ResourcePath": "Assets/资源统一放置点/游戏物体/第四章物体/迷宫篮球.prefab",
+            "ABPackageName": "chapter_four"
+        },
+        {
+            "ResourceName": "站酷酷黑体",
+            "ResourcePath": "Assets/资源统一放置点/TMP字体/站酷酷黑体.ttf",
+            "ABPackageName": "font"
+        },
+        {
+            "ResourceName": "TextMeshPro/Distance Field",
+            "ResourcePath": "Assets/TextMesh Pro/Shaders/TMP_SDF.shader",
+            "ABPackageName": "font"
+        },
+        {
+            "ResourceName": "站酷酷黑体 SDF",
+            "ResourcePath": "Assets/资源统一放置点/TMP字体/站酷酷黑体 SDF.asset",
+            "ABPackageName": "font"
+        },
+        {
+            "ResourceName": "T_BulletComments",
+            "ResourcePath": "Assets/资源统一放置点/Excel导表管理/json数据/T_BulletComments.json",
+            "ABPackageName": "json"
+        },
+        {
+            "ResourceName": "短裙鸡",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/短裙鸡.mp3",
+            "ABPackageName": "music_begin"
+        },
+        {
+            "ResourceName": "飞机场",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/飞机场.mp3",
+            "ABPackageName": "music_begin"
+        },
+        {
+            "ResourceName": "蒸汽鸡",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/蒸汽鸡.mp3",
+            "ABPackageName": "music_begin"
+        },
+        {
+            "ResourceName": "王妃",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/王妃.mp3",
+            "ABPackageName": "music_begin"
+        },
+        {
+            "ResourceName": "因为你",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/第四章/因为你.mp3",
+            "ABPackageName": "music_four"
+        },
+        {
+            "ResourceName": "打字机",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/打字机.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "BeginPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/BeginPanel.prefab",
+            "ABPackageName": "ui_panel_begin"
+        },
+        {
+            "ResourceName": "AboutPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/AboutPanel.prefab",
+            "ABPackageName": "ui_panel_begin"
+        },
+        {
+            "ResourceName": "MazeTipsPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/MazeTipsPanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "MazePCPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/MazePCPanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "MazePhonePanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/MazePhonePanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "StoryPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/StoryPanel.prefab",
+            "ABPackageName": "ui_panel_load"
+        },
+        {
+            "ResourceName": "LodingPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/LodingPanel.prefab",
+            "ABPackageName": "ui_panel_load"
+        }
+    ]
+}

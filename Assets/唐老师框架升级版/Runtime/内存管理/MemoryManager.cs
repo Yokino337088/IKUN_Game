@@ -4,7 +4,7 @@ using System.Threading;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
-namespace TangFramework
+namespace TangmenFramework
 {
     /// <summary>
     /// 内存管理器，用于临时存储数据类并在使用完毕后释放内存

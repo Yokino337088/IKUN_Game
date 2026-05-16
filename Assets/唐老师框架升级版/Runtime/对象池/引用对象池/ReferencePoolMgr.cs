@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace TangmenFramework
+{
 /// <summary>
 /// 引用对象池管理器
 /// 负责管理所有引用类型对象的缓存和复用
@@ -471,4 +473,5 @@ public abstract class ReferencePoolObjectBase : IReferencePoolObject
     {
         // 默认实现，子类可以重写
     }
+}
 }

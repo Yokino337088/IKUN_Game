@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace TangmenFramework
+{
 /// <summary>
 /// 输入配置类
 /// 管理输入绑定的配置
@@ -195,4 +197,5 @@ public class InputConfig
     }
 
     #endregion
+}
 }

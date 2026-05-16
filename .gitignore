@@ -59,3 +59,9 @@ Thumbs.db
 # Packages/
 # *.meta
 # ======================================
+# Backup/dst directories
+/.git_dst/
+/Assets_dst/
+/ProjectSettings_dst/
+/.gitattributes_dst
+/ignore.conf

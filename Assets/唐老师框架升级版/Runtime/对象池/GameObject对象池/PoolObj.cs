@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 该脚本主要用于挂载到需要使用缓存池功能的预设体对象上
-/// </summary>
-public class PoolObj : MonoBehaviour
+namespace TangmenFramework
 {
-    public int maxNum;
+    /// <summary>
+    /// 瀵硅薄姹犲璞＄被
+    /// </summary>
+    public class PoolObj : MonoBehaviour
+    {
+        public int maxNum;
+    }
 }

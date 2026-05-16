@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
-using TangFramework;
 
-namespace TangFramework.Examples
+
+namespace TangmenFramework
 {
     /// <summary>
     /// 内存管理示例

@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 2430868508
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 262a8d403f159b03d47ed7e7861e88c8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 262a8d403f159b03d47ed7e7861e88c8
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u80CC\u666F\u97F3\u4E50/\u5F00\u59CB\u573A\u666F/\u98DE\u673A\u573A.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u80CC\u666F\u97F3\u4E50/\u5F00\u59CB\u573A\u666F/\u77ED\u88D9\u9E21.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u80CC\u666F\u97F3\u4E50/\u5F00\u59CB\u573A\u666F/\u738B\u5983.mp3"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/\u97F3\u9891\u8D44\u6E90/\u80CC\u666F\u97F3\u4E50/\u5F00\u59CB\u573A\u666F/\u84B8\u6C7D\u9E21.mp3"
+Dependencies: []

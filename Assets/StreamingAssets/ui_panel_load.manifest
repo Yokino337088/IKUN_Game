@@ -1,0 +1,60 @@
+ManifestFileVersion: 0
+CRC: 3928647407
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d275f18b3ef14b488d28da4fdcf375c1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f80746785788c24eb8f12b4f21b04de0
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: d275f18b3ef14b488d28da4fdcf375c1
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 947cd6bbbd0f18344823bcdb53ed5e36, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6e653f90c39996640a2652b6fb184a7a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6dca9bf8ab0272342ba031458d5d77c0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 97bf1a63470e27f4ab546615f0beec3e, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: StoryDialogueEntry
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.FontData
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+Assets:
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/UI/UI\u9762\u677F/StoryPanel.prefab"
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/UI/UI\u9762\u677F/LodingPanel.prefab"
+Dependencies:
+- D:/Unity_Project/IKUN_Game/PC/font

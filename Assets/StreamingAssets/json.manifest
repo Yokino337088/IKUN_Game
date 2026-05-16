@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 1556449267
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5f84719b1a4dcbe0f999bb37f37b5061
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 5f84719b1a4dcbe0f999bb37f37b5061
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- "Assets/\u8D44\u6E90\u7EDF\u4E00\u653E\u7F6E\u70B9/Excel\u5BFC\u8868\u7BA1\u7406/json\u6570\u636E/T_BulletComments.json"
+Dependencies: []
