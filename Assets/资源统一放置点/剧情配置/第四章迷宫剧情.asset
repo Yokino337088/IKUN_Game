@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97bf1a63470e27f4ab546615f0beec3e, type: 3}
+  m_Name: "\u7B2C\u56DB\u7AE0\u8FF7\u5BAB\u5267\u60C5"
+  m_EditorClassIdentifier: 
+  chapterId: 4
+  moduleId: 1
+  moduleName: "\u7B2C\u56DB\u7AE0\u8FF7\u5BAB\u5267\u60C5"
+  dialogues:
+  - speakerName: "\u8521\u5F90\u5764"
+    content: "\u539F\u6765,\u4E00\u5207\u90FD\u5DF2\u7ECF\u7ED3\u675F\u4E86\u5417"
+    autoAdvanceTime: 0
+  - speakerName: "\u8521\u5F90\u5764"
+    content: "\u90A3\u4E2A\u5C5E\u4E8EIKUN\u7684\u65F6\u4EE3\u5F7B\u5E95\u7ED3\u675F\u4E86"
+    autoAdvanceTime: 0
+  - speakerName: "\u8521\u5F90\u5764"
+    content: "\u4E0D\uFF0C\u8FD9\u662F\u54EA\u91CC\uFF01"
+    autoAdvanceTime: 0
+  - speakerName: "\u8521\u5F90\u5764"
+    content: "\u5443\u554A\uFF0C\u96BE\u9053\u662F\u6211\u88AB\u9053\u8389\u88AD\u51FB\u4E86\u5417"
+    autoAdvanceTime: 0
+  - speakerName: "\u8521\u5F90\u5764"
+    content: "\u6211\u9700\u8981\u5728\u8FD9\u4E2A\u8FF7\u5BAB\u91CC\u9762\u627E\u5230\u9057\u5931\u76844\u4E2A\u7BEE\u7403\u788E\u7247\uFF0C\u627E\u56DE\u6211\u66FE\u7ECF\u7684\u4FE1\u4EF0"
+    autoAdvanceTime: 0
+  - speakerName: "\u8521\u5F90\u5764"
+    content: "\u96C6\u9F50\u6240\u6709\u7684\u7BEE\u7403\u788E\u7247\u540E\u6211\u8981\u524D\u5F80\u7EC8\u70B9\u51FB\u8D25\u9053\u8389"
+    autoAdvanceTime: 0
+  - speakerName: "\u8521\u5F90\u5764"
+    content: "\u64CD\u4F5C\u63D0\u793A:\u7535\u8111\u7AEF\u73A9\u5BB6WASD\u79FB\u52A8\uFF0C\u70B9\u51FB\u5C4F\u5E55\u4E0A\u7684\u201C\u8DEF\u5F84\u63D0\u793A\u201D\u6309\u94AE\u5373\u53EF\u83B7\u5F97\u6307\u5F15(\u5B89\u5353\u7AEF\u73A9\u5BB6\u8BF7\u5FFD\u7565)"
+    autoAdvanceTime: 0
