@@ -1,90 +1,90 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TangmenFramework;
 
 /// <summary>
-/// »ùÓÚDFS(Éî¶ÈÓÅÏÈËÑË÷)Ëã·¨µÄÔËĞĞÊ±ÃÔ¹¬Éú³ÉÆ÷
-/// ¹¦ÄÜ£º×Ô¶¯Éú³ÉÁ¬Í¨ÃÔ¹¬¡¢¿É¿ØÖÆ±ßÔµ°üÎ§Ç½¡¢¿É¿ØÖÆÃÔ¹¬¸´ÔÓ¶È¡¢×Ô¶¯ÉèÖÃÆğµãÖÕµã
-/// ¹æÔò£º0=¿ÉĞĞ×ßµØÃæ  1=²»¿ÉĞĞ×ßÇ½Ìå
+/// åŸºäºDFS(æ·±åº¦ä¼˜å…ˆæœç´¢)ç®—æ³•çš„è¿è¡Œæ—¶è¿·å®«ç”Ÿæˆå™¨
+/// åŠŸèƒ½ï¼šè‡ªåŠ¨ç”Ÿæˆè¿é€šè¿·å®«ã€å¯æ§åˆ¶è¾¹ç¼˜åŒ…å›´å¢™ã€å¯æ§åˆ¶è¿·å®«å¤æ‚åº¦ã€è‡ªåŠ¨è®¾ç½®èµ·ç‚¹ç»ˆç‚¹
+/// è§„åˆ™ï¼š0=å¯è¡Œèµ°åœ°é¢  1=ä¸å¯è¡Œèµ°å¢™ä½“
 /// </summary>
 public class MazeGenerator_DFS : MonoBehaviour
 {
-    [Header("========== »ù´¡µØÍ¼ÉèÖÃ ==========")]
-    [Tooltip("µØÍ¼×Ü¿í¶È£¬ÍÆ¼öÊ¹ÓÃÆæÊı£¬ÃÔ¹¬Éú³É¸ü¹æÕû")]
+    [Header("========== åŸºç¡€åœ°å›¾è®¾ç½® ==========")]
+    [Tooltip("åœ°å›¾æ€»å®½åº¦ï¼Œæ¨èä½¿ç”¨å¥‡æ•°ï¼Œè¿·å®«ç”Ÿæˆæ›´è§„æ•´")]
     public int mapWidth = 21;
 
-    [Tooltip("µØÍ¼×Ü¸ß¶È£¬ÍÆ¼öÊ¹ÓÃÆæÊı£¬ÃÔ¹¬Éú³É¸ü¹æÕû")]
+    [Tooltip("åœ°å›¾æ€»é«˜åº¦ï¼Œæ¨èä½¿ç”¨å¥‡æ•°ï¼Œè¿·å®«ç”Ÿæˆæ›´è§„æ•´")]
     public int mapHeight = 11;
 
-    [Header("========== ±ßÔµ°üÎ§Ç½ÉèÖÃ ==========")]
-    [Tooltip("µØÍ¼×îÍâ²ãÉú³É¼¸²ãÇ½Ìå£¬ÓÃÓÚ°üÎ§Õû¸öÃÔ¹¬")]
+    [Header("========== è¾¹ç¼˜åŒ…å›´å¢™è®¾ç½® ==========")]
+    [Tooltip("åœ°å›¾æœ€å¤–å±‚ç”Ÿæˆå‡ å±‚å¢™ä½“ï¼Œç”¨äºåŒ…å›´æ•´ä¸ªè¿·å®«")]
     public int borderWallLayerCount = 2;
 
-    [Header("========== ÃÔ¹¬ÄÑ¶ÈÉèÖÃ ==========")]
-    [Tooltip("ÃÔ¹¬¸´ÔÓ¶È/Â·¾¶ÇúÕÛ¶È£º0=×î¼òµ¥£¨Ö±½ÓÒ»ÌõÂ·£©£¬1=×î¸´ÔÓ£¨´óÁ¿·ÖÖ§ºÍËÀÂ·£©")]
+    [Header("========== è¿·å®«éš¾åº¦è®¾ç½® ==========")]
+    [Tooltip("è¿·å®«å¤æ‚åº¦/è·¯å¾„æ›²æŠ˜åº¦ï¼š0=æœ€ç®€å•ï¼ˆç›´æ¥ä¸€æ¡è·¯ï¼‰ï¼Œ1=æœ€å¤æ‚ï¼ˆå¤§é‡åˆ†æ”¯å’Œæ­»è·¯ï¼‰")]
     [Range(0, 1)] 
     public float mazeComplexity = 0.5f;
 
-    [Header("========== ÍßÆ¬×ÊÔ´ÉèÖÃ£¨Ö±½ÓÍÏSprite£© ==========")]
-    [Tooltip("Ö±½ÓÍÏÈëµØÃæÍ¼Æ¬£¨Sprite£©¼´¿É£¬²»ÓÃ´´½¨Tile")]
-    public Sprite groundSprite;   // ¸Ä³É Sprite
+    [Header("========== ç“¦ç‰‡èµ„æºè®¾ç½®ï¼ˆç›´æ¥æ‹–Spriteï¼‰ ==========")]
+    [Tooltip("ç›´æ¥æ‹–å…¥åœ°é¢å›¾ç‰‡ï¼ˆSpriteï¼‰å³å¯ï¼Œä¸ç”¨åˆ›å»ºTile")]
+    public Sprite groundSprite;   // æ”¹æˆ Sprite
 
-    [Tooltip("Ö±½ÓÍÏÈëÇ½ÌåÍ¼Æ¬£¨Sprite£©¼´¿É£¬²»ÓÃ´´½¨Tile")]
-    public Sprite wallSprite;     // ¸Ä³É Sprite
+    [Tooltip("ç›´æ¥æ‹–å…¥å¢™ä½“å›¾ç‰‡ï¼ˆSpriteï¼‰å³å¯ï¼Œä¸ç”¨åˆ›å»ºTile")]
+    public Sprite wallSprite;     // æ”¹æˆ Sprite
 
-    [Header("ÖÕµã¶ÔÓ¦µÄÔ¤ÖÆÌå")]
+    [Header("ç»ˆç‚¹å¯¹åº”çš„é¢„åˆ¶ä½“")]
     public GameObject endObj;
 
-    [Header("========== ×Ô¶¯Éú³ÉµÄÆğµãÖÕµã ==========")]
-    [Tooltip("ÃÔ¹¬Æğµã×ø±ê£¨ÔËĞĞÊ±×Ô¶¯¸³Öµ£©")]
+    [Header("========== è‡ªåŠ¨ç”Ÿæˆçš„èµ·ç‚¹ç»ˆç‚¹ ==========")]
+    [Tooltip("è¿·å®«èµ·ç‚¹åæ ‡ï¼ˆè¿è¡Œæ—¶è‡ªåŠ¨èµ‹å€¼ï¼‰")]
     public Vector2Int startPosition;
 
-    [Tooltip("ÃÔ¹¬ÖÕµã×ø±ê£¨ÔËĞĞÊ±×Ô¶¯¸³Öµ£©")]
+    [Tooltip("è¿·å®«ç»ˆç‚¹åæ ‡ï¼ˆè¿è¡Œæ—¶è‡ªåŠ¨èµ‹å€¼ï¼‰")]
     public Vector2Int endPosition;
 
-    // ====================== Ë½ÓĞ±äÁ¿ ======================
+    // ====================== ç§æœ‰å˜é‡ ======================
     private Tilemap currentTilemap;
 
-    // ÃÔ¹¬Êı¾İ¶şÎ¬Êı×é£º´æ´¢Õû¸öµØÍ¼µÄÇ½/µØÃæĞÅÏ¢
+    // è¿·å®«æ•°æ®äºŒç»´æ•°ç»„ï¼šå­˜å‚¨æ•´ä¸ªåœ°å›¾çš„å¢™/åœ°é¢ä¿¡æ¯
     private int[,] mazeDataGrid;
 
-    // Êµ¼ÊÊ¹ÓÃµÄµØÍ¼¿í¸ß
+    // å®é™…ä½¿ç”¨çš„åœ°å›¾å®½é«˜
     private int actualMapWidth;
     private int actualMapHeight;
 
-    // ÄÚ²¿¶¯Ì¬´´½¨µÄTile£¨ÎŞĞèÊÖ¶¯´´½¨£©
+    // å†…éƒ¨åŠ¨æ€åˆ›å»ºçš„Tileï¼ˆæ— éœ€æ‰‹åŠ¨åˆ›å»ºï¼‰
     private Tile groundTile;
     private Tile wallTile;
     private Tile endTile;
 
-    // ÉÏÒ»´ÎÑ°Â·Â·¾¶µÄÔ­Ê¼ÍßÆ¬¼ÇÂ¼£¬ÓÃÓÚĞÂÑ°Â·Ç°»Ö¸´
+    // ä¸Šä¸€æ¬¡å¯»è·¯è·¯å¾„çš„åŸå§‹ç“¦ç‰‡è®°å½•ï¼Œç”¨äºæ–°å¯»è·¯å‰æ¢å¤
     private Dictionary<Vector3Int, TileBase> lastPathOriginalTiles;
 
-    [Header("Éú³ÉµÄÀºÇò¸öÊı")]
+    [Header("ç”Ÿæˆçš„ç¯®çƒä¸ªæ•°")]
     public int ballCount = 4;
 
 
 
     /// <summary>
-    /// ÓÎÏ·Æô¶¯Ê±×Ô¶¯Ö´ĞĞ
+    /// æ¸¸æˆå¯åŠ¨æ—¶è‡ªåŠ¨æ‰§è¡Œ
     /// </summary>
     private void Start()
     {
-        // »ñÈ¡µ±Ç°ÎïÌåÉÏµÄTilemap×é¼ş
+        // è·å–å½“å‰ç‰©ä½“ä¸Šçš„Tilemapç»„ä»¶
         currentTilemap = GetComponent<Tilemap>();
 
-        // ¸ù¾İSprite¶¯Ì¬Éú³ÉTile
+        // æ ¹æ®SpriteåŠ¨æ€ç”ŸæˆTile
         CreateTilesFromSprites();
 
-        // µ÷ÓÃÔËĞĞÊ±ÃÔ¹¬Éú³É·½·¨
+        // è°ƒç”¨è¿è¡Œæ—¶è¿·å®«ç”Ÿæˆæ–¹æ³•
         GenerateMazeAtRuntime();
 
-        //³õÊ¼»¯AĞÇÑ°Â·µÄµØÍ¼
+        //åˆå§‹åŒ–Aæ˜Ÿå¯»è·¯çš„åœ°å›¾
         AStarMgr.Instance.InitMapInfo(mazeDataGrid);
 
-        //×¢²áÊÂ¼ş
+        //æ³¨å†Œäº‹ä»¶
         RegisterEvent();
     }
 
@@ -95,18 +95,18 @@ public class MazeGenerator_DFS : MonoBehaviour
 
     private void OnDestroy()
     {
-        //×¢ÏúÊÂ¼ş
+        //æ³¨é”€äº‹ä»¶
         LogOutEvent();
     }
 
-    //×¢²áÊÂ¼ş
+    //æ³¨å†Œäº‹ä»¶
     private void RegisterEvent()
     {
         EventCenter.Instance.AddEventListener<Vector2, Vector2>(MyEventTypeString.PlayerFindPathEvent, AstarFindPathWrapper);
         EventCenter.Instance.AddEventListener(MyEventTypeString.MazeTask2InitEvent, SetDestinationTile);
     }
 
-    //×¢ÏúÊÂ¼ş
+    //æ³¨é”€äº‹ä»¶
     private void LogOutEvent()
     {
         EventCenter.Instance.RemoveEventListener<Vector2, Vector2>(MyEventTypeString.PlayerFindPathEvent, AstarFindPathWrapper);
@@ -114,21 +114,21 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// Ìá¹©¸øÍæ¼ÒÓÃÓÚÑ°Â·µÄ·½·¨£¬Í¨¹ıÊÂ¼ş´¥·¢,ÕâÀïÒªÌØ±ğ×¢Òâ£¬UniTaskVoid²¢²»ÄÜ×ª»»ÎªC#system¿âÖĞµÄActionÎ¯ÍĞ
-    /// ËùÒÔ±ØĞëÒª°ü¹üÒ»²ã
+    /// æä¾›ç»™ç©å®¶ç”¨äºå¯»è·¯çš„æ–¹æ³•ï¼Œé€šè¿‡äº‹ä»¶è§¦å‘,è¿™é‡Œè¦ç‰¹åˆ«æ³¨æ„ï¼ŒUniTaskVoidå¹¶ä¸èƒ½è½¬æ¢ä¸ºC#systemåº“ä¸­çš„Actionå§”æ‰˜
+    /// æ‰€ä»¥å¿…é¡»è¦åŒ…è£¹ä¸€å±‚
     /// </summary>
     /// <param name="startPos"></param>
     /// <param name="endPos"></param>
     /// <returns></returns>
     private async UniTaskVoid AstarFindPath(Vector2 startPos,Vector2 endPos)
     {
-        // Èç¹ûÉÏÒ»´ÎÑ°Â·»¹ÓĞÃ»Çå³ıµÄÂ·¾¶£¬ÏÈ»Ö¸´Ô­Ê¼ÍßÆ¬
+        // å¦‚æœä¸Šä¸€æ¬¡å¯»è·¯è¿˜æœ‰æ²¡æ¸…é™¤çš„è·¯å¾„ï¼Œå…ˆæ¢å¤åŸå§‹ç“¦ç‰‡
         if (lastPathOriginalTiles != null && lastPathOriginalTiles.Count > 0)
         {
-            //±éÀú
+            //éå†
             foreach (var kvp in lastPathOriginalTiles)
             {
-                //¸´Ô­ÍßÆ¬
+                //å¤åŸç“¦ç‰‡
                 Vector3Int tilePosition = kvp.Key;
                 TileBase originalTile = kvp.Value;
                 if (originalTile != null)
@@ -139,79 +139,51 @@ public class MazeGenerator_DFS : MonoBehaviour
                 {
                     currentTilemap.SetTile(tilePosition, null);
                 }
-                //µÈÒ»Ö¡·ÀÖ¹Ö÷Ïß³Ì¿¨¶Ù
+                //ç­‰ä¸€å¸§é˜²æ­¢ä¸»çº¿ç¨‹å¡é¡¿
                 await UniTask.DelayFrame(1);
             }
             lastPathOriginalTiles = null;
         }
 
         List<AStarNode> path = await AStarMgr.Instance.FindPathAsync(startPos, endPos, false);
-        // ¼ì²éÊÇ·ñÕÒµ½Â·¾¶
+        // æ£€æŸ¥æ˜¯å¦æ‰¾åˆ°è·¯å¾„
         if (path == null || path.Count == 0)
         {
-            LogSystem.Warning("Î´ÕÒµ½´ÓÆğµãµ½ÖÕµãµÄÂ·¾¶£¡");
+            LogSystem.Warning("æœªæ‰¾åˆ°ä»èµ·ç‚¹åˆ°ç»ˆç‚¹çš„è·¯å¾„ï¼");
             return;
         }
 
-        LogSystem.Info($"ÕÒµ½Â·¾¶£¬Â·¾¶³¤¶È£º{path.Count}¸ö½Úµã");
+        LogSystem.Info($"æ‰¾åˆ°è·¯å¾„ï¼Œè·¯å¾„é•¿åº¦ï¼š{path.Count}ä¸ªèŠ‚ç‚¹");
         
-        // ´´½¨ÂÌÉ«ÍßÆ¬ÓÃÓÚÏÔÊ¾Â·¾¶
+        // åˆ›å»ºç»¿è‰²ç“¦ç‰‡ç”¨äºæ˜¾ç¤ºè·¯å¾„
         Tile pathTile = CreateColoredTile(groundSprite, Color.green);
         
-        // ±£´æÂ·¾¶ÉÏÃ¿¸öÎ»ÖÃµÄÔ­Ê¼ÍßÆ¬£¬ÓÃÓÚÖ®ºó»Ö¸´
+        // ä¿å­˜è·¯å¾„ä¸Šæ¯ä¸ªä½ç½®çš„åŸå§‹ç“¦ç‰‡ï¼Œç”¨äºä¹‹åæ¢å¤
         Dictionary<Vector3Int, TileBase> originalTiles = new Dictionary<Vector3Int, TileBase>();
 
-        // ±éÀúÂ·¾¶ÉÏµÄËùÓĞ½Úµã£¬Ã¿¸ô25ºÁÃë½«Ò»¸öÂ·¾¶µãÉèÖÃÎªÂÌÉ«
+        // éå†è·¯å¾„ä¸Šçš„æ‰€æœ‰èŠ‚ç‚¹ï¼Œæ¯éš”25æ¯«ç§’å°†ä¸€ä¸ªè·¯å¾„ç‚¹è®¾ç½®ä¸ºç»¿è‰²
         foreach (AStarNode node in path)
         {
             Vector3Int tilePosition = new Vector3Int(node.x, node.y, 0);
 
-            // ±£´æÔ­Ê¼ÍßÆ¬
+            // ä¿å­˜åŸå§‹ç“¦ç‰‡
             originalTiles[tilePosition] = currentTilemap.GetTile(tilePosition);
             
-            // ÉèÖÃÎªÂÌÉ«Â·¾¶ÍßÆ¬
+            // è®¾ç½®ä¸ºç»¿è‰²è·¯å¾„ç“¦ç‰‡
             currentTilemap.SetTile(tilePosition, pathTile);
 
-            // µÈ´ı25ºÁÃë
+            // ç­‰å¾…25æ¯«ç§’
             await UniTask.Delay(25);
         }
 
-        // ½«µ±Ç°Â·¾¶µÄÔ­Ê¼ÍßÆ¬¼ÇÂ¼´æµ½Àà×Ö¶Î£¬¹©ÏÂ´ÎÑ°Â·Ê±»Ö¸´
+        // å°†å½“å‰è·¯å¾„çš„åŸå§‹ç“¦ç‰‡è®°å½•å­˜åˆ°ç±»å­—æ®µï¼Œä¾›ä¸‹æ¬¡å¯»è·¯æ—¶æ¢å¤
         lastPathOriginalTiles = originalTiles;
         
-        // Â·¾¶ÏÔÊ¾Íê³É£¬µÈ´ı10Ãë
-        //await UniTask.Delay(10000);
         
-        //LogSystem.Info("¿ªÊ¼Çå³ıÂ·¾¶£¬»Ö¸´Ô­Ê¼ÍßÆ¬...");
-        
-        //// Çå³ıÂ·¾¶£¬»Ö¸´Ô­Ê¼ÍßÆ¬
-        //foreach (var kvp in lastPathOriginalTiles)
-        //{
-        //    Vector3Int tilePosition = kvp.Key;
-        //    TileBase originalTile = kvp.Value;
-            
-        //    if (originalTile != null)
-        //    {
-        //        // »Ö¸´Ô­Ê¼ÍßÆ¬
-        //        currentTilemap.SetTile(tilePosition, originalTile);
-        //    }
-        //    else
-        //    {
-        //        // Èç¹ûÔ­À´Ã»ÓĞÍßÆ¬£¬¾ÍÒÆ³ı
-        //        currentTilemap.SetTile(tilePosition, null);
-        //    }
-        //    //·ÀÖ¹Ö÷Ïß³Ì¿¨¶Ù£¬ÒªµÈÒ»Ö¡
-        //    await UniTask.DelayFrame(1);
-        //}
-        
-        //// Çå³ıÍê±Ï£¬Çå¿Õ¼ÇÂ¼
-        //lastPathOriginalTiles.Clear();
-        //lastPathOriginalTiles = null;
-        //LogSystem.Info("Â·¾¶Çå³ıÍê³É£¡");
     }
 
     /// <summary>
-    /// ÊÂ¼şÏµÍ³µÄ°ü×°·½·¨£¬ÓÃÓÚÊÊÅä Action<T1, T2> Î¯ÍĞ
+    /// äº‹ä»¶ç³»ç»Ÿçš„åŒ…è£…æ–¹æ³•ï¼Œç”¨äºé€‚é… Action<T1, T2> å§”æ‰˜
     /// </summary>
     private void AstarFindPathWrapper(Vector2 startPos, Vector2 endPos)
     {
@@ -219,16 +191,16 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸ù¾İÓÃ»§ÍÏÈëµÄSprite£¬×Ô¶¯´´½¨Tile
-    /// ²»ÓÃÊÖ¶¯´´½¨Tile×ÊÔ´£¬½Å±¾×Ô¶¯´¦Àí
+    /// æ ¹æ®ç”¨æˆ·æ‹–å…¥çš„Spriteï¼Œè‡ªåŠ¨åˆ›å»ºTile
+    /// ä¸ç”¨æ‰‹åŠ¨åˆ›å»ºTileèµ„æºï¼Œè„šæœ¬è‡ªåŠ¨å¤„ç†
     /// </summary>
     private void CreateTilesFromSprites()
     {
-        // ´´½¨µØÃæTile
+        // åˆ›å»ºåœ°é¢Tile
         groundTile = ScriptableObject.CreateInstance<Tile>();
         groundTile.sprite = groundSprite;
 
-        // ´´½¨Ç½ÌåTile
+        // åˆ›å»ºå¢™ä½“Tile
         wallTile = ScriptableObject.CreateInstance<Tile>();
         wallTile.sprite = wallSprite;
 
@@ -236,53 +208,53 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// ¡¾×ÜÈë¿Ú¡¿ÔËĞĞÊ±Éú³ÉÍêÕûÃÔ¹¬£¨ËùÓĞ²½ÖèµÄ×Üµ÷¶È·½·¨£©
+    /// ã€æ€»å…¥å£ã€‘è¿è¡Œæ—¶ç”Ÿæˆå®Œæ•´è¿·å®«ï¼ˆæ‰€æœ‰æ­¥éª¤çš„æ€»è°ƒåº¦æ–¹æ³•ï¼‰
     /// </summary>
     public void GenerateMazeAtRuntime()
     {
-        // ÑéÖ¤µØÍ¼³ß´çÊÇ·ñ×ã¹»ÈİÄÉ±ßÔµÇ½ÌåºÍÃÔ¹¬
+        // éªŒè¯åœ°å›¾å°ºå¯¸æ˜¯å¦è¶³å¤Ÿå®¹çº³è¾¹ç¼˜å¢™ä½“å’Œè¿·å®«
         ValidateMapSize();
 
-        // 1. ³õÊ¼»¯Êµ¼ÊÊ¹ÓÃµÄµØÍ¼³ß´ç
+        // 1. åˆå§‹åŒ–å®é™…ä½¿ç”¨çš„åœ°å›¾å°ºå¯¸
         actualMapWidth = mapWidth;
         actualMapHeight = mapHeight;
 
-        // 2. ´´½¨ÃÔ¹¬Êı¾İ¶şÎ¬Êı×é
+        // 2. åˆ›å»ºè¿·å®«æ•°æ®äºŒç»´æ•°ç»„
         mazeDataGrid = new int[actualMapWidth, actualMapHeight];
 
-        // ²½Öè1£º°ÑÕû¸öµØÍ¼È«²¿Ìî³äÎªÇ½Ìå
+        // æ­¥éª¤1ï¼šæŠŠæ•´ä¸ªåœ°å›¾å…¨éƒ¨å¡«å……ä¸ºå¢™ä½“
         FillAllMapWithWall();
 
-        // ²½Öè2£º×Ô¶¯ÉèÖÃÆğµãºÍÖÕµã£¬±£Ö¤Ò»¶¨¿ÉÒÔÍ¨ĞĞ
-        // ¡¾ÖØÒª¡¿±ØĞëÔÚDFSÖ®Ç°ÉèÖÃ£¬ÒòÎªDFS»áÊ¹ÓÃÆğµãÎ»ÖÃ
+        // æ­¥éª¤2ï¼šè‡ªåŠ¨è®¾ç½®èµ·ç‚¹å’Œç»ˆç‚¹ï¼Œä¿è¯ä¸€å®šå¯ä»¥é€šè¡Œ
+        // ã€é‡è¦ã€‘å¿…é¡»åœ¨DFSä¹‹å‰è®¾ç½®ï¼Œå› ä¸ºDFSä¼šä½¿ç”¨èµ·ç‚¹ä½ç½®
         SetStartAndEndPosition();
 
-        // ²½Öè3£ºÊ¹ÓÃDFSËã·¨ÍÚÍ¨µÀÂ·£¬Éú³ÉÁ¬Í¨µÄÃÔ¹¬½á¹¹
-        // ¡¾ÖØÒª¡¿DFS»á´ÓÆğµã¿ªÊ¼Éú³ÉÃÔ¹¬
+        // æ­¥éª¤3ï¼šä½¿ç”¨DFSç®—æ³•æŒ–é€šé“è·¯ï¼Œç”Ÿæˆè¿é€šçš„è¿·å®«ç»“æ„
+        // ã€é‡è¦ã€‘DFSä¼šä»èµ·ç‚¹å¼€å§‹ç”Ÿæˆè¿·å®«
         GenerateMazeByDFS();
 
-        // ²½Öè3.5£º¡¾¹Ø¼ü±£ÕÏ¡¿È·±£ÆğµãºÍÖÕµãÖ®¼äÒ»¶¨ÓĞÍ¨Â·
+        // æ­¥éª¤3.5ï¼šã€å…³é”®ä¿éšœã€‘ç¡®ä¿èµ·ç‚¹å’Œç»ˆç‚¹ä¹‹é—´ä¸€å®šæœ‰é€šè·¯
         EnsurePathFromStartToEnd();
 
-        // ²½Öè4£ºÉú³É¶à²ã±ßÔµ°üÎ§Ç½£¬ÈÃµØÍ¼¸üÃÀ¹Û£¨²»¸²¸ÇÆğµãÖÕµã£©
+        // æ­¥éª¤4ï¼šç”Ÿæˆå¤šå±‚è¾¹ç¼˜åŒ…å›´å¢™ï¼Œè®©åœ°å›¾æ›´ç¾è§‚ï¼ˆä¸è¦†ç›–èµ·ç‚¹ç»ˆç‚¹ï¼‰
         CreateBorderWallLayers();
 
-        // ²½Öè5£º½«ÃÔ¹¬Êı¾İ»æÖÆµ½UnityµÄÍßÆ¬µØÍ¼ÉÏ
+        // æ­¥éª¤5ï¼šå°†è¿·å®«æ•°æ®ç»˜åˆ¶åˆ°Unityçš„ç“¦ç‰‡åœ°å›¾ä¸Š
         DrawMazeToTilemap();
 
-        // ²½Öè6£º×¢²áÃÔ¹¬Êı¾İµ½Êı¾İ¹ÜÀíÆ÷£¨¹©ÆäËûÏµÍ³Ê¹ÓÃ£©
+        // æ­¥éª¤6ï¼šæ³¨å†Œè¿·å®«æ•°æ®åˆ°æ•°æ®ç®¡ç†å™¨ï¼ˆä¾›å…¶ä»–ç³»ç»Ÿä½¿ç”¨ï¼‰
         RegisterMazeDataToManager();
 
-        //²½Öè7:´´½¨ÀºÇò
+        //æ­¥éª¤7:åˆ›å»ºç¯®çƒ
         SelectWalkablePoints();
 
-        //´´½¨Íæ¼Ò
+        //åˆ›å»ºç©å®¶
         GeneratePlayerObj();
 
     }
 
     /// <summary>
-    /// ½«ÃÔ¹¬Êı¾İ×¢²áµ½MazeDataManager
+    /// å°†è¿·å®«æ•°æ®æ³¨å†Œåˆ°MazeDataManager
     /// </summary>
     private void RegisterMazeDataToManager()
     {
@@ -297,171 +269,174 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// ÑéÖ¤µØÍ¼³ß´çÊÇ·ñ×ã¹»ÈİÄÉ±ßÔµÇ½ÌåºÍÃÔ¹¬
+    /// éªŒè¯åœ°å›¾å°ºå¯¸æ˜¯å¦è¶³å¤Ÿå®¹çº³è¾¹ç¼˜å¢™ä½“å’Œè¿·å®«
     /// </summary>
     private void ValidateMapSize()
     {
-        // ×îĞ¡ÃÔ¹¬³ß´çÒªÇó£º±ßÔµÇ½Ìå * 2 + 3£¨ÆğµãÖÕµãºÍÖĞ¼ä¸ñ×Ó£©
+        // æœ€å°è¿·å®«å°ºå¯¸è¦æ±‚ï¼šè¾¹ç¼˜å¢™ä½“ * 2 + 3ï¼ˆèµ·ç‚¹ç»ˆç‚¹å’Œä¸­é—´æ ¼å­ï¼‰
         int minSize = borderWallLayerCount * 2 + 3;
 
         if (mapWidth < minSize)
         {
-            Debug.LogWarning($"µØÍ¼¿í¶È {mapWidth} Ğ¡ÓÚ×îĞ¡ÒªÇó {minSize}£¬ÒÑ×Ô¶¯µ÷ÕûÎª {minSize}");
+            Debug.LogWarning($"åœ°å›¾å®½åº¦ {mapWidth} å°äºæœ€å°è¦æ±‚ {minSize}ï¼Œå·²è‡ªåŠ¨è°ƒæ•´ä¸º {minSize}");
             mapWidth = minSize;
         }
 
         if (mapHeight < minSize)
         {
-            Debug.LogWarning($"µØÍ¼¸ß¶È {mapHeight} Ğ¡ÓÚ×îĞ¡ÒªÇó {minSize}£¬ÒÑ×Ô¶¯µ÷ÕûÎª {minSize}");
+            Debug.LogWarning($"åœ°å›¾é«˜åº¦ {mapHeight} å°äºæœ€å°è¦æ±‚ {minSize}ï¼Œå·²è‡ªåŠ¨è°ƒæ•´ä¸º {minSize}");
             mapHeight = minSize;
         }
     }
 
     /// <summary>
-    /// ³õÊ¼»¯£º½«Õû¸öµØÍ¼È«²¿Ìî³äÎªÇ½Ìå£¨1£©
-    /// Ô­Àí£ºÏÈÈ«²¿¶ÂËÀ£¬ÔÙÍ¨¹ıËã·¨ÍÚ³öÂ·£¬±£Ö¤ÃÔ¹¬Á¬Í¨ĞÔ
+    /// åˆå§‹åŒ–ï¼šå°†æ•´ä¸ªåœ°å›¾å…¨éƒ¨å¡«å……ä¸ºå¢™ä½“ï¼ˆ1ï¼‰
+    /// å®é™…ä¸Šå°±æ˜¯éå†äºŒç»´æ•°ç»„ï¼ŒæŠŠæ¯ä¸ªæ ¼å­éƒ½è®¾ç½®ä¸º1ï¼Œä»£è¡¨ä¸å¯è¡Œèµ°çš„å¢™ä½“
+    /// åŸç†ï¼šå…ˆå…¨éƒ¨å µæ­»ï¼Œå†é€šè¿‡ç®—æ³•æŒ–å‡ºè·¯ï¼Œä¿è¯è¿·å®«è¿é€šæ€§
     /// </summary>
     private void FillAllMapWithWall()
     {
-        // ±éÀúËùÓĞX×ø±ê
+        // éå†æ‰€æœ‰Xåæ ‡
         for (int x = 0; x < actualMapWidth; x++)
         {
-            // ±éÀúËùÓĞY×ø±ê
+            // éå†æ‰€æœ‰Yåæ ‡
             for (int y = 0; y < actualMapHeight; y++)
             {
-                // È«²¿ÉèÖÃÎªÇ½Ìå(1)
+                // å…¨éƒ¨è®¾ç½®ä¸ºå¢™ä½“(1)
                 mazeDataGrid[x, y] = 1;
             }
         }
     }
 
     /// <summary>
-    /// ¡¾ºËĞÄËã·¨¡¿DFSÉî¶ÈÓÅÏÈËÑË÷Éú³ÉÃÔ¹¬
-    /// Ô­Àí£º´ÓÆğµã³ö·¢£¬Ëæ»úÏòËÄÖÜÍÚÂ·£¬Ö±µ½ÎŞ·¨¼ÌĞø£¬±£Ö¤È«Í¼Á¬Í¨
+    /// ã€æ ¸å¿ƒç®—æ³•ã€‘DFSæ·±åº¦ä¼˜å…ˆæœç´¢ç”Ÿæˆè¿·å®«
+    /// åŸç†ï¼šä»èµ·ç‚¹å‡ºå‘ï¼Œéšæœºå‘å››å‘¨æŒ–è·¯ï¼Œç›´åˆ°æ— æ³•ç»§ç»­ï¼Œä¿è¯å…¨å›¾è¿é€š
     /// </summary>
     private void GenerateMazeByDFS()
     {
-        // Õ»£ºÓÃÓÚ´æ´¢DFSËã·¨µÄĞĞ×ßÂ·¾¶
+        // æ ˆï¼šç”¨äºå­˜å‚¨DFSç®—æ³•çš„è¡Œèµ°è·¯å¾„
         Stack<Vector2Int> positionStack = new Stack<Vector2Int>();
 
-        // ÃÔ¹¬Éú³ÉÆğÊ¼µã£ºÊ¹ÓÃÊµ¼ÊµÄÆğµãÎ»ÖÃ
+        // è¿·å®«ç”Ÿæˆèµ·å§‹ç‚¹ï¼šä½¿ç”¨å®é™…çš„èµ·ç‚¹ä½ç½®
         Vector2Int startCell = new Vector2Int(startPosition.x, startPosition.y);
 
-        // ½«ÆğÊ¼µãÉèÖÃÎª¿ÉĞĞ×ßµØÃæ(0)
+        // å°†èµ·å§‹ç‚¹è®¾ç½®ä¸ºå¯è¡Œèµ°åœ°é¢(0)
         mazeDataGrid[startCell.x, startCell.y] = 0;
 
-        // ½«ÆğÊ¼µãÑ¹ÈëÕ»ÖĞ
+        // å°†èµ·å§‹ç‚¹å‹å…¥æ ˆä¸­
         positionStack.Push(startCell);
 
-        // ¶¨ÒåËÄ¸ö·½Ïò£ºÉÏÏÂ×óÓÒ
-        // Ã¿´ÎÒÆ¶¯2¸ñ£º±£Ö¤ÖĞ¼ä±£ÁôÒ»¸ñÇ½Ìå£¬ĞÎ³É±ê×¼ÃÔ¹¬½á¹¹
+        // å®šä¹‰å››ä¸ªæ–¹å‘ï¼šä¸Šä¸‹å·¦å³
+        // æ¯æ¬¡ç§»åŠ¨2æ ¼ï¼šä¿è¯ä¸­é—´ä¿ç•™ä¸€æ ¼å¢™ä½“ï¼Œå½¢æˆæ ‡å‡†è¿·å®«ç»“æ„
         Vector2Int[] directions =
         {
-            new Vector2Int(2, 0),  // ÓÒ
-            new Vector2Int(-2, 0), // ×ó
-            new Vector2Int(0, 2),  // ÉÏ
-            new Vector2Int(0, -2)  // ÏÂ
+            new Vector2Int(2, 0),  // å³
+            new Vector2Int(-2, 0), // å·¦
+            new Vector2Int(0, 2),  // ä¸Š
+            new Vector2Int(0, -2)  // ä¸‹
         };
 
-        // Ñ­»·£ºÕ»²»Îª¿Õ£¬ËµÃ÷»¹ÓĞÂ·¾¶¿ÉÒÔÌ½Ë÷
+        // å¾ªç¯ï¼šæ ˆä¸ä¸ºç©ºï¼Œè¯´æ˜è¿˜æœ‰è·¯å¾„å¯ä»¥æ¢ç´¢
         while (positionStack.Count > 0)
         {
-            // È¡³öÕ»¶¥µÄµ±Ç°µ¥Ôª¸ñ£¨²»³öÕ»£©
+            // å–å‡ºæ ˆé¡¶çš„å½“å‰å•å…ƒæ ¼ï¼ˆä¸å‡ºæ ˆï¼‰
             Vector2Int currentCell = positionStack.Pop();
 
-            // »ñÈ¡µ±Ç°µ¥Ôª¸ñËùÓĞÎ´·ÃÎÊµÄÁÚ¾Ó
+            // è·å–å½“å‰å•å…ƒæ ¼æ‰€æœ‰æœªè®¿é—®çš„é‚»å±…
             List<Vector2Int> unvisitedNeighbors = GetUnvisitedNeighbors(currentCell, directions);
 
-            // Èç¹û´æÔÚÎ´·ÃÎÊµÄÁÚ¾Ó
+            // å¦‚æœå­˜åœ¨æœªè®¿é—®çš„é‚»å±…
             if (unvisitedNeighbors.Count > 0)
             {
-                // ½«µ±Ç°µ¥Ôª¸ñÖØĞÂÑ¹»ØÕ»
+                // å°†å½“å‰å•å…ƒæ ¼é‡æ–°å‹å›æ ˆ
                 positionStack.Push(currentCell);
 
-                // Ëæ»úÑ¡ÔñÒ»¸öÎ´·ÃÎÊµÄÁÚ¾Óµ¥Ôª¸ñ
+                // éšæœºé€‰æ‹©ä¸€ä¸ªæœªè®¿é—®çš„é‚»å±…å•å…ƒæ ¼,ç›´æ¥ä¸€æ¡è·¯èµ°åˆ°æ­»
                 Vector2Int randomNeighbor = unvisitedNeighbors[Random.Range(0, unvisitedNeighbors.Count)];
 
-                // ´òÍ¨µ±Ç°µ¥Ôª¸ñÓëÁÚ¾Óµ¥Ôª¸ñÖ®¼äµÄÇ½Ìå
+                // æ‰“é€šå½“å‰å•å…ƒæ ¼ä¸é‚»å±…å•å…ƒæ ¼ä¹‹é—´çš„å¢™ä½“
                 RemoveWallBetweenTwoCells(currentCell, randomNeighbor);
 
-                // ½«Ñ¡ÖĞµÄÁÚ¾ÓÉèÖÃÎª¿ÉĞĞ×ßµØÃæ
+                // å°†é€‰ä¸­çš„é‚»å±…è®¾ç½®ä¸ºå¯è¡Œèµ°åœ°é¢
                 mazeDataGrid[randomNeighbor.x, randomNeighbor.y] = 0;
 
-                // ¸´ÔÓ¶È¿ØÖÆ£ºËæ»ú¾ö¶¨ÊÇ·ñÁ¢¼´»ØÍË£¨ÈÃÂ·¾¶¸üÇúÕÛ£©
-                // ÖµÔ½´ó£¬Ô½²»ÈİÒ×Á¢¼´»ØÍË ¡ú Ì½Ë÷¸üÉîÈë ¡ú Â·¾¶¸üÇúÕÛ ¡ú ÃÔ¹¬¸ü¸´ÔÓ
+                // å¤æ‚åº¦æ§åˆ¶ï¼šéšæœºå†³å®šæ˜¯å¦ç«‹å³å›é€€ï¼ˆè®©è·¯å¾„æ›´æ›²æŠ˜ï¼‰
+                // å€¼è¶Šå¤§ï¼Œè¶Šä¸å®¹æ˜“ç«‹å³å›é€€ â†’ æ¢ç´¢æ›´æ·±å…¥ â†’ è·¯å¾„æ›´æ›²æŠ˜ â†’ è¿·å®«æ›´å¤æ‚
                 if (Random.value < mazeComplexity)
                 {
-                    // ²»Á¢¼´»ØÍË£¬¼ÌĞøÉîÈëÌ½Ë÷
+                    // ä¸ç«‹å³å›é€€ï¼Œç»§ç»­æ·±å…¥æ¢ç´¢
                     positionStack.Push(randomNeighbor);
                 }
-                // ·ñÔò£ºÁ¢¼´»ØÍË£¬ĞÎ³É½Ï¶ÌµÄ·ÖÖ§
+                // å¦åˆ™ï¼šç«‹å³å›é€€ï¼Œå½¢æˆè¾ƒçŸ­çš„åˆ†æ”¯
             }
         }
     }
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°µ¥Ôª¸ñÖÜÎ§ËùÓĞÎ´±»·ÃÎÊ¹ıµÄÓĞĞ§ÁÚ¾Ó
+    /// è·å–å½“å‰å•å…ƒæ ¼å‘¨å›´æ‰€æœ‰æœªè¢«è®¿é—®è¿‡çš„æœ‰æ•ˆé‚»å±…
     /// </summary>
-    /// <param name="currentCell">µ±Ç°µ¥Ôª¸ñ×ø±ê</param>
-    /// <param name="directions">·½ÏòÊı×é</param>
-    /// <returns>Î´·ÃÎÊÁÚ¾ÓÁĞ±í</returns>
+    /// <param name="currentCell">å½“å‰å•å…ƒæ ¼åæ ‡</param>
+    /// <param name="directions">æ–¹å‘æ•°ç»„</param>
+    /// <returns>æœªè®¿é—®é‚»å±…åˆ—è¡¨</returns>
     private List<Vector2Int> GetUnvisitedNeighbors(Vector2Int currentCell, Vector2Int[] directions)
     {
-        // ´æ´¢ÓĞĞ§ÁÚ¾ÓµÄÁĞ±í
+        // å­˜å‚¨æœ‰æ•ˆé‚»å±…çš„åˆ—è¡¨
         List<Vector2Int> neighborList = new List<Vector2Int>();
 
-        // ±éÀúËÄ¸ö·½Ïò
+        // éå†å››ä¸ªæ–¹å‘
         foreach (Vector2Int dir in directions)
         {
-            // ¼ÆËãÁÚ¾Óµ¥Ôª¸ñµÄX×ø±ê
+            // è®¡ç®—é‚»å±…å•å…ƒæ ¼çš„Xåæ ‡
             int neighborX = currentCell.x + dir.x;
 
-            // ¼ÆËãÁÚ¾Óµ¥Ôª¸ñµÄY×ø±ê
+            // è®¡ç®—é‚»å±…å•å…ƒæ ¼çš„Yåæ ‡
             int neighborY = currentCell.y + dir.y;
 
-            // ÅĞ¶ÏÌõ¼ş£º
-            // 1. ×ø±êÔÚµØÍ¼·¶Î§ÄÚ
-            // 2. µ¥Ôª¸ñÊÇÇ½Ìå(1)£¬´ú±íÎ´±»·ÃÎÊ
+            // åˆ¤æ–­æ¡ä»¶ï¼š
+            // 1. åæ ‡åœ¨åœ°å›¾èŒƒå›´å†…
+            // 2. å•å…ƒæ ¼æ˜¯å¢™ä½“(1)ï¼Œä»£è¡¨æœªè¢«è®¿é—®
             if (IsPositionInMapRange(neighborX, neighborY) && mazeDataGrid[neighborX, neighborY] == 1)
             {
-                // Ìí¼Óµ½ÓĞĞ§ÁÚ¾ÓÁĞ±í
+                // æ·»åŠ åˆ°æœ‰æ•ˆé‚»å±…åˆ—è¡¨
                 neighborList.Add(new Vector2Int(neighborX, neighborY));
             }
         }
 
-        // ·µ»ØËùÓĞÓĞĞ§Î´·ÃÎÊÁÚ¾Ó
+        // è¿”å›æ‰€æœ‰æœ‰æ•ˆæœªè®¿é—®é‚»å±…
         return neighborList;
     }
 
     /// <summary>
-    /// ´òÍ¨Á½¸öµ¥Ôª¸ñÖ®¼äµÄÇ½Ìå
-    /// Ô­Àí£ºÁ½¸öµ¥Ôª¸ñ¼ä¸ô1¸ñ£¬½«ÖĞ¼äÄÇ¸ñÉèÖÃÎªµØÃæ¼´¿ÉÍ¨Â·
+    /// ç§»é™¤ä¸¤ä¸ªç›¸é‚»å•å…ƒæ ¼ä¹‹é—´çš„å¢™ï¼Œå°†å®ƒä»¬ä¹‹é—´çš„ä¸­ç‚¹å•å…ƒæ ¼è®¾ç½®ä¸ºåœ°é¢ã€‚
     /// </summary>
+    /// <remarks>å‡å®šä¸¤ä¸ªå•å…ƒæ ¼åœ¨ç½‘æ ¼ä¸Šç›¸é‚»ä¸”å…¶ä¸­ç‚¹å¯¹åº”è¦ç§»é™¤çš„å¢™å•å…ƒæ ¼ï¼›é€šè¿‡å°† mazeDataGrid å¯¹åº”ä½ç½®è®¾ä¸º 0 æ¥æ‰“é€šè·¯å¾„ã€‚</remarks>
+    /// <param name="firstCell">ç¬¬ä¸€ä¸ªå•å…ƒæ ¼åœ¨è¿·å®«ç½‘æ ¼ä¸­çš„åæ ‡ï¼ˆVector2Intï¼‰ã€‚</param>
+    /// <param name="secondCell">ç¬¬äºŒä¸ªå•å…ƒæ ¼åœ¨è¿·å®«ç½‘æ ¼ä¸­çš„åæ ‡ï¼ˆVector2Intï¼‰ã€‚</param>
     private void RemoveWallBetweenTwoCells(Vector2Int firstCell, Vector2Int secondCell)
     {
-        // ¼ÆËãÖĞ¼äµãX×ø±ê
+        // è®¡ç®—ä¸­é—´ç‚¹Xåæ ‡
         int middleX = (firstCell.x + secondCell.x) / 2;
 
-        // ¼ÆËãÖĞ¼äµãY×ø±ê
+        // è®¡ç®—ä¸­é—´ç‚¹Yåæ ‡
         int middleY = (firstCell.y + secondCell.y) / 2;
 
-        // ½«ÖĞ¼äµãÉèÖÃÎªµØÃæ(0)£¬´òÍ¨µÀÂ·
+        // å°†ä¸­é—´ç‚¹è®¾ç½®ä¸ºåœ°é¢(0)ï¼Œæ‰“é€šé“è·¯
         mazeDataGrid[middleX, middleY] = 0;
     }
 
     /// <summary>
-    /// Éú³É¶à²ã±ßÔµ°üÎ§Ç½
-    /// ¹¦ÄÜ£ºÈÃµØÍ¼±ßÔµ¸üÕûÆë£¬·ÀÖ¹ÃÔ¹¬Ìù±ß£¨²»¸²¸ÇÆğµãÖÕµã£©
+    /// ç”Ÿæˆå¤šå±‚è¾¹ç¼˜åŒ…å›´å¢™
+    /// åŠŸèƒ½ï¼šè®©åœ°å›¾è¾¹ç¼˜æ›´æ•´é½ï¼Œé˜²æ­¢è¿·å®«è´´è¾¹ï¼ˆä¸è¦†ç›–èµ·ç‚¹ç»ˆç‚¹ï¼‰
     /// </summary>
     private void CreateBorderWallLayers()
     {
-        // ========== Éú³ÉÉÏÏÂ±ßÔµÇ½Ìå ==========
+        // ========== ç”Ÿæˆä¸Šä¸‹è¾¹ç¼˜å¢™ä½“ ==========
         for (int x = 0; x < actualMapWidth; x++)
         {
-            // ¶¥²¿±ßÔµ
+            // é¡¶éƒ¨è¾¹ç¼˜
             for (int y = 0; y < borderWallLayerCount; y++)
             {
-                // Ö»¸²¸ÇÇ½Ìå£¬²»¸²¸ÇÆğµãºÍÖÕµã
+                // åªè¦†ç›–å¢™ä½“ï¼Œä¸è¦†ç›–èµ·ç‚¹å’Œç»ˆç‚¹
                 Vector2Int currentPos = new Vector2Int(x, y);
                 if (currentPos != startPosition && currentPos != endPosition)
                 {
@@ -469,7 +444,7 @@ public class MazeGenerator_DFS : MonoBehaviour
                 }
             }
 
-            // µ×²¿±ßÔµ
+            // åº•éƒ¨è¾¹ç¼˜
             for (int y = actualMapHeight - borderWallLayerCount; y < actualMapHeight; y++)
             {
                 Vector2Int currentPos = new Vector2Int(x, y);
@@ -480,10 +455,10 @@ public class MazeGenerator_DFS : MonoBehaviour
             }
         }
 
-        // ========== Éú³É×óÓÒ±ßÔµÇ½Ìå ==========
+        // ========== ç”Ÿæˆå·¦å³è¾¹ç¼˜å¢™ä½“ ==========
         for (int y = 0; y < actualMapHeight; y++)
         {
-            // ×ó²à±ßÔµ
+            // å·¦ä¾§è¾¹ç¼˜
             for (int x = 0; x < borderWallLayerCount; x++)
             {
                 Vector2Int currentPos = new Vector2Int(x, y);
@@ -493,7 +468,7 @@ public class MazeGenerator_DFS : MonoBehaviour
                 }
             }
 
-            // ÓÒ²à±ßÔµ
+            // å³ä¾§è¾¹ç¼˜
             for (int x = actualMapWidth - borderWallLayerCount; x < actualMapWidth; x++)
             {
                 Vector2Int currentPos = new Vector2Int(x, y);
@@ -506,70 +481,70 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// ×Ô¶¯ÉèÖÃÃÔ¹¬µÄÆğµãºÍÖÕµã
-    /// ±£Ö¤£ºÆğµãºÍÖÕµãÒ»¶¨ÔÚµØÃæÉÏ£¬ÇÒÒ»¶¨Á¬Í¨
+    /// è‡ªåŠ¨è®¾ç½®è¿·å®«çš„èµ·ç‚¹å’Œç»ˆç‚¹
+    /// ä¿è¯ï¼šèµ·ç‚¹å’Œç»ˆç‚¹ä¸€å®šåœ¨åœ°é¢ä¸Šï¼Œä¸”ä¸€å®šè¿é€š
     /// </summary>
     private void SetStartAndEndPosition()
     {
-        // ¼ÆËãÃÔ¹¬ÓĞĞ§ÇøÓò£¨¿¼ÂÇ±ßÔµÇ½Ìå£©
+        // è®¡ç®—è¿·å®«æœ‰æ•ˆåŒºåŸŸï¼ˆè€ƒè™‘è¾¹ç¼˜å¢™ä½“ï¼‰
         int effectiveLeft = borderWallLayerCount;
         int effectiveRight = actualMapWidth - borderWallLayerCount - 1;
         int effectiveBottom = borderWallLayerCount;
         int effectiveTop = actualMapHeight - borderWallLayerCount - 1;
 
-        // Æğµã£º×î×óÏÂ½Ç£¨È·±£ÊÇÆæÊı×ø±ê£¬DFSÃ¿´ÎÒÆ¶¯2¸ñ£©
+        // èµ·ç‚¹ï¼šæœ€å·¦ä¸‹è§’ï¼ˆç¡®ä¿æ˜¯å¥‡æ•°åæ ‡ï¼ŒDFSæ¯æ¬¡ç§»åŠ¨2æ ¼ï¼‰
         int startX = effectiveLeft;
-        if (startX % 2 == 0) startX++; // È·±£ÊÇÆæÊı
+        if (startX % 2 == 0) startX++; // ç¡®ä¿æ˜¯å¥‡æ•°
 
         int startY = effectiveBottom;
-        if (startY % 2 == 0) startY++; // È·±£ÊÇÆæÊı
+        if (startY % 2 == 0) startY++; // ç¡®ä¿æ˜¯å¥‡æ•°
 
-        // ÖÕµã£º×îÓÒÉÏ½Ç£¨È·±£ÊÇÆæÊı×ø±ê£¬DFSÃ¿´ÎÒÆ¶¯2¸ñ£©
+        // ç»ˆç‚¹ï¼šæœ€å³ä¸Šè§’ï¼ˆç¡®ä¿æ˜¯å¥‡æ•°åæ ‡ï¼ŒDFSæ¯æ¬¡ç§»åŠ¨2æ ¼ï¼‰
         int endX = effectiveRight;
-        if (endX % 2 == 0) endX--; // È·±£ÊÇÆæÊı
+        if (endX % 2 == 0) endX--; // ç¡®ä¿æ˜¯å¥‡æ•°
 
         int endY = effectiveTop;
-        if (endY % 2 == 0) endY--; // È·±£ÊÇÆæÊı
+        if (endY % 2 == 0) endY--; // ç¡®ä¿æ˜¯å¥‡æ•°
 
-        // Æğµã£ºÃÔ¹¬ÓĞĞ§ÇøÓò×óÏÂ½Ç
+        // èµ·ç‚¹ï¼šè¿·å®«æœ‰æ•ˆåŒºåŸŸå·¦ä¸‹è§’
         startPosition = new Vector2Int(startX, startY);
 
-        // ÖÕµã£ºÃÔ¹¬ÓĞĞ§ÇøÓòÓÒÉÏ½Ç
+        // ç»ˆç‚¹ï¼šè¿·å®«æœ‰æ•ˆåŒºåŸŸå³ä¸Šè§’
         endPosition = new Vector2Int(endX, endY);
 
-        // Ç¿ÖÆ½«ÆğµãÉèÖÃÎªµØÃæ
+        // å¼ºåˆ¶å°†èµ·ç‚¹è®¾ç½®ä¸ºåœ°é¢
         mazeDataGrid[startPosition.x, startPosition.y] = 0;
 
-        // Ç¿ÖÆ½«ÖÕµãÉèÖÃÎªµØÃæ
+        // å¼ºåˆ¶å°†ç»ˆç‚¹è®¾ç½®ä¸ºåœ°é¢
         mazeDataGrid[endPosition.x, endPosition.y] = 0;
     }
 
     /// <summary>
-    /// ½«ÄÚ´æÖĞµÄÃÔ¹¬Êı¾İ£¬äÖÈ¾µ½UnityµÄTilemapÍßÆ¬µØÍ¼ÉÏ
+    /// å°†äºŒç»´æ•°ç»„ä¸­çš„è¿·å®«æ•°æ®ï¼Œæ¸²æŸ“åˆ°Unityçš„Tilemapç“¦ç‰‡åœ°å›¾ä¸Š
     /// </summary>
     private void DrawMazeToTilemap()
     {
-        // Çå¿Õ¾ÉµÄÍßÆ¬
+        // æ¸…ç©ºæ—§çš„ç“¦ç‰‡
         currentTilemap.ClearAllTiles();
         
 
-        // ±éÀúÕû¸öµØÍ¼
+        // éå†æ•´ä¸ªåœ°å›¾
         for (int x = 0; x < actualMapWidth; x++)
         {
             for (int y = 0; y < actualMapHeight; y++)
             {
-                // ÍßÆ¬×ø±ê
+                // ç“¦ç‰‡åæ ‡
                 Vector3Int tilePosition = new Vector3Int(x, y, 0);
 
-                // ÅĞ¶Ïµ±Ç°¸ñ×ÓÊÇµØÃæ»¹ÊÇÇ½Ìå
+                // åˆ¤æ–­å½“å‰æ ¼å­æ˜¯åœ°é¢è¿˜æ˜¯å¢™ä½“
                 if (mazeDataGrid[x, y] == 0)
                 {                    
-                    // ÆÕÍ¨µØÃæ·ÅÖÃÆÕÍ¨ÍßÆ¬
+                    // æ™®é€šåœ°é¢æ”¾ç½®æ™®é€šç“¦ç‰‡
                     currentTilemap.SetTile(tilePosition, groundTile);     
                 }
                 else
                 {
-                    // 1 = ·ÅÖÃÇ½ÌåÍßÆ¬
+                    // 1 = æ”¾ç½®å¢™ä½“ç“¦ç‰‡
                     currentTilemap.SetTile(tilePosition, wallTile);
                 }
             }
@@ -577,7 +552,7 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// ´´½¨´øÖ¸¶¨ÑÕÉ«µÄÍßÆ¬
+    /// åˆ›å»ºå¸¦æŒ‡å®šé¢œè‰²çš„ç“¦ç‰‡
     /// </summary>
     private Tile CreateColoredTile(Sprite sprite, Color color)
     {
@@ -588,74 +563,74 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// ÅĞ¶Ï×ø±êÊÇ·ñÔÚºÏ·¨µÄµØÍ¼·¶Î§ÄÚ
+    /// åˆ¤æ–­åæ ‡æ˜¯å¦åœ¨åˆæ³•çš„åœ°å›¾èŒƒå›´å†…
     /// </summary>
     private bool IsPositionInMapRange(int posX, int posY)
     {
-        // XºÍY¶¼±ØĞë´óÓÚµÈÓÚ0£¬ÇÒĞ¡ÓÚµØÍ¼¿í¸ß
+        // Xå’ŒYéƒ½å¿…é¡»å¤§äºç­‰äº0ï¼Œä¸”å°äºåœ°å›¾å®½é«˜
         return posX >= 0 && posY >= 0 && posX < actualMapWidth && posY < actualMapHeight;
     }
 
     /// <summary>
-    /// ¡¾¹Ø¼ü±£ÕÏ¡¿È·±£ÆğµãºÍÖÕµãÖ®¼äÒ»¶¨ÓĞÒ»ÌõÍ¨Â·
-    /// Ê¹ÓÃBFS¼ì²éÊÇ·ñÁ¬Í¨£¬Èç¹û²»Á¬Í¨¾ÍÇ¿ÖÆ´òÍ¨Ò»ÌõÂ·¾¶
+    /// ã€å…³é”®ä¿éšœã€‘ç¡®ä¿èµ·ç‚¹å’Œç»ˆç‚¹ä¹‹é—´ä¸€å®šæœ‰ä¸€æ¡é€šè·¯
+    /// ä½¿ç”¨BFSæ£€æŸ¥æ˜¯å¦è¿é€šï¼Œå¦‚æœä¸è¿é€šå°±å¼ºåˆ¶æ‰“é€šä¸€æ¡è·¯å¾„
     /// </summary>
     private void EnsurePathFromStartToEnd()
     {
-        // Ê×ÏÈÓÃBFS¼ì²éÆğµãºÍÖÕµãÊÇ·ñÁ¬Í¨
+        // é¦–å…ˆç”¨BFSæ£€æŸ¥èµ·ç‚¹å’Œç»ˆç‚¹æ˜¯å¦è¿é€š
         bool isConnected = CheckIfPositionsConnected(startPosition, endPosition);
 
-        // Èç¹ûÒÑ¾­Á¬Í¨£¬Ö±½Ó·µ»Ø
+        // å¦‚æœå·²ç»è¿é€šï¼Œç›´æ¥è¿”å›
         if (isConnected)
         {
             return;
         }
 
-        // Èç¹û²»Á¬Í¨£¬Ç¿ÖÆ´òÍ¨Ò»Ìõ´ÓÆğµãµ½ÖÕµãµÄÖ±ÏßÂ·¾¶
-        Debug.Log("ÆğµãÖÕµã²»Á¬Í¨£¬ÕıÔÚÇ¿ÖÆ´òÍ¨Â·¾¶...");
+        // å¦‚æœä¸è¿é€šï¼Œå¼ºåˆ¶æ‰“é€šä¸€æ¡ä»èµ·ç‚¹åˆ°ç»ˆç‚¹çš„ç›´çº¿è·¯å¾„
+        Debug.Log("èµ·ç‚¹ç»ˆç‚¹ä¸è¿é€šï¼Œæ­£åœ¨å¼ºåˆ¶æ‰“é€šè·¯å¾„...");
         ForceConnectStartAndEnd();
     }
 
     /// <summary>
-    /// Ê¹ÓÃBFS¼ì²éÁ½¸ö×ø±êÊÇ·ñÁ¬Í¨
+    /// ä½¿ç”¨BFSæ£€æŸ¥ä¸¤ä¸ªåæ ‡æ˜¯å¦è¿é€š
     /// </summary>
     private bool CheckIfPositionsConnected(Vector2Int from, Vector2Int to)
     {
-        // ¼ÇÂ¼·ÃÎÊ¹ıµÄÎ»ÖÃ
+        // è®°å½•è®¿é—®è¿‡çš„ä½ç½®
         bool[,] visited = new bool[actualMapWidth, actualMapHeight];
-        // BFS¶ÓÁĞ
+        // BFSé˜Ÿåˆ—
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
 
-        // ´ÓÆğµã¿ªÊ¼
+        // ä»èµ·ç‚¹å¼€å§‹
         queue.Enqueue(from);
         visited[from.x, from.y] = true;
 
-        // ËÄ¸ö·½Ïò£¨Ã¿´ÎÒÆ¶¯1¸ñ£©
+        // å››ä¸ªæ–¹å‘ï¼ˆæ¯æ¬¡ç§»åŠ¨1æ ¼ï¼‰
         Vector2Int[] directions =
         {
-            new Vector2Int(1, 0),  // ÓÒ
-            new Vector2Int(-1, 0), // ×ó
-            new Vector2Int(0, 1),  // ÉÏ
-            new Vector2Int(0, -1)  // ÏÂ
+            new Vector2Int(1, 0),  // å³
+            new Vector2Int(-1, 0), // å·¦
+            new Vector2Int(0, 1),  // ä¸Š
+            new Vector2Int(0, -1)  // ä¸‹
         };
 
-        // BFSÑ­»·
+        // BFSå¾ªç¯
         while (queue.Count > 0)
         {
             Vector2Int current = queue.Dequeue();
 
-            // µ½´ïÖÕµã£¬·µ»Øtrue
+            // åˆ°è¾¾ç»ˆç‚¹ï¼Œè¿”å›true
             if (current == to)
             {
                 return true;
             }
 
-            // ±éÀúËÄ¸ö·½Ïò
+            // éå†å››ä¸ªæ–¹å‘
             foreach (Vector2Int dir in directions)
             {
                 Vector2Int next = current + dir;
 
-                // ¼ì²é£ºÔÚ·¶Î§ÄÚ¡¢Î´·ÃÎÊ¡¢ÊÇµØÃæ
+                // æ£€æŸ¥ï¼šåœ¨èŒƒå›´å†…ã€æœªè®¿é—®ã€æ˜¯åœ°é¢
                 if (IsPositionInMapRange(next.x, next.y) && 
                     !visited[next.x, next.y] && 
                     mazeDataGrid[next.x, next.y] == 0)
@@ -666,88 +641,88 @@ public class MazeGenerator_DFS : MonoBehaviour
             }
         }
 
-        // BFS½áÊøÎ´ÕÒµ½ÖÕµã£¬²»Á¬Í¨
+        // BFSç»“æŸæœªæ‰¾åˆ°ç»ˆç‚¹ï¼Œä¸è¿é€š
         return false;
     }
 
     /// <summary>
-    /// Ç¿ÖÆ´òÍ¨Ò»Ìõ´ÓÆğµãµ½ÖÕµãµÄÖ±ÏßÂ·¾¶£¨LĞÍÂ·¾¶£©
-    /// ÏÈÏòÓÒ×ßµ½ÖÕµãX£¬ÔÙÏòÏÂ×ßµ½ÖÕµãY
+    /// å¼ºåˆ¶æ‰“é€šä¸€æ¡ä»èµ·ç‚¹åˆ°ç»ˆç‚¹çš„ç›´çº¿è·¯å¾„ï¼ˆLå‹è·¯å¾„ï¼‰
+    /// å…ˆå‘å³èµ°åˆ°ç»ˆç‚¹Xï¼Œå†å‘ä¸‹èµ°åˆ°ç»ˆç‚¹Y
     /// </summary>
     private void ForceConnectStartAndEnd()
     {
         Vector2Int current = startPosition;
 
-        // µÚÒ»²½£ºË®Æ½·½Ïò£¬´ÓÆğµã×ßµ½ÖÕµãµÄX×ø±ê
+        // ç¬¬ä¸€æ­¥ï¼šæ°´å¹³æ–¹å‘ï¼Œä»èµ·ç‚¹èµ°åˆ°ç»ˆç‚¹çš„Xåæ ‡
         while (current.x != endPosition.x)
         {
-            // ½«µ±Ç°Î»ÖÃÉèÎªµØÃæ
+            // å°†å½“å‰ä½ç½®è®¾ä¸ºåœ°é¢
             mazeDataGrid[current.x, current.y] = 0;
-            // ÏòÖÕµãX·½ÏòÒÆ¶¯
+            // å‘ç»ˆç‚¹Xæ–¹å‘ç§»åŠ¨
             current.x += (endPosition.x > current.x) ? 1 : -1;
         }
 
-        // µÚ¶ş²½£º´¹Ö±·½Ïò£¬×ßµ½ÖÕµãµÄY×ø±ê
+        // ç¬¬äºŒæ­¥ï¼šå‚ç›´æ–¹å‘ï¼Œèµ°åˆ°ç»ˆç‚¹çš„Yåæ ‡
         while (current.y != endPosition.y)
         {
-            // ½«µ±Ç°Î»ÖÃÉèÎªµØÃæ
+            // å°†å½“å‰ä½ç½®è®¾ä¸ºåœ°é¢
             mazeDataGrid[current.x, current.y] = 0;
-            // ÏòÖÕµãY·½ÏòÒÆ¶¯
+            // å‘ç»ˆç‚¹Yæ–¹å‘ç§»åŠ¨
             current.y += (endPosition.y > current.y) ? 1 : -1;
         }
 
-        // ×îºóÈ·±£ÖÕµãÒ²ÊÇµØÃæ
+        // æœ€åç¡®ä¿ç»ˆç‚¹ä¹Ÿæ˜¯åœ°é¢
         mazeDataGrid[endPosition.x, endPosition.y] = 0;
 
-        Debug.Log("ÒÑÇ¿ÖÆ´òÍ¨ÆğµãÖÕµãÂ·¾¶£¡");
+        Debug.Log("å·²å¼ºåˆ¶æ‰“é€šèµ·ç‚¹ç»ˆç‚¹è·¯å¾„ï¼");
     }
 
     /// <summary>
-    /// ´´½¨ÀºÇò
+    /// åˆ›å»ºç¯®çƒ
     /// </summary>
     private void GenerateBasketball(Vector2Int pos)
     {
-        //ÏÈ°ÑÍø¸ñ×ø±ê×ª³ÉÊÀ½ç×ø±ê
+        //å…ˆæŠŠç½‘æ ¼åæ ‡è½¬æˆä¸–ç•Œåæ ‡
         Vector3 ballPos = MazeCoordinateConverter.GridToWorld(pos);
-        //¼ÓÔØ×ÊÔ´
-        ABResMgr.Instance.LoadResAsync<GameObject>(MyAssetBundleName.µÚËÄÕÂÎïÌå°ü, "ÃÔ¹¬ÀºÇò", (obj) =>
+        //åŠ è½½èµ„æº
+        ABResMgr.Instance.LoadResAsync<GameObject>(MyAssetBundleName.ç¬¬å››ç« ç‰©ä½“åŒ…, "è¿·å®«ç¯®çƒ", (obj) =>
         {
-            //ÊµÀı»¯Ô¤ÖÆÌå
+            //å®ä¾‹åŒ–é¢„åˆ¶ä½“
             MazeBall mazeBall = GameObject.Instantiate(obj,ballPos,Quaternion.identity).GetComponent<MazeBall>();
-            //×¢²áÀºÇòµÄ×ø±êÊı¾İ
+            //æ³¨å†Œç¯®çƒçš„åæ ‡æ•°æ®
             MazeDataManager.Instance.RegisterBallData(pos,mazeBall);
         });
     }
 
     /// <summary>
-    /// Ëæ»úÑ¡Ôñ¿ÉĞĞ×ßÇøÓòÈ¥´´½¨ÀºÇò
+    /// éšæœºé€‰æ‹©å¯è¡Œèµ°åŒºåŸŸå»åˆ›å»ºç¯®çƒ
     /// </summary>
     private void SelectWalkablePoints()
     {
         List<Vector2Int> result = new List<Vector2Int>(actualMapWidth * actualMapHeight / 4);
-        // ±éÀúÕû¸öµØÍ¼
+        // éå†æ•´ä¸ªåœ°å›¾
         for (int x = 0; x < actualMapWidth; x++)
         {
             for (int y = 0; y < actualMapHeight; y++)
             {
-                // ÅĞ¶Ïµ±Ç°¸ñ×ÓÊÇµØÃæ»¹ÊÇÇ½Ìå
+                // åˆ¤æ–­å½“å‰æ ¼å­æ˜¯åœ°é¢è¿˜æ˜¯å¢™ä½“
                 if (mazeDataGrid[x, y] == 0)
                 {
-                    //»ñÈ¡µ±Ç°×ø±ê
+                    //è·å–å½“å‰åæ ‡
                     Vector2Int currentPos = new Vector2Int(x, y);
 
-                    // ¼ì²éÊÇ·ñÊÇÆğµã»òÖÕµã
+                    // æ£€æŸ¥æ˜¯å¦æ˜¯èµ·ç‚¹æˆ–ç»ˆç‚¹
                     if (currentPos == startPosition || currentPos == endPosition)
                     {
                         continue;
                     }
-                    //¼ÓÈë½á¹û¼¯
+                    //åŠ å…¥ç»“æœé›†
                     result.Add(currentPos);
                 }
             }
         }
 
-        //Éú³É¶ÔÓ¦µÄÀºÇò
+        //ç”Ÿæˆå¯¹åº”çš„ç¯®çƒ
         for (int i = 0; i < ballCount; i++)
         {
             GenerateBasketball(result[Random.Range(0, result.Count)]);
@@ -755,19 +730,19 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃÖÕµãµÄÍßÆ¬
+    /// è®¾ç½®ç»ˆç‚¹çš„ç“¦ç‰‡
     /// </summary>
     private void SetDestinationTile()
     {
         Instantiate(endObj, MazeCoordinateConverter.GridToWorld(endPosition), Quaternion.identity);
 
-        // Èç¹ûÉÏÒ»´ÎÑ°Â·»¹ÓĞÃ»Çå³ıµÄÂ·¾¶£¬ÏÈ»Ö¸´Ô­Ê¼ÍßÆ¬
+        // å¦‚æœä¸Šä¸€æ¬¡å¯»è·¯è¿˜æœ‰æ²¡æ¸…é™¤çš„è·¯å¾„ï¼Œå…ˆæ¢å¤åŸå§‹ç“¦ç‰‡
         if (lastPathOriginalTiles != null && lastPathOriginalTiles.Count > 0)
         {
-            //±éÀú
+            //éå†
             foreach (var kvp in lastPathOriginalTiles)
             {
-                //¸´Ô­ÍßÆ¬
+                //å¤åŸç“¦ç‰‡
                 Vector3Int tilePosition = kvp.Key;
                 TileBase originalTile = kvp.Value;
                 if (originalTile != null)
@@ -784,35 +759,35 @@ public class MazeGenerator_DFS : MonoBehaviour
     }
 
     /// <summary>
-    /// Éú³ÉÍæ¼ÒÔ¤ÖÆÌå
+    /// ç”Ÿæˆç©å®¶é¢„åˆ¶ä½“
     /// </summary>
     private void GeneratePlayerObj()
     {
-        //¼ÓÔØ×ÊÔ´£¬×¢ÒâÕâÀïµÄÍæ¼ÒÔ¤ÖÆÌåÊµÀı»¯ÊÇÔÚÒì²½»Øµ÷µ±ÖĞÖ´ĞĞµÄ
-        ABResMgr.Instance.LoadResAsync<GameObject>(MyAssetBundleName.µÚËÄÕÂÎïÌå°ü, "ÃÔ¹¬Íæ¼Ò", (obj) =>
+        //åŠ è½½èµ„æºï¼Œæ³¨æ„è¿™é‡Œçš„ç©å®¶é¢„åˆ¶ä½“å®ä¾‹åŒ–æ˜¯åœ¨å¼‚æ­¥å›è°ƒå½“ä¸­æ‰§è¡Œçš„
+        ABResMgr.Instance.LoadResAsync<GameObject>(MyAssetBundleName.ç¬¬å››ç« ç‰©ä½“åŒ…, "è¿·å®«ç©å®¶", (obj) =>
         {
-            //ÊµÀı»¯Ô¤ÖÆÌå
+            //å®ä¾‹åŒ–é¢„åˆ¶ä½“
             GameObject playerObj = GameObject.Instantiate(obj, MazeCoordinateConverter.GridToWorld(startPosition), Quaternion.identity);
-            //ÉèÖÃÉãÏñ»úÄ¿±ê
+            //è®¾ç½®æ‘„åƒæœºç›®æ ‡
             Camera.main.GetComponent<MazeCameraFollow>().SetTarget(playerObj.transform);
         });
 
-        //Íæ¼ÒÔ¤ÖÆÌåÊµÀı»¯Íê³ÉÖ®ºó£¬»áÁ¢¼´µ÷ÓÃMazePlayer½Å±¾µÄAwake()º¯Êı
-        //´ËÊ±Õâ¸ö½Å±¾ÉÏÒÀ¸½µÄÈÎÎñ¹ÜÀí×´Ì¬»ú³õÊ¼»¯Íê³É½øÈëMazeTask1StateÕâ¸ö×´Ì¬ÊÇ»áµ÷ÓÃÒ»´ÎRefreshNearestBall·½·¨
-        //Õâ¸öÊ±ºò¾Í»áµ÷ÓÃIMazeTaskÖĞµÄplayerMazePosÊôĞÔ£¬ÓÖ»á×ªµ½MazePlayerµ±ÖĞÈ¥µ÷ÓÃMazeCoordinateConverter.WorldToGrid(transform.position)
-        //ÄÇÃ´·µ»ØµÄÍæ¼Ò×ø±ê¾Í»áÔ½½ç
+        //ç©å®¶é¢„åˆ¶ä½“å®ä¾‹åŒ–å®Œæˆä¹‹åï¼Œä¼šç«‹å³è°ƒç”¨MazePlayerè„šæœ¬çš„Awake()å‡½æ•°
+        //æ­¤æ—¶è¿™ä¸ªè„šæœ¬ä¸Šä¾é™„çš„ä»»åŠ¡ç®¡ç†çŠ¶æ€æœºåˆå§‹åŒ–å®Œæˆè¿›å…¥MazeTask1Stateè¿™ä¸ªçŠ¶æ€æ˜¯ä¼šè°ƒç”¨ä¸€æ¬¡RefreshNearestBallæ–¹æ³•
+        //è¿™ä¸ªæ—¶å€™å°±ä¼šè°ƒç”¨IMazeTaskä¸­çš„playerMazePoså±æ€§ï¼Œåˆä¼šè½¬åˆ°MazePlayerå½“ä¸­å»è°ƒç”¨MazeCoordinateConverter.WorldToGrid(transform.position)
+        //é‚£ä¹ˆè¿”å›çš„ç©å®¶åæ ‡å°±ä¼šè¶Šç•Œ
 
-        //ÎªÊ²Ã´»áÔ½½ç£¿
-        //Tilemap µÄ SetTiles ¸Õ¸ÕÖ´ĞĞÍê£¬µ« Unity ÄÚ²¿µÄ Tilemap Êı¾İ½á¹¹»¹Ã»Ë¢ĞÂÍê¡£
-        //DrawMazeToTilemap()Ò»´ÎĞÔÉèÖÃÁË´óÁ¿ SetTile µ÷ÓÃ¡£
-        //ËäÈ»ÕâĞ©µ÷ÓÃÔÚÂß¼­ÉÏÍê³ÉÁË£¬
-        //µ« Unity µÄ Tilemap ×é¼şÄÚ²¿¿ÉÄÜÓĞÑÓ³ÙË¢ĞÂ¡ª¡ªËüÔÚµ±Ç°Ö¡Ä©Î²»òÏÂÒ»Ö¡¿ªÊ¼Ê±²Å»áÑ¹Ëõ±ß½çÖØ½¨ÄÚ²¿chunkË÷Òı¡£
+        //ä¸ºä»€ä¹ˆä¼šè¶Šç•Œï¼Ÿ
+        //Tilemap çš„ SetTiles åˆšåˆšæ‰§è¡Œå®Œï¼Œä½† Unity å†…éƒ¨çš„ Tilemap æ•°æ®ç»“æ„è¿˜æ²¡åˆ·æ–°å®Œã€‚
+        //DrawMazeToTilemap()ä¸€æ¬¡æ€§è®¾ç½®äº†å¤§é‡ SetTile è°ƒç”¨ã€‚
+        //è™½ç„¶è¿™äº›è°ƒç”¨åœ¨é€»è¾‘ä¸Šå®Œæˆäº†ï¼Œ
+        //ä½† Unity çš„ Tilemap ç»„ä»¶å†…éƒ¨å¯èƒ½æœ‰å»¶è¿Ÿåˆ·æ–°â€”â€”å®ƒåœ¨å½“å‰å¸§æœ«å°¾æˆ–ä¸‹ä¸€å¸§å¼€å§‹æ—¶æ‰ä¼šå‹ç¼©è¾¹ç•Œé‡å»ºå†…éƒ¨chunkç´¢å¼•ã€‚
 
-        //ÔÚAB°ü¼ÓÔØ»Øµ÷´¥·¢µÄÄÇ¸öÊ±¼äµã£º
-        //tilemap.WorldToCell(transform.position)¿ÉÄÜÒòÎª Tilemap ÄÚ²¿ chunk »¹Ã»Ë¢ĞÂ£¬·µ»ØÁËÔ½½çÖµ
+        //åœ¨ABåŒ…åŠ è½½å›è°ƒè§¦å‘çš„é‚£ä¸ªæ—¶é—´ç‚¹ï¼š
+        //tilemap.WorldToCell(transform.position)å¯èƒ½å› ä¸º Tilemap å†…éƒ¨ chunk è¿˜æ²¡åˆ·æ–°ï¼Œè¿”å›äº†è¶Šç•Œå€¼
 
-        //Õâ¾ÍÊÇÎªÊ²Ã´ FindPathAsync ´òÓ¡µÄÈÕÖ¾ÊÇ" Æğµã »òÖÕµã²»ÔÚµØÍ¼·¶Î§ÄÚ"£¬Æğµã£¨Íæ¼Ò×ø±ê£©±»WorldToGridËã´íÁË¡£
+        //è¿™å°±æ˜¯ä¸ºä»€ä¹ˆ FindPathAsync æ‰“å°çš„æ—¥å¿—æ˜¯" èµ·ç‚¹ æˆ–ç»ˆç‚¹ä¸åœ¨åœ°å›¾èŒƒå›´å†…"ï¼Œèµ·ç‚¹ï¼ˆç©å®¶åæ ‡ï¼‰è¢«WorldToGridç®—é”™äº†ã€‚
 
-        //ËùÒÔMazeTask1StateÖĞµÄEnterState()½øÈë¸Ã×´Ì¬Ê±Òª¶ÔRefreshNearestBall()·½·¨½øĞĞÑÓ³Ùµ÷ÓÃ
+        //æ‰€ä»¥MazeTask1Stateä¸­çš„EnterState()è¿›å…¥è¯¥çŠ¶æ€æ—¶è¦å¯¹RefreshNearestBall()æ–¹æ³•è¿›è¡Œå»¶è¿Ÿè°ƒç”¨
     }
 }

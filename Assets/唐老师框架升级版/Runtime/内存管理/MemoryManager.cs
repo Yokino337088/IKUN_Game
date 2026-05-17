@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -39,7 +39,7 @@ namespace TangmenFramework
         /// <summary>
         /// 是否启用自动清理
         /// </summary>
-        public bool AutoCleanupEnabled { get; set; } = true;
+        public bool AutoCleanupEnabled { get; set; } = false;
         
         /// <summary>
         /// 取消令牌源

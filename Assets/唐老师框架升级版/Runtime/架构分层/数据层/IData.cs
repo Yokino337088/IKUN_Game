@@ -4,7 +4,7 @@ namespace TangmenFramework
 {
     /// <summary>
     /// 数据接口
-    /// 所有数据类都需要实现此接口
+    /// 所有数据类需要实现此接口，即可注册到 DataMgr 中进行管理
     /// </summary>
     public interface IData
     {
@@ -27,15 +27,5 @@ namespace TangmenFramework
         /// 重置数据
         /// </summary>
         void Reset();
-
-        /// <summary>
-        /// 保存数据
-        /// </summary>
-        void Save();
-
-        /// <summary>
-        /// 加载数据
-        /// </summary>
-        void Load();
     }
 }

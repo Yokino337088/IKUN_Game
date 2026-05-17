@@ -2,12 +2,12 @@
     "resources": [
         {
             "ResourceName": "迷宫玩家",
-            "ResourcePath": "Assets/资源统一放置点/游戏物体/第四章物体/迷宫玩家.prefab",
+            "ResourcePath": "Assets/资源统一放置点/游戏物体/第四章物体/迷宫/迷宫玩家.prefab",
             "ABPackageName": "chapter_four"
         },
         {
             "ResourceName": "迷宫篮球",
-            "ResourcePath": "Assets/资源统一放置点/游戏物体/第四章物体/迷宫篮球.prefab",
+            "ResourcePath": "Assets/资源统一放置点/游戏物体/第四章物体/迷宫/迷宫篮球.prefab",
             "ABPackageName": "chapter_four"
         },
         {
@@ -16,29 +16,19 @@
             "ABPackageName": "font"
         },
         {
-            "ResourceName": "TextMeshPro/Distance Field",
-            "ResourcePath": "Assets/TextMesh Pro/Shaders/TMP_SDF.shader",
+            "ResourceName": "站酷酷黑体 SDF",
+            "ResourcePath": "Assets/资源统一放置点/TMP字体/站酷酷黑体 SDF.asset",
             "ABPackageName": "font"
         },
         {
-            "ResourceName": "站酷酷黑体 SDF",
-            "ResourcePath": "Assets/资源统一放置点/TMP字体/站酷酷黑体 SDF.asset",
+            "ResourceName": "TextMeshPro/Distance Field",
+            "ResourcePath": "Assets/TextMesh Pro/Shaders/TMP_SDF.shader",
             "ABPackageName": "font"
         },
         {
             "ResourceName": "T_BulletComments",
             "ResourcePath": "Assets/资源统一放置点/Excel导表管理/json数据/T_BulletComments.json",
             "ABPackageName": "json"
-        },
-        {
-            "ResourceName": "短裙鸡",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/短裙鸡.mp3",
-            "ABPackageName": "music_begin"
-        },
-        {
-            "ResourceName": "飞机场",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/飞机场.mp3",
-            "ABPackageName": "music_begin"
         },
         {
             "ResourceName": "蒸汽鸡",
@@ -51,48 +41,158 @@
             "ABPackageName": "music_begin"
         },
         {
+            "ResourceName": "飞机场",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/飞机场.mp3",
+            "ABPackageName": "music_begin"
+        },
+        {
+            "ResourceName": "短裙鸡",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/短裙鸡.mp3",
+            "ABPackageName": "music_begin"
+        },
+        {
             "ResourceName": "因为你",
             "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/第四章/因为你.mp3",
             "ABPackageName": "music_four"
         },
         {
-            "ResourceName": "打字机",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/打字机.mp3",
+            "ResourceName": "鬼叫3",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/鬼叫3.mp3",
             "ABPackageName": "sound_four"
         },
         {
+            "ResourceName": "格挡",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/格挡.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "鬼叫1",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/鬼叫1.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "蹦床",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/蹦床.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "蓄力",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/蓄力.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "鬼叫2",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/鬼叫2.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "歌剧",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/歌剧.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "升降梯",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/升降梯.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "受击",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/受击.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "跳跃",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/跳跃.wav",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "你",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/你.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "美",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/美.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "鸡你太美",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/鸡你太美.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "打字机",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/打字机.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "鸡",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/鸡.wav",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "落地",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/落地.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "太",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/太.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "你干嘛",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/你干嘛.wav",
+            "ABPackageName": "sound_general"
+        },
+        {
             "ResourceName": "BeginPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/BeginPanel.prefab",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/开始场景/BeginPanel.prefab",
             "ABPackageName": "ui_panel_begin"
         },
         {
             "ResourceName": "AboutPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/AboutPanel.prefab",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/开始场景/AboutPanel.prefab",
             "ABPackageName": "ui_panel_begin"
         },
         {
             "ResourceName": "MazeTipsPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/MazeTipsPanel.prefab",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazeTipsPanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "FourBossPCPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPCPanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "FourBossPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "FourBossPhonePanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPhonePanel.prefab",
             "ABPackageName": "ui_panel_four"
         },
         {
             "ResourceName": "MazePCPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/MazePCPanel.prefab",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazePCPanel.prefab",
             "ABPackageName": "ui_panel_four"
         },
         {
             "ResourceName": "MazePhonePanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/MazePhonePanel.prefab",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazePhonePanel.prefab",
             "ABPackageName": "ui_panel_four"
-        },
-        {
-            "ResourceName": "StoryPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/StoryPanel.prefab",
-            "ABPackageName": "ui_panel_load"
         },
         {
             "ResourceName": "LodingPanel",
             "ResourcePath": "Assets/资源统一放置点/UI/UI面板/LodingPanel.prefab",
+            "ABPackageName": "ui_panel_load"
+        },
+        {
+            "ResourceName": "StoryPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/StoryPanel.prefab",
             "ABPackageName": "ui_panel_load"
         }
     ]

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +26,8 @@ namespace TangmenFramework
         E_Input_Right,
         E_Input_Jump,
         E_Input_Attack,
+        E_Input_Skill,
+        E_Input_Ultimate,
         E_Input_Special,
         E_Input_Menu,
         E_Input_Pause,

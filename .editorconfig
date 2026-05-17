@@ -1,0 +1,13 @@
+# Unity C# 项目编码强制设置
+root = true
+
+[*.cs]
+# 强制 C# 文件保存为 UTF-8 with BOM（Windows + Unity 最稳妥）
+charset = utf-8-bom
+# 缩进用 4 空格
+indent_style = space
+indent_size = 4
+# 换行符 Windows (CRLF)
+end_of_line = crlf
+# 文件末尾保留空行
+insert_final_newline = true

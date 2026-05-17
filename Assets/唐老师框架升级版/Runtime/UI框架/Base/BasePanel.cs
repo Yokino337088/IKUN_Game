@@ -54,11 +54,14 @@ namespace TangmenFramework
 
         protected List<Button> btnLists = new List<Button>();
 
+        protected List<LongPressButton> longPressBtnLists = new List<LongPressButton>();
+
         protected virtual void Awake()
         {
             CurrentState = PanelState.Initializing;
             //为了方便 一次性把所有需要的控件全部找到并存储起来
             //将来要使用的话 直接通过名称去字典中获取即可
+            FindChildrenControl<LongPressButton>();
             FindChildrenControl<Button>();
             FindChildrenControl<Toggle>();
             FindChildrenControl<Slider>();
@@ -136,6 +139,11 @@ namespace TangmenFramework
 
         }
 
+        protected virtual void LongPressBtn(string btnName)
+        {
+
+        }
+
         protected virtual void SliderValueChange(string sliderName, float value)
         {
 
@@ -182,6 +190,19 @@ namespace TangmenFramework
                                 ClickBtn(controlName);
                             });
                             btnLists.Add(controls[i] as Button);
+                        }
+                        else if (controls[i] is LongPressButton)
+                        {
+                            LongPressButton lpb = controls[i] as LongPressButton;
+                            lpb.onLongPress.AddListener(() =>
+                            {
+                                LongPressBtn(controlName);
+                            });
+                            lpb.onShortClick.AddListener(() =>
+                            {
+                                ClickBtn(controlName);
+                            });
+                            longPressBtnLists.Add(lpb);
                         }
                         else if (controls[i] is Slider)
                         {

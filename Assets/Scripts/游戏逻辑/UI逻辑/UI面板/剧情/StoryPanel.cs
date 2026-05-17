@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TangmenFramework;
@@ -7,15 +7,15 @@ using DG.Tweening;
 
 public class StoryPanel : BasePanel
 {
-    //¾çÇé²¥·ÅÆ÷µÄÒıÓÃ
+    //å‰§æƒ…æ’­æ”¾å™¨çš„å¼•ç”¨
     
     public StoryPlayer storyPlayer;
 
-    //ÏÔÊ¾¾çÇéµÄtext×é¼ş
+    //æ˜¾ç¤ºå‰§æƒ…çš„textç»„ä»¶
 
     public Text txtStory;
 
-    //´òÒ»¸ö×ÖµÄÊ±¼ä
+    //æ‰“ä¸€ä¸ªå­—çš„æ—¶é—´
 
     public float typeSpeed = 0.1f;
 
@@ -23,7 +23,7 @@ public class StoryPanel : BasePanel
     {
         base.ShowMe();
         this.DoPanelScaleInAnimation();
-        //×¢²áÊÂ¼ş
+        //æ³¨å†Œäº‹ä»¶
         storyPlayer.OnStoryStarted += OnStoryStarted;
         storyPlayer.OnDialogueUpdated += OnDialogueUpdated;
         storyPlayer.OnStoryEnded += OnStoryEnded;
@@ -32,7 +32,7 @@ public class StoryPanel : BasePanel
     public override void HideMe()
     {
         base.HideMe();
-        //×¢ÏúÊÂ¼ş
+        //æ³¨é”€äº‹ä»¶
         storyPlayer.OnStoryStarted -= OnStoryStarted;
         storyPlayer.OnDialogueUpdated -= OnDialogueUpdated;
         storyPlayer.OnStoryEnded -= OnStoryEnded;
@@ -40,10 +40,10 @@ public class StoryPanel : BasePanel
 
     private void Update()
     {
-        //¼ì²âÍæ¼ÒÊÇ·ñ°´ÏÂÁËÈÎÒâ¼ü»òÕßµã»÷ÁËÆÁÄ»
+        //æ£€æµ‹ç©å®¶æ˜¯å¦æŒ‰ä¸‹äº†ä»»æ„é”®æˆ–è€…ç‚¹å‡»äº†å±å¹•
         if (Input.anyKeyDown || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
-            //ÏÔÊ¾ÏÂÒ»¶Î¶Ô»°
+            //æ˜¾ç¤ºä¸‹ä¸€æ®µå¯¹è¯
             storyPlayer.NextDialogue();
         }
     }
@@ -55,29 +55,29 @@ public class StoryPanel : BasePanel
 
     private void OnDialogueUpdated(int index,string speakerName,string content)
     {
-        //ÏÈÇå¿Õ×Ö·û
+        //å…ˆæ¸…ç©ºå­—ç¬¦
         txtStory.text = null;
-        //dotween´ò×Ö»úĞ§¹û
+        //dotweenæ‰“å­—æœºæ•ˆæœ
         txtStory.DOText(content, content.Length * typeSpeed);
-        //²¥·ÅÒôĞ§
-        MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.µÚËÄÕÂÒôĞ§°ü, "´ò×Ö»ú", content.Length * typeSpeed);
+        //æ’­æ”¾éŸ³æ•ˆ
+        MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.é€šç”¨éŸ³æ•ˆåŒ…, "æ‰“å­—æœº", null , content.Length * typeSpeed);
     }
 
     private void OnStoryEnded()
     {
-        //Òş²Ø¸ÃÃæ°å
-        UIMgr.Instance.HidePanelWithAnimation<StoryPanel>(E_HideType.Ëõ·ÅÍË³ö, () =>
+        //éšè—è¯¥é¢æ¿
+        UIMgr.Instance.HidePanelWithAnimation<StoryPanel>(E_HideType.ç¼©æ”¾é€€å‡º, () =>
         {
-            //ÕâÀïÈ¥´¥·¢¹Ø¿¨³õÊ¼»¯µÄÊÂ¼ş£¬ÊµÏÖ½âñî
+            //è¿™é‡Œå»è§¦å‘å…³å¡åˆå§‹åŒ–çš„äº‹ä»¶ï¼Œå®ç°è§£è€¦
             EventCenter.Instance.EventTrigger(MyEventTypeString.StoryEndAndLevelInit);
         });
     }
 
     /// <summary>
-    /// Ìá¹©¸øÍâ²¿½øĞĞµ÷ÓÃµÄ¿ªÊ¼¶Ô»°·½·¨
+    /// æä¾›ç»™å¤–éƒ¨è¿›è¡Œè°ƒç”¨çš„å¼€å§‹å¯¹è¯æ–¹æ³•
     /// </summary>
-    /// <param name="ChapterId">ÕÂ½ÚºÅ</param>
-    /// <param name="ModuleId">¾çÇéºÅ</param>
+    /// <param name="ChapterId">ç« èŠ‚å·</param>
+    /// <param name="ModuleId">å‰§æƒ…å·</param>
     public void StartStoryDialog(int ChapterId,int ModuleId)
     {
         storyPlayer.PlayByLookup(ChapterId, ModuleId);

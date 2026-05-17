@@ -29,5 +29,7 @@ public static class MyAssetBundleName
 
     public const string 过场景UI面板包 = "ui_panel_load";
 
+    public const string 通用音效包 = "sound_general";
+
     #endregion
 }

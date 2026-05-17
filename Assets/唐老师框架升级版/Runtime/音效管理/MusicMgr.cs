@@ -1,8 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System;
+using System.Diagnostics;
 
 
 namespace TangmenFramework
@@ -124,7 +125,7 @@ namespace TangmenFramework
         /// </summary>
         /// <param name="abName">AB包名字</param>
         /// <param name="name">资源名</param>
-        public void PlayBKMusic(string abName, string name)
+        public void PlayBKMusic(string abName, string name,bool isLoop = true)
         {
             //动态创建背景音乐播放器，确保场景切换时也能播放
             //确保背景音乐在场景切换时也能播放
@@ -140,7 +141,7 @@ namespace TangmenFramework
             ABResMgr.Instance.LoadResAsync<AudioClip>(abName, name, (clip) =>
             {
                 bkMusic.clip = clip;
-                bkMusic.loop = true;
+                bkMusic.loop = isLoop;
                 bkMusic.volume = bkMusicValue;
                 bkMusic.Play();
             });
@@ -590,7 +591,7 @@ namespace TangmenFramework
         /// <param name="isLoop"></param>
         /// <param name="isSync"></param>
         /// <param name="callBack"></param>
-        public void PlaySoundSafe(string abName, string soundName, float duration = -1f, bool isLoop = false, bool isSync = false, Action<AudioSource> callBack = null)
+        public void PlaySoundSafe(string abName, string soundName,  Action<AudioSource> callBack = null , float duration = -1f, bool isLoop = false, bool isSync = false)
         {
             //如果正在场景加载中，延迟播放
             if (isSceneChanging && !isSync)
