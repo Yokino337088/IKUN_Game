@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TangmenFramework;
 using TMPro;
@@ -8,46 +8,64 @@ using UnityEngine.UI;
 public class BeginPanel : BasePanel
 {
     /// <summary>
-    /// ÏÂÀ­ÁĞ±í
+    /// ä¸‹æ‹‰åˆ—è¡¨
     /// </summary>
-    private TMP_Dropdown myDropdown;
+    private Dropdown myDropdown;
 
-    //ÒôÀÖ×Öµä(±ÜÃâswitch-caseÓï¾ä)
+    [SerializeField]
+    private Image imgå¼€å§‹æ¸¸æˆæŒ‰é’®;
+
+    [SerializeField]
+    private Image imgä»£ç å¼€æºæŒ‰é’®;
+
+    [SerializeField]
+    private Image imgé€€å‡ºæ¸¸æˆæŒ‰é’®;
+
+    //éŸ³ä¹å­—å…¸(é¿å…switch-caseè¯­å¥)
     private Dictionary<int, string> musicDic = new Dictionary<int, string>()
     {
-        { 0,"Íõåú"},{1,"¶ÌÈ¹¼¦" },{2,"ÕôÆû¼¦" },{3,"·É»ú³¡" }
+        { 0,"ç‹å¦ƒ"},{1,"çŸ­è£™é¸¡" },{2,"è’¸æ±½é¸¡" },{3,"é£æœºåœº" }
     };
 
     /// <summary>
-    /// ÊÇ·ñÍ¨¹ı´úÂëÉèÖÃdropdownµÄÑ¡Ïî
+    /// æ˜¯å¦é€šè¿‡ä»£ç è®¾ç½®dropdownçš„é€‰é¡¹
     /// </summary>
     private bool isSettingByCode = false;
 
     protected override void Awake()
     {
         base.Awake();
-        myDropdown = GetControl<TMP_Dropdown>("dropÒôÀÖÑ¡Ôñ");
         this.AddAllControlsAnimation();
+        myDropdown = GetControl<Dropdown>("dropéŸ³ä¹é€‰æ‹©");
+        
+
+        ABResMgr.Instance.LoadResAsync<Material>(MyAssetBundleName.å¼€å§‹åœºæ™¯æè´¨åŒ…, "æŒ‰é’®æè´¨", (mat) =>
+        {
+            mat.shader = Shader.Find("Custom/ButtonSelectEffect");
+            imgä»£ç å¼€æºæŒ‰é’®.material = mat;
+            imgå¼€å§‹æ¸¸æˆæŒ‰é’®.material = mat;
+            imgé€€å‡ºæ¸¸æˆæŒ‰é’®.material = mat;
+        });
     }
 
     public override void ShowMe()
     {
         base.ShowMe();
-        //Ìí¼ÓÃæ°åµ­Èë¶¯»­
+        //æ·»åŠ é¢æ¿æ·¡å…¥åŠ¨ç”»
         this.DoPanelFadeInAnimation(0.2f);
-        //×¢²áÊÂ¼ş
+        //æ³¨å†Œäº‹ä»¶
         MusicMgr.Instance.OnMusicPlaybackCompleted += OnMusicPlaybackOnCompleted;
     }
 
     public override void HideMe()
     {
         base.HideMe();
-        //×¢ÏúÊÂ¼ş(×¢²áºÍ×¢Ïú±ØĞëÅä¶Ô£¬·ÀÖ¹ÄÚ´æĞ¹Â©)
+        //æ³¨é”€äº‹ä»¶(æ³¨å†Œå’Œæ³¨é”€å¿…é¡»é…å¯¹ï¼Œé˜²æ­¢å†…å­˜æ³„æ¼)
         MusicMgr.Instance.OnMusicPlaybackCompleted -= OnMusicPlaybackOnCompleted;
     }
 
     /// <summary>
-    /// ¼àÌı°´Å¥ÊÂ¼ş
+    /// ç›‘å¬æŒ‰é’®äº‹ä»¶
     /// </summary>
     /// <param name="btnName"></param>
     protected override void ClickBtn(string btnName)
@@ -56,53 +74,53 @@ public class BeginPanel : BasePanel
 
         switch (btnName)
         {
-            case "btn¿ªÊ¼ÓÎÏ·":
+            case "btnå¼€å§‹æ¸¸æˆ":
 
                 break;
-            case "btn´úÂë¿ªÔ´":
-                UIMgr.Instance.HidePanelWithAnimation<BeginPanel>(E_HideType.µ­³ö, () =>
+            case "btnä»£ç å¼€æº":
+                UIMgr.Instance.HidePanelWithAnimation<BeginPanel>(E_HideType.æ·¡å‡º, () =>
                 {
-                    UIMgr.Instance.ShowPanel<AboutPanel>();
+                    UIMgr.Instance.ShowPanel<AboutPanel>(MyAssetBundleName.å¼€å§‹åœºæ™¯UIé¢æ¿åŒ…);
                 },0.3f);
                 break;
-            case "btnÍË³öÓÎÏ·":
+            case "btné€€å‡ºæ¸¸æˆ":
                 Application.Quit();
                 break;
         }
     }
 
     /// <summary>
-    /// ¼àÌıÏÂÀ­ÁĞ±íÊÂ¼ş
+    /// ç›‘å¬ä¸‹æ‹‰åˆ—è¡¨äº‹ä»¶
     /// </summary>
     /// <param name="dropDownName"></param>
     /// <param name="index"></param>
     protected override void DropDownSelectChange(string dropDownName, int index)
     {
         base.DropDownSelectChange(dropDownName, index);
-        //Èç¹ûÊÇÍ¨¹ıÊÂ¼ş´¥·¢µÄ»°£¬ÄÇÃ´Ö±½ÓÌø¹ı¡¤
+        //å¦‚æœæ˜¯é€šè¿‡äº‹ä»¶è§¦å‘çš„è¯ï¼Œé‚£ä¹ˆç›´æ¥è·³è¿‡Â·
         if (isSettingByCode)
             return;
 
         switch (dropDownName)
         {
-            case "dropÒôÀÖÑ¡Ôñ": 
+            case "dropéŸ³ä¹é€‰æ‹©": 
                 OnDropDownSelect(index);
                 break;
         }
     }
 
     /// <summary>
-    /// ¸ù¾İË÷ÒıÇĞ»»ÒôÀÖ
+    /// æ ¹æ®ç´¢å¼•åˆ‡æ¢éŸ³ä¹
     /// </summary>
     /// <param name="index"></param>
     private void OnDropDownSelect(int index)
     {
-        //ÕâÀïÈç¹û²»ÓÃ×Öµä´æË÷Òı¶ÔÓ¦µÄÒôÀÖÃû×ÖµÄ»°ÄÇÃ´¾ÍÒªÓÃswitch-caseÓï¾äĞ´4´Î
+        //è¿™é‡Œå¦‚æœä¸ç”¨å­—å…¸å­˜ç´¢å¼•å¯¹åº”çš„éŸ³ä¹åå­—çš„è¯é‚£ä¹ˆå°±è¦ç”¨switch-caseè¯­å¥å†™4æ¬¡
         MusicMgr.Instance.PlayBKMusicListFromSong(musicDic[index]);
     }
 
     /// <summary>
-    /// ÒôÀÖ²¥·ÅÍê³ÉÊ±´¥·¢µÄÊÂ¼şº¯Êı(Õâ¾ÍÊÇ¹Û²ìÕßÄ£Ê½)
+    /// éŸ³ä¹æ’­æ”¾å®Œæˆæ—¶è§¦å‘çš„äº‹ä»¶å‡½æ•°(è¿™å°±æ˜¯è§‚å¯Ÿè€…æ¨¡å¼)
     /// </summary>
     /// <param name="index"></param>
     private void OnMusicPlaybackOnCompleted(int index)

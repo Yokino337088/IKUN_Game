@@ -1,4 +1,4 @@
-// 引入系统命名空间
+﻿// 引入系统命名空间
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -398,25 +398,11 @@ namespace TangmenFramework
             return File.Exists(filePath);
         }
 
-        /// <summary>
-        /// 从Ab包中加载表格数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="K"></typeparam>
-        public void LoadTableFromAB<T, K>()
-        {
-            LoadTableFromAB<T, K>(true);
-        }
+        
 
-        /// <summary>
-        /// 使用 Newtonsoft.Json 从 Ab 包中加载表格数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="K"></typeparam>
-        public void LoadTableFromABWithNewtonsoft<T, K>()
-        {
-            LoadTableFromAB<T, K>(true);
-        }
+        
+
+       
 
         /// <summary>
         /// 从Ab包中加载表格数据
@@ -424,19 +410,22 @@ namespace TangmenFramework
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="K"></typeparam>
         /// <param name="useNewtonsoft"></param>
-        private void LoadTableFromAB<T, K>(bool useNewtonsoft = true)
+        /// <param name="onComplete">加载完成回调，参数为是否成功</param>
+        public void LoadTableFromAB<T, K>(string abName = "json",Action<bool> onComplete = null)
         {
             string fileName = typeof(K).Name;
             LogSystem.Info($"从Ab包中加载表格数据: {fileName}");
-            ABResMgr.Instance.LoadResAsync<TextAsset>("json", fileName, (obj) =>
+            ABResMgr.Instance.LoadResAsync<TextAsset>(abName, fileName, (obj) =>
             {
                 if (obj != null)
                 {
-                    ProcessJsonData<T, K>(obj.text, useNewtonsoft);
+                    ProcessJsonData<T, K>(obj.text, true);
+                    onComplete?.Invoke(true);
                 }
                 else
                 {
-                    LogSystem.Error("从AB包加载json失败");
+                    LogSystem.Error("从AB包加载json失败: " + fileName);
+                    onComplete?.Invoke(false);
                 }
             });
         }

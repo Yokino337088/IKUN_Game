@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TangmenFramework;
 using UnityEngine;
@@ -45,29 +45,38 @@ public class BulletCommentMgr : MonoBehaviour
     {
         commentTexts = new List<string>();
 
-        //调用API获取弹幕配置表数据
-        JsonDataMgr.Instance.LoadTableFromAB<T_BulletCommentsContainer, T_BulletComments>();
-        var container = JsonDataMgr.Instance.GetTable<T_BulletCommentsContainer>();
-        //如果数据表为空或加载失败，使用默认弹幕文字
-        if (container == null || container.dataDic == null || container.dataDic.Count == 0)
+        //调用API获取弹幕配置表数据（异步，需在回调中使用数据）
+        JsonDataMgr.Instance.LoadTableFromAB<T_BulletCommentsContainer, T_BulletComments>(MyAssetBundleName.第四章json数据包,(success) =>
         {
-            LogSystem.Warning("弹幕配置表为空或加载失败，使用默认弹幕文字");
-            commentTexts.Add("IKUN万岁！");
-            commentTexts.Add("鸡你太美");
-            return;
-        }
-
-        //遍历数据表，提取弹幕文字信息
-        foreach (var kvp in container.dataDic)
-        {
-            if (!string.IsNullOrEmpty(kvp.Value.textInfo))
+            if (!success)
             {
-                //将弹幕文字添加到列表中
-                commentTexts.Add(kvp.Value.textInfo);
+                LogSystem.Warning("弹幕配置表加载失败，使用默认弹幕文字");
+                commentTexts.Add("IKUN万岁！");
+                commentTexts.Add("鸡你太美");
+                return;
             }
-        }
 
-        LogSystem.Info($"弹幕文字加载完成，共 {commentTexts.Count} 条");
+            var container = JsonDataMgr.Instance.GetTable<T_BulletCommentsContainer>();
+            //如果数据表为空，使用默认弹幕文字
+            if (container == null || container.dataDic == null || container.dataDic.Count == 0)
+            {
+                LogSystem.Warning("弹幕配置表为空，使用默认弹幕文字");
+                commentTexts.Add("IKUN万岁！");
+                commentTexts.Add("鸡你太美");
+                return;
+            }
+
+            //遍历数据表，提取弹幕文字信息
+            foreach (var kvp in container.dataDic)
+            {
+                if (!string.IsNullOrEmpty(kvp.Value.textInfo))
+                {
+                    commentTexts.Add(kvp.Value.textInfo);
+                }
+            }
+
+            LogSystem.Info($"弹幕文字加载完成，共 {commentTexts.Count} 条");
+        });
     }
 
     /// <summary>

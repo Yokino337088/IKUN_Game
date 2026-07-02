@@ -13,12 +13,12 @@ public class BulletPattern1State : BossBaseState
 {
     public override BossStateType StateType => BossStateType.BulletPattern1;
 
-    private float attackDuration = 5f;
+    private float attackDuration = 6f;
     private float attackTimer;
     private bool isFiring;
     private float fireInterval = 0.1f;
     private float lastFireTime;
-    private int bulletCount = 40;
+    private int bulletCount = 50;
     private int currentBulletIndex;
 
     // 子弹速度
@@ -41,7 +41,10 @@ public class BulletPattern1State : BossBaseState
         boss.StopCurrentMove();
         boss.StopFloatingAnimation();
 
-        MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "鬼叫1");
+        if(AIObj.GetBossData().nowPhase == BossPhaseType.陶喆)
+            MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "CB");
+        else
+            MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "鬼叫1");
 
         AIObj.DoBullet1Animation();
 

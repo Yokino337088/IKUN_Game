@@ -17,7 +17,7 @@ public class LaserAttackState : BossBaseState
     /// <summary>
     /// 攻击持续时间
     /// </summary>
-    private float attackDuration = 6f;
+    private float attackDuration = 7f;
     private float attackTimer;
     private bool isAttacking;
 
@@ -34,8 +34,11 @@ public class LaserAttackState : BossBaseState
 
         var boss = AIObj.GetBossController();
         boss.StopFloatingAnimation();
+
         // 播放激光攻击音效
-        MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "歌剧", (audio) =>
+        string soundName = AIObj.GetBossData().nowPhase == BossPhaseType.陶喆 ? "哦啊啊" : "歌剧";
+
+        MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, soundName, (audio) =>
         {
             // 设置音效持续时间，确保在攻击结束时停止播放
             TimerMgr.Instance.CreateTimer(true, (int)attackDuration * 1000, () =>

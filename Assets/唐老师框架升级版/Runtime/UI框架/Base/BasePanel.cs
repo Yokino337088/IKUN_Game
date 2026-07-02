@@ -1,5 +1,6 @@
-using System.Collections;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -88,7 +89,10 @@ namespace TangmenFramework
         public virtual void ShowMe()
         {
             CurrentState = PanelState.Active;
+
         }
+
+      
 
         /// <summary>
         /// 面板隐藏时调用的方法

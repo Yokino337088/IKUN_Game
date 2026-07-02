@@ -1,0 +1,19 @@
+{
+  "name": "cn.tuanjie.ai.profiler",
+  "version": "1.0.4",
+  "displayName": "团结AI性能分析",
+  "description": "团结AI性能分析插件，用于分析团结性能瓶颈。",
+  "unity": "2019.4",
+  "keywords": [
+    "Profiler",
+    "AI",
+    "Performance"
+  ],
+  "dependencies": {
+    "cn.tuanjie.codely.bridge": "1.0.34"
+  },
+  "type": "library",
+  "author": {
+    "name": "Yousandi Technologies"
+  }
+}

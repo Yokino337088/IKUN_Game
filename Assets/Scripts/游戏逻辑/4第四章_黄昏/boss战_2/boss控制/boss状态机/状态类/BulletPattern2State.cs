@@ -13,7 +13,7 @@ public class BulletPattern2State : BossBaseState
 {
     public override BossStateType StateType => BossStateType.BulletPattern2;
 
-    private float attackDuration = 4f;
+    private float attackDuration = 6f;
     private float attackTimer;
     private bool isFiring;
     private float fireInterval = 0.1f;
@@ -41,7 +41,10 @@ public class BulletPattern2State : BossBaseState
         boss.StopFloatingAnimation();
 
         AIObj.DoBullet2Animation();
-        MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "鬼叫2");
+        if (AIObj.GetBossData().nowPhase == BossPhaseType.陶喆)
+            MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "胡彦斌");
+        else
+            MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "鬼叫2");
         LogSystem.Info("Boss进入螺旋弹幕攻击");
     }
 

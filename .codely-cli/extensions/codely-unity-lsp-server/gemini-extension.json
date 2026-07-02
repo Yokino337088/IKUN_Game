@@ -1,0 +1,19 @@
+{
+  "name": "codely-unity-lsp-server",
+  "version": "0.1.1",
+  "lspServers": {
+    "csharp": {
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "${extensionPath}${/}dist${/}server.js"
+      ],
+      "extensionToLanguage": {
+        ".cs": "csharp",
+        ".csx": "csharp"
+      },
+      "cwd": "${extensionPath}",
+      "workspace_required": true,
+      "defaultInitializationOptions": {}
+    }
+  }
+}

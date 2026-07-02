@@ -1,0 +1,21 @@
+{
+    "name": "cn.tuanjie.ai.profiler",
+    "rootNamespace": "Tuanjie.Ai.Profiler",
+    "references": [
+        "GUID:7d5abdf9527d3f24fae9fffd53879b25",
+        "GUID:0939af519db78b345b6219b59e96546d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Codely.Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

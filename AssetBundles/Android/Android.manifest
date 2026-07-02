@@ -1,0 +1,42 @@
+ManifestFileVersion: 0
+CRC: 2740198102
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: chapter_four
+      Dependencies:
+        Dependency_0: font
+    Info_1:
+      Name: music_begin
+      Dependencies: {}
+    Info_2:
+      Name: ui_panel_begin
+      Dependencies:
+        Dependency_0: font
+        Dependency_1: material_begin
+    Info_3:
+      Name: ui_panel_four
+      Dependencies:
+        Dependency_0: font
+    Info_4:
+      Name: music_four
+      Dependencies: {}
+    Info_5:
+      Name: font
+      Dependencies: {}
+    Info_6:
+      Name: ui_panel_load
+      Dependencies:
+        Dependency_0: font
+    Info_7:
+      Name: sound_general
+      Dependencies: {}
+    Info_8:
+      Name: sound_four
+      Dependencies: {}
+    Info_9:
+      Name: material_begin
+      Dependencies: {}
+    Info_10:
+      Name: json_four
+      Dependencies: {}
