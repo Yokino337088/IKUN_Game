@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "cn.tuanjie.ai.profiler": "file:D:/Unity_Project/IKUN_Game/.codely-cli/extensions/tuanjie-perf-profiler/Packages/cn.tuanjie.ai.profiler"
+  }
+}

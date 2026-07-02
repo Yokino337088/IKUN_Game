@@ -164,7 +164,8 @@ public class TeleportAttackState : BossBaseState
         // 瞬移（瞬时移动）
         AIObj.TeleportTo(teleportPos, () =>
         {
-            MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "鬼叫3");
+            string soundName = AIObj.GetBossData().nowPhase == BossPhaseType.陶喆 ? "爱我还是他" : "鬼叫3";
+            MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, soundName);
         });
 
         // 显示Boss

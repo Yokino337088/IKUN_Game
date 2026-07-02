@@ -1,0 +1,20 @@
+{
+  "model": "codely-basic",
+  "mcpServers": {
+    "mcp1": {
+      "httpUrl": "{   \"mcpServers\": {     \"unityMCP\": {       \"url\": \"http://127.0.0.1:8080/mcp\",       \"type\": \"http\"     }   } }"
+    }
+  },
+  "models": {
+    "DeepSeek-V4-Pro": {
+      "authType": "openai",
+      "displayName": "DeepSeek-V4-Pro",
+      "baseUrl": "https://api.deepseek.com",
+      "apiKey": "sk-38af51b78c294e4faf2823a585ca7ca0",
+      "roles": [
+        "chat",
+        "vl"
+      ]
+    }
+  }
+}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using TangmenFramework;
@@ -17,7 +18,11 @@ using UnityEngine;
 /// 
 /// 【使用方式】
 /// 挂载到场景中的空GameObject上，在Inspector中设置好子模块引用。
-/// 外部通过 PlayScene(PerformanceSceneData) 或 PlaySceneByLookup(chapter, module) 启动演出。
+/// 外部通过 PlayScene(PerformanceSceneData) 启动演出。
+/// 
+/// 【两种执行模式】
+/// - Sequential（顺序模式）：命令按列表顺序逐条执行，执行完即结束
+/// - BGMDriven（BGM驱动模式）：以一首BGM为时间轴，命令可绑定时间戳触发
 /// 
 /// 【意识流演出的执行特点】
 /// - 命令支持延迟和并行，实现多层画面元素同时呈现
@@ -42,8 +47,11 @@ public class PerformanceDirector : MonoBehaviour
     [Tooltip("演出数据（可直接拖入场景资产，也支持代码动态设置）")]
     public PerformanceSceneData sceneData;
 
-    [Tooltip("背景图SpriteRenderer引用")]
+    [Tooltip("背景图SpriteRenderer引用（简单背景模式）")]
     public SpriteRenderer backgroundRenderer;
+
+    [Tooltip("背景根节点（GameObject背景模式，支持Shader动效）")]
+    public Transform backgroundRoot;
 
     [Tooltip("UI画布层（用于显示文字等UI元素）")]
     public Canvas performanceCanvas;
@@ -53,7 +61,7 @@ public class PerformanceDirector : MonoBehaviour
     [Tooltip("默认文字显示速度（每个字符秒数）")]
     public float defaultTypeSpeed = 0.05f;
 
-    [Tooltip("是否允许跳过（按任意键跳过当前命令）")]
+    [Tooltip("是否允许跳过（按Escape/Space跳过当前命令）")]
     public bool allowSkip = true;
 
     [Header("========== 运行时状态（只读）==========")]
@@ -67,6 +75,12 @@ public class PerformanceDirector : MonoBehaviour
     [SerializeField, Tooltip("是否正在执行中")]
     private bool isExecuting;
 
+    [SerializeField, Tooltip("演出已运行的时间（BGMDriven模式用于进度展示）")]
+    private float performanceElapsedTime;
+
+    [SerializeField, Tooltip("演出总时长")]
+    private float performanceTotalDuration;
+
     // ============================================================
     //  事件回调
     // ============================================================
@@ -74,7 +88,7 @@ public class PerformanceDirector : MonoBehaviour
     /// <summary>演出开始</summary>
     public Action<PerformanceSceneData> OnPerformanceStarted;
 
-    /// <summary>命令执行前（参数：命令索引，命令数据）</summary>
+    /// <summary>命令执行前（参数：命令索引，命令数据）。BGMDriven模式中索引可能为-1表示时间戳触发</summary>
     public Action<int, PerformanceCommand> OnCommandExecuting;
 
     /// <summary>对话文字显示（参数：说话人，内容）</summary>
@@ -82,6 +96,9 @@ public class PerformanceDirector : MonoBehaviour
 
     /// <summary>浮空文字显示（参数：内容，屏幕位置）</summary>
     public Action<string, Vector2> OnFloatingTextDisplay;
+
+    /// <summary>BGM进度更新（参数：当前秒数，总秒数）。BGMDriven模式专用，可用于进度条显示</summary>
+    public Action<float, float> OnBGMProgress;
 
     /// <summary>演出正常结束</summary>
     public Action OnPerformanceEnded;
@@ -96,6 +113,8 @@ public class PerformanceDirector : MonoBehaviour
     public bool IsExecuting => isExecuting;
     public int CurrentCommandIndex => currentCommandIndex;
     public PerformanceSceneData CurrentScene => currentScene;
+    public float PerformanceElapsedTime => performanceElapsedTime;
+    public float PerformanceTotalDuration => performanceTotalDuration;
 
     // ============================================================
     //  内部状态
@@ -103,9 +122,20 @@ public class PerformanceDirector : MonoBehaviour
 
     private CancellationTokenSource executionCTS;
     private bool isWaitingForInput;
+    private float performanceStartTime; // Time.time at performance start (for progress tracking)
 
     private void Update()
     {
+        // BGM进度追踪（BGMDriven模式）
+        if (isExecuting && currentScene != null && currentScene.syncMode == PerformanceSyncMode.BGMDriven)
+        {
+            performanceElapsedTime = Time.time - performanceStartTime;
+            if (performanceTotalDuration > 0f)
+            {
+                OnBGMProgress?.Invoke(performanceElapsedTime, performanceTotalDuration);
+            }
+        }
+
         // 等待用户交互推进
         if (isWaitingForInput)
         {
@@ -115,7 +145,7 @@ public class PerformanceDirector : MonoBehaviour
             }
         }
 
-        // 跳过功能：按任意键跳过当前命令
+        // 跳过功能：按Escape或Space跳过当前命令
         if (allowSkip && isExecuting && !isWaitingForInput)
         {
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space))
@@ -173,15 +203,18 @@ public class PerformanceDirector : MonoBehaviour
 
         OnPerformanceStarted?.Invoke(data);
 
-        // 执行命令序列
-        await ExecuteCommandSequence(data.commands, executionCTS.Token);
+        // 根据同步模式选择执行方式
+        if (data.syncMode == PerformanceSyncMode.BGMDriven)
+        {
+            await ExecuteBGMDrivenSequence(data.commands, executionCTS.Token);
+        }
+        else
+        {
+            await ExecuteCommandSequence(data.commands, executionCTS.Token);
+        }
 
         // 正常结束
-        if (isExecuting)
-        {
-            isExecuting = false;
-            OnPerformanceEnded?.Invoke();
-        }
+        OnPerformanceCleanup();
     }
 
     /// <summary>播放Inspector中拖入的演出场景</summary>
@@ -203,12 +236,18 @@ public class PerformanceDirector : MonoBehaviour
         executionCTS?.Cancel();
         isExecuting = false;
         isWaitingForInput = false;
+
+        // BGMDriven模式：停止演出主BGM
+        if (currentScene != null && currentScene.syncMode == PerformanceSyncMode.BGMDriven)
+        {
+            MusicMgr.Instance.StopBKMusic();
+        }
+
         OnPerformanceInterrupted?.Invoke();
     }
 
     /// <summary>
     /// 跳过当前命令（仅在非WaitForInput状态有效）
-    /// 会取消当前正在执行的命令，推进到下一个
     /// </summary>
     public void SkipCurrentCommand()
     {
@@ -216,7 +255,6 @@ public class PerformanceDirector : MonoBehaviour
             return;
 
         executionCTS?.Cancel();
-
         executionCTS?.Dispose();
         executionCTS = new CancellationTokenSource();
 
@@ -224,8 +262,7 @@ public class PerformanceDirector : MonoBehaviour
 
         if (currentCommandIndex >= currentScene.CommandCount)
         {
-            isExecuting = false;
-            OnPerformanceEnded?.Invoke();
+            OnPerformanceCleanup();
         }
         else
         {
@@ -240,6 +277,26 @@ public class PerformanceDirector : MonoBehaviour
     }
 
     // ============================================================
+    //  演出收尾
+    // ============================================================
+
+    private void OnPerformanceCleanup()
+    {
+        if (!isExecuting)
+            return;
+
+        isExecuting = false;
+
+        // BGMDriven模式：停止演出主BGM
+        if (currentScene != null && currentScene.syncMode == PerformanceSyncMode.BGMDriven)
+        {
+            MusicMgr.Instance.StopBKMusic();
+        }
+
+        OnPerformanceEnded?.Invoke();
+    }
+
+    // ============================================================
     //  场景初始化
     // ============================================================
 
@@ -251,15 +308,39 @@ public class PerformanceDirector : MonoBehaviour
             await SetBackground(data.initialBackgroundName, data.initialBackgroundABName);
         }
 
-        // 播放初始BGM
-        if (!string.IsNullOrEmpty(data.initialBGMResName))
+        // BGMDriven模式：播放演出主BGM
+        if (data.syncMode == PerformanceSyncMode.BGMDriven && !string.IsNullOrEmpty(data.performanceBGMResName))
+        {
+            // 设置演出BGM音量（覆盖全局音量）
+            if (data.performanceBGMVolume > 0f)
+            {
+                MusicMgr.Instance.ChangeBKMusicValue(data.performanceBGMVolume);
+            }
+            
+            // 播放BGM，不循环（演出是单曲播放）
+            MusicMgr.Instance.PlayBKMusic(data.performanceBGMABName, data.performanceBGMResName, false);
+            LogSystem.Info($"PerformanceDirector: BGMDriven模式启动 BGM [{data.performanceBGMResName}]，音量={data.performanceBGMVolume}");
+
+            // 设置总时长（优先使用手动设置，否则为0即不追踪百分比）
+            performanceTotalDuration = data.performanceDuration;
+            if (performanceTotalDuration <= 0f)
+            {
+                LogSystem.Debug("PerformanceDirector: performanceDuration未设置，BGM进度百分比不可用（时间戳命令仍正常工作）");
+            }
+        }
+        // Sequential模式：播放初始BGM
+        else if (data.syncMode == PerformanceSyncMode.Sequential && !string.IsNullOrEmpty(data.initialBGMResName))
         {
             MusicMgr.Instance.PlayBKMusic(data.initialBGMABName, data.initialBGMResName);
         }
+
+        // 记录演出开始时间
+        performanceStartTime = Time.time;
+        performanceElapsedTime = 0f;
     }
 
     // ============================================================
-    //  命令序列执行（核心）
+    //  命令序列执行 —— Sequential模式
     // ============================================================
 
     private async UniTask ExecuteCommandSequence(List<PerformanceCommand> cmds, CancellationToken ct)
@@ -272,13 +353,11 @@ public class PerformanceDirector : MonoBehaviour
 
             OnCommandExecuting?.Invoke(i, cmd);
 
-            // 延迟
             if (cmd.delay > 0f)
             {
                 await UniTask.WaitForSeconds(cmd.delay, cancellationToken: ct);
             }
 
-            // 执行命令
             await ExecuteSingleCommand(cmd, ct);
         }
     }
@@ -300,6 +379,106 @@ public class PerformanceDirector : MonoBehaviour
 
             await ExecuteSingleCommand(cmd, ct);
         }
+    }
+
+    // ============================================================
+    //  命令序列执行 —— BGMDriven模式（长剧情演出核心）
+    // ============================================================
+
+    /// <summary>
+    /// BGMDriven模式执行入口。
+    /// 
+    /// 【执行逻辑】
+    /// 1. 将命令分为两组：设置了timestamp的"时间戳命令" vs 未设置的"顺序命令"
+    /// 2. 时间戳命令各自延迟到指定秒数后触发（并行等待）
+    /// 3. 顺序命令按列表顺序逐条执行
+    /// 4. 两组命令并行运行，演出结束条件：
+    ///    - 设置了performanceDuration → 到达时长后结束
+    ///    - 未设置 → 等待所有命令执行完毕后结束
+    /// </summary>
+    private async UniTask ExecuteBGMDrivenSequence(List<PerformanceCommand> cmds, CancellationToken ct)
+    {
+        // 分离时间戳命令和顺序命令
+        List<PerformanceCommand> timestampedCmds = new List<PerformanceCommand>();
+        List<PerformanceCommand> sequentialCmds = new List<PerformanceCommand>();
+
+        for (int i = 0; i < cmds.Count; i++)
+        {
+            PerformanceCommand cmd = cmds[i];
+            // 将命令信息拷贝到一个字段，用于日志输出
+            if (cmd.timestamp > 0f)
+            {
+                timestampedCmds.Add(cmd);
+            }
+            else
+            {
+                sequentialCmds.Add(cmd);
+            }
+        }
+
+        LogSystem.Info($"PerformanceDirector: BGMDriven模式 → 时间戳命令 {timestampedCmds.Count} 条, 顺序命令 {sequentialCmds.Count} 条");
+
+        // 构建所有并行Task
+        List<UniTask> allTasks = new List<UniTask>();
+
+        // 1. 时间戳命令：各自等待到指定秒数后触发
+        for (int i = 0; i < timestampedCmds.Count; i++)
+        {
+            PerformanceCommand cmd = timestampedCmds[i];
+            allTasks.Add(ExecuteTimestampedCommand(cmd, ct));
+        }
+
+        // 2. 顺序命令：逐条执行
+        if (sequentialCmds.Count > 0)
+        {
+            allTasks.Add(ExecuteCommandSequence(sequentialCmds, ct));
+        }
+
+        // 3. 如果设置了总时长，添加时长限制Task
+        if (performanceTotalDuration > 0f)
+        {
+            allTasks.Add(WaitForDuration(performanceTotalDuration, ct));
+        }
+
+        // 并行等待所有任务完成
+        await UniTask.WhenAll(allTasks);
+    }
+
+    /// <summary>
+    /// 执行一条时间戳命令：等待到指定时刻后触发
+    /// </summary>
+    private async UniTask ExecuteTimestampedCommand(PerformanceCommand cmd, CancellationToken ct)
+    {
+        float targetTime = cmd.timestamp;
+
+        // 等待到达目标时刻
+        float elapsed = 0f;
+        while (elapsed < targetTime)
+        {
+            ct.ThrowIfCancellationRequested();
+            elapsed += Time.deltaTime;
+            await UniTask.Yield(ct);
+        }
+
+        // 触发命令
+        LogSystem.Info($"PerformanceDirector: 时间戳命令触发 (t={targetTime:F1}s)");
+        OnCommandExecuting?.Invoke(-1, cmd); // -1 表示时间戳触发
+        await ExecuteSingleCommand(cmd, ct);
+    }
+
+    /// <summary>
+    /// 等待演出总时长结束后返回（用于BGMDriven模式下限制总时长）
+    /// </summary>
+    private async UniTask WaitForDuration(float totalDuration, CancellationToken ct)
+    {
+        float elapsed = 0f;
+        while (elapsed < totalDuration)
+        {
+            ct.ThrowIfCancellationRequested();
+            elapsed += Time.deltaTime;
+            await UniTask.Yield(ct);
+        }
+        LogSystem.Info($"PerformanceDirector: BGMDriven演出时长到达 ({totalDuration:F1}s)，结束演出");
     }
 
     // ============================================================
@@ -415,7 +594,6 @@ public class PerformanceDirector : MonoBehaviour
     private async UniTask ExecuteDialogue(PerformanceCommand cmd, CancellationToken ct)
     {
         OnDialogueDisplay?.Invoke(cmd.speakerName, cmd.textContent);
-        // 文字显示持续时间 = 字数 * 打字速度 + 额外停留时间
         float displayTime = (string.IsNullOrEmpty(cmd.textContent) ? 0 : cmd.textContent.Length * defaultTypeSpeed);
         float stayTime = cmd.duration > 0f ? cmd.duration : displayTime + 1.5f;
         await UniTask.WaitForSeconds(stayTime, cancellationToken: ct);
@@ -423,7 +601,6 @@ public class PerformanceDirector : MonoBehaviour
 
     private void ExecuteFloatingText(PerformanceCommand cmd)
     {
-        // 随机屏幕位置（0.1-0.9归一化范围，避边缘）
         Vector2 pos = new Vector2(
             UnityEngine.Random.Range(0.15f, 0.85f),
             UnityEngine.Random.Range(0.2f, 0.8f)
@@ -483,6 +660,23 @@ public class PerformanceDirector : MonoBehaviour
 
     private async UniTask ExecuteBackgroundChange(PerformanceCommand cmd, CancellationToken ct)
     {
+        // GameObject背景模式（支持Shader动效）
+        if (backgroundRoot != null)
+        {
+            if (cmd.duration > 0f)
+            {
+                await effectManager.ScreenFade(1f, cmd.duration * 0.5f, ct);
+                SwitchBackgroundGameObject(cmd.backgroundSpriteName);
+                await effectManager.ScreenFade(0f, cmd.duration * 0.5f, ct);
+            }
+            else
+            {
+                SwitchBackgroundGameObject(cmd.backgroundSpriteName);
+            }
+            return;
+        }
+
+        // SpriteRenderer背景模式（简单图片切换）
         if (backgroundRenderer == null)
         {
             LogSystem.Debug("PerformanceDirector: backgroundRenderer 未设置！");
@@ -491,7 +685,6 @@ public class PerformanceDirector : MonoBehaviour
 
         if (cmd.duration > 0f)
         {
-            // 有过渡时间：淡出 → 换图 → 淡入
             await effectManager.ScreenFade(1f, cmd.duration * 0.5f, ct);
             await SetBackground(cmd.backgroundSpriteName, cmd.backgroundSpriteABName);
             await effectManager.ScreenFade(0f, cmd.duration * 0.5f, ct);
@@ -499,6 +692,31 @@ public class PerformanceDirector : MonoBehaviour
         else
         {
             await SetBackground(cmd.backgroundSpriteName, cmd.backgroundSpriteABName);
+        }
+    }
+
+    /// <summary>切换GameObject背景（通过显隐控制，支持Shader动效）</summary>
+    private void SwitchBackgroundGameObject(string backgroundName)
+    {
+        if (backgroundRoot == null || string.IsNullOrEmpty(backgroundName))
+            return;
+
+        // 隐藏所有背景
+        foreach (Transform child in backgroundRoot)
+        {
+            child.gameObject.SetActive(false);
+        }
+
+        // 显示目标背景
+        Transform target = backgroundRoot.Find(backgroundName);
+        if (target != null)
+        {
+            target.gameObject.SetActive(true);
+            LogSystem.Info($"PerformanceDirector: 切换背景 -> [{backgroundName}]");
+        }
+        else
+        {
+            LogSystem.Debug($"PerformanceDirector: 未找到背景 [{backgroundName}]");
         }
     }
 
@@ -527,11 +745,7 @@ public class PerformanceDirector : MonoBehaviour
 
     private void ExecuteCameraShake(PerformanceCommand cmd)
     {
-        if (cameraController == null)
-        {
-            LogSystem.Debug("PerformanceDirector: cameraController 未设置！");
-            return;
-        }
+        if (cameraController == null) return;
         float strength = cmd.cameraShakeStrength > 0f ? cmd.cameraShakeStrength : 0.5f;
         float time = cmd.duration > 0f ? cmd.duration : 0.3f;
         int vibrato = cmd.cameraShakeVibrato > 0 ? cmd.cameraShakeVibrato : 20;
@@ -540,11 +754,7 @@ public class PerformanceDirector : MonoBehaviour
 
     private async UniTask ExecuteCameraZoom(PerformanceCommand cmd, CancellationToken ct)
     {
-        if (cameraController == null)
-        {
-            LogSystem.Debug("PerformanceDirector: cameraController 未设置！");
-            return;
-        }
+        if (cameraController == null) return;
         float target = cmd.cameraZoomTarget > 0f ? cmd.cameraZoomTarget : 1f;
         float time = cmd.duration > 0f ? cmd.duration : 1f;
         await cameraController.ZoomTo(target, time, ct);
@@ -552,33 +762,21 @@ public class PerformanceDirector : MonoBehaviour
 
     private async UniTask ExecuteCameraPan(PerformanceCommand cmd, CancellationToken ct)
     {
-        if (cameraController == null)
-        {
-            LogSystem.Debug("PerformanceDirector: cameraController 未设置！");
-            return;
-        }
+        if (cameraController == null) return;
         float time = cmd.duration > 0f ? cmd.duration : 2f;
         await cameraController.PanTo(cmd.cameraPanOffset, time, ct);
     }
 
     private async UniTask ExecuteCameraRotate(PerformanceCommand cmd, CancellationToken ct)
     {
-        if (cameraController == null)
-        {
-            LogSystem.Debug("PerformanceDirector: cameraController 未设置！");
-            return;
-        }
+        if (cameraController == null) return;
         float time = cmd.duration > 0f ? cmd.duration : 0.8f;
         await cameraController.RotateTo(cmd.cameraRotateAngle, time, ct);
     }
 
     private void ExecuteCameraReset()
     {
-        if (cameraController == null)
-        {
-            LogSystem.Debug("PerformanceDirector: cameraController 未设置！");
-            return;
-        }
+        if (cameraController == null) return;
         cameraController.ResetCamera();
     }
 
@@ -588,57 +786,36 @@ public class PerformanceDirector : MonoBehaviour
 
     private async UniTask ExecuteScreenColorFilter(PerformanceCommand cmd, CancellationToken ct)
     {
-        if (effectManager == null)
-        {
-            LogSystem.Debug("PerformanceDirector: effectManager 未设置！");
-            return;
-        }
+        if (effectManager == null) return;
         float time = cmd.duration > 0f ? cmd.duration : 1f;
         await effectManager.SetColorFilter(cmd.screenFilterColor, time, ct);
     }
 
     private async UniTask ExecuteScreenFade(PerformanceCommand cmd, CancellationToken ct)
     {
-        if (effectManager == null)
-        {
-            LogSystem.Debug("PerformanceDirector: effectManager 未设置！");
-            return;
-        }
+        if (effectManager == null) return;
         float time = cmd.duration > 0f ? cmd.duration : 1f;
         await effectManager.ScreenFade(cmd.screenFadeAlpha, time, ct);
     }
 
     private async UniTask ExecuteScreenBlur(PerformanceCommand cmd, CancellationToken ct)
     {
-        if (effectManager == null)
-        {
-            LogSystem.Debug("PerformanceDirector: effectManager 未设置！");
-            return;
-        }
+        if (effectManager == null) return;
         float time = cmd.duration > 0f ? cmd.duration : 1f;
         await effectManager.SetBlur(cmd.blurStrength, time, ct);
     }
 
     private void ExecuteParticleEffect(PerformanceCommand cmd)
     {
-        if (effectManager == null)
-        {
-            LogSystem.Debug("PerformanceDirector: effectManager 未设置！");
-            return;
-        }
+        if (effectManager == null) return;
         effectManager.SpawnParticle(cmd.particleResName, cmd.particleABName, cmd.particleSpawnPos);
     }
 
     private async UniTask ExecuteFlash(PerformanceCommand cmd, CancellationToken ct)
     {
-        if (effectManager == null)
-        {
-            LogSystem.Debug("PerformanceDirector: effectManager 未设置！");
-            return;
-        }
+        if (effectManager == null) return;
         Color color = cmd.flashColor != default ? cmd.flashColor : Color.white;
         float time = cmd.duration > 0f ? cmd.duration : 0.3f;
-        // 闪白：瞬间变亮 → 渐隐
         await effectManager.Flash(color, time * 0.3f, time * 0.7f, ct);
     }
 
@@ -677,7 +854,6 @@ public class PerformanceDirector : MonoBehaviour
         if (cmd.parallelCommands == null || cmd.parallelCommands.Count == 0)
             return;
 
-        // 将所有子命令并行执行
         List<UniTask> tasks = new List<UniTask>();
         foreach (var subCmd in cmd.parallelCommands)
         {

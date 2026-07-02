@@ -1,3 +1,5 @@
+using UnityEngine;
+
 /// <summary>
 /// 演出命令类型枚举 —— 定义剧情演出中所有可用的指令类型。
 /// 
@@ -16,81 +18,81 @@
 public enum EPerformanceCommandType
 {
     // ======== 文字类 ========
-    /// <summary>显示对话文字（支持打字机效果、位置、风格）</summary>
+    [InspectorName("💬 对话文字 — Dialogue")]
     Dialogue,
 
-    /// <summary>显示浮空文字（飘散、短暂停留后消失，意识流特征）</summary>
+    [InspectorName("💬 浮空文字 — FloatingText")]
     FloatingText,
 
     // ======== 角色类 ========
-    /// <summary>显示/隐藏角色（支持淡入淡出等过渡）</summary>
+    [InspectorName("🧑 角色显隐 — CharacterVisibility")]
     CharacterVisibility,
 
-    /// <summary>移动角色到指定位置</summary>
+    [InspectorName("🧑 角色移动 — CharacterMove")]
     CharacterMove,
 
-    /// <summary>角色表情/姿态切换（更换Sprite）</summary>
+    [InspectorName("🧑 角色表情 — CharacterExpression")]
     CharacterExpression,
 
-    /// <summary>角色震动效果（表现情绪激动等）</summary>
+    [InspectorName("🧑 角色震动 — CharacterShake")]
     CharacterShake,
 
     // ======== 场景/背景类 ========
-    /// <summary>切换背景图</summary>
+    [InspectorName("🖼 切换背景 — BackgroundChange")]
     BackgroundChange,
 
-    /// <summary>背景滚动/平移</summary>
+    [InspectorName("🖼 背景滚动 — BackgroundScroll")]
     BackgroundScroll,
 
     // ======== 镜头类 ========
-    /// <summary>摄像机震动</summary>
+    [InspectorName("🎥 摄像机震动 — CameraShake")]
     CameraShake,
 
-    /// <summary>摄像机缩放（拉近拉远）</summary>
+    [InspectorName("🎥 摄像机缩放 — CameraZoom")]
     CameraZoom,
 
-    /// <summary>摄像机平移</summary>
+    [InspectorName("🎥 摄像机平移 — CameraPan")]
     CameraPan,
 
-    /// <summary>摄像机旋转（表现眩晕/意识模糊/空间扭曲）</summary>
+    [InspectorName("🎥 摄像机旋转 — CameraRotate")]
     CameraRotate,
 
-    /// <summary>摄像机重置（恢复到演出初始状态）</summary>
+    [InspectorName("🎥 摄像机复位 — CameraReset")]
     CameraReset,
 
     // ======== 特效类 ========
-    /// <summary>全屏颜色滤镜（情绪色调切换）</summary>
+    [InspectorName("✨ 颜色滤镜 — ScreenColorFilter")]
     ScreenColorFilter,
 
-    /// <summary>屏幕淡入/淡出</summary>
+    [InspectorName("✨ 淡入淡出 — ScreenFade")]
     ScreenFade,
 
-    /// <summary>屏幕模糊效果</summary>
+    [InspectorName("✨ 画面模糊 — ScreenBlur")]
     ScreenBlur,
 
-    /// <summary>生成粒子特效</summary>
+    [InspectorName("✨ 粒子特效 — ParticleEffect")]
     ParticleEffect,
 
-    /// <summary>画面闪白/闪黑（冲击效果）</summary>
+    [InspectorName("✨ 闪白闪黑 — Flash")]
     Flash,
 
     // ======== 音频类 ========
-    /// <summary>播放背景音乐</summary>
+    [InspectorName("🎵 播放BGM — PlayBGM")]
     PlayBGM,
 
-    /// <summary>停止背景音乐</summary>
+    [InspectorName("🎵 停止BGM — StopBGM")]
     StopBGM,
 
-    /// <summary>播放音效</summary>
+    [InspectorName("🎵 播放音效 — PlaySFX")]
     PlaySFX,
 
     // ======== 控制类 ========
-    /// <summary>等待指定秒数</summary>
+    [InspectorName("⏱ 等待N秒 — Wait")]
     Wait,
 
-    /// <summary>并行执行组（组内命令同时执行）</summary>
+    [InspectorName("⏱ 并行执行 — Parallel")]
     Parallel,
 
-    /// <summary>用户交互等待（等待点击/按键后继续）</summary>
+    [InspectorName("⏱ 等待点击 — WaitForInput")]
     WaitForInput,
 }

@@ -104,7 +104,7 @@ namespace TangmenFramework
         /// <returns>加载到的AssetBundle，如果所有路径都加载失败则返回null</returns>
         private AssetBundle LoadAssetBundleFromMultiplePaths(string abName)
         {
-            // 1. 首先尝试从persistentDataPath加载
+            // 1. 首先尝试从persistentDataPath加载（热更目录）
             string persistentPath = PersistentDataPath + abName;
             if (File.Exists(persistentPath))
             {
@@ -112,22 +112,30 @@ namespace TangmenFramework
                 return AssetBundle.LoadFromFile(persistentPath);
             }
 
-            // 2. 如果persistentDataPath不存在，则尝试从streamingAssetsPath加载
+            // 2. 尝试从streamingAssetsPath加载（包内目录）
+            // 注意：Android平台上streamingAssetsPath指向APK内部，
+            // File.Exists()无法检测APK内文件，因此直接尝试AssetBundle.LoadFromFile()
             string streamingPath = StreamingAssetsPath + abName;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            // Android真机：跳过File.Exists检查，直接尝试加载
+            LogSystem.Info("从streamingAssetsPath加载AB包(Android): " + abName);
+            return AssetBundle.LoadFromFile(streamingPath);
+#else
             if (File.Exists(streamingPath))
             {
                 LogSystem.Info("从streamingAssetsPath加载AB包: " + abName);
                 return AssetBundle.LoadFromFile(streamingPath);
             }
+#endif
 
-            // 3. 如果两个路径都不存在，返回null
+            // 3. 如果两个路径都加载失败，返回null
             LogSystem.Warning("AB包在两个路径中都不存在: " + abName);
             return null;
         }
 
         private AssetBundleCreateRequest LoadAssetBundleFromMultiplePathsRequest(string abName)
         {
-            // 1. 首先尝试从persistentDataPath加载
+            // 1. 首先尝试从persistentDataPath加载（热更目录）
             string persistentPath = PersistentDataPath + abName;
             if (File.Exists(persistentPath))
             {
@@ -135,15 +143,21 @@ namespace TangmenFramework
                 return AssetBundle.LoadFromFileAsync(persistentPath);
             }
 
-            // 2. 如果persistentDataPath不存在，则尝试从streamingAssetsPath加载
+            // 2. 尝试从streamingAssetsPath加载（包内目录）
             string streamingPath = StreamingAssetsPath + abName;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            // Android真机：跳过File.Exists检查，直接尝试加载
+            LogSystem.Info("从streamingAssetsPath加载AB包(Android): " + abName);
+            return AssetBundle.LoadFromFileAsync(streamingPath);
+#else
             if (File.Exists(streamingPath))
             {
                 LogSystem.Info("从streamingAssetsPath加载AB包: " + abName);
                 return AssetBundle.LoadFromFileAsync(streamingPath);
             }
+#endif
 
-            // 3. 如果两个路径都不存在，返回null
+            // 3. 如果两个路径都加载失败，返回null
             LogSystem.Warning("AB包在两个路径中都不存在: " + abName);
             return null;
         }
@@ -153,7 +167,7 @@ namespace TangmenFramework
         /// </summary>
         private async UniTask<AssetBundle> LoadAssetBundleFromMultiplePathsAsync(string abName)
         {
-            // 1. 首先尝试从persistentDataPath加载
+            // 1. 首先尝试从persistentDataPath加载（热更目录）
             string persistentPath = PersistentDataPath + abName;
             if (File.Exists(persistentPath))
             {
@@ -163,17 +177,25 @@ namespace TangmenFramework
                 return request.assetBundle;
             }
 
-            // 2. 如果persistentDataPath不存在，则尝试从streamingAssetsPath加载
+            // 2. 尝试从streamingAssetsPath加载（包内目录）
             string streamingPath = StreamingAssetsPath + abName;
+#if UNITY_ANDROID && !UNITY_EDITOR
+            // Android真机：跳过File.Exists检查，直接尝试加载
+            LogSystem.Info("异步从streamingAssetsPath加载AB包(Android): " + abName);
+            var request2 = AssetBundle.LoadFromFileAsync(streamingPath);
+            await request2;
+            return request2.assetBundle;
+#else
             if (File.Exists(streamingPath))
             {
                 LogSystem.Info("异步从streamingAssetsPath加载AB包: " + abName);
-                var request = AssetBundle.LoadFromFileAsync(streamingPath);
-                await request;
-                return request.assetBundle;
+                var request2 = AssetBundle.LoadFromFileAsync(streamingPath);
+                await request2;
+                return request2.assetBundle;
             }
+#endif
 
-            // 3. 如果两个路径都不存在，返回null
+            // 3. 如果两个路径都加载失败，返回null
             LogSystem.Warning("AB包在两个路径中都不存在: " + abName);
             return null;
         }
@@ -186,6 +208,12 @@ namespace TangmenFramework
         {
             //加载主包
             LoadMainAB();
+            //主包加载失败则无法获取依赖信息
+            if (manifest == null)
+            {
+                LogSystem.Error($"主包 [{MainName}] 加载失败，无法获取 {abName} 的依赖信息");
+                return;
+            }
             //获取依赖包
             string[] strs = manifest.GetAllDependencies(abName);
             for (int i = 0; i < strs.Length; i++)
@@ -282,6 +310,16 @@ namespace TangmenFramework
         {
             //加载主包
             LoadMainAB();
+            //主包加载失败时，manifest为null，无法继续
+            if (manifest == null)
+            {
+                LogSystem.Error($"主包 [{MainName}] 加载失败，无法加载依赖信息。请检查：\n" +
+                    $"1. AB包是否已正确构建（目标平台应为 {Application.platform}）\n" +
+                    $"2. StreamingAssets中是否存在 [{MainName}] 主包文件\n" +
+                    $"3. AB包是否已随APK一起打包");
+                callBack(null);
+                return;
+            }
             //获取依赖包
             string[] strs = manifest.GetAllDependencies(abName);
             for (int i = 0; i < strs.Length; i++)

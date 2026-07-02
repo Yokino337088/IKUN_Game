@@ -13,6 +13,8 @@ public static class MyAssetBundleName
     public const string 开始场景音乐包 = "music_begin";
 
     public const string 开始场景UI面板包 = "ui_panel_begin";
+
+    public const string 开始场景材质包 = "material_begin";
     #endregion
 
     #region 第四章
@@ -23,6 +25,8 @@ public static class MyAssetBundleName
     public const string 第四章音效包 = "sound_four";
 
     public const string 第四章UI面板包 = "ui_panel_four";
+
+    public const string 第四章json数据包 = "json_four";
     #endregion
 
     #region 其他

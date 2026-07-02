@@ -31,11 +31,12 @@ public class BossBaseState : BaseState<BossStateType, IBossFSMObj>
 
     public override void QuitState()
     {
+        EventCenter.Instance.RemoveEventListener<BossPhaseType>(MyEventTypeString.Boss动画切换事件, ChangePhaseAnimation);
     }
 
     public override void UpdateState()
     {
-        EventCenter.Instance.RemoveEventListener<BossPhaseType>(MyEventTypeString.Boss动画切换事件, ChangePhaseAnimation);
+        
     }
 
     protected void PlayAnimation(AnimationClip clip, float fadeDuration = 0.2f)
@@ -58,5 +59,12 @@ public class BossBaseState : BaseState<BossStateType, IBossFSMObj>
     private void ChangePhaseAnimation(BossPhaseType bossPhaseType)
     {
         PlayAnimation(AIObj.GetAnimationClip(bossPhaseType));
+        if (AIObj.GetBossData().nowPhase == BossPhaseType.陶喆)
+        {
+            ABResMgr.Instance.LoadResAsync<GameObject>(MyAssetBundleName.第四章物体包, "陶喆文字", (obj) =>
+            {
+                GameObject.Instantiate(obj,Vector3.zero,Quaternion.identity);
+            });
+        }
     }
 }

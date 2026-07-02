@@ -20,6 +20,11 @@ using UnityEngine;
 /// - 角色可以随时淡入淡出，表现记忆/幻觉的闪现
 /// - 震动效果模拟内心震撼或外部冲击
 /// - 表情切换在实时演算中进行，配合文字推进情绪
+/// 
+/// 【动画角色支持】
+/// 如果角色预制体包含Animator组件，演出系统会自动保留动画播放状态。
+/// 通过 SetExpression 切换角色姿态时，会销毁旧实例并实例化新的预制体，
+/// 新预制体会自动播放其默认动画。
 /// </summary>
 public class PerformanceCharacter : MonoBehaviour
 {
@@ -32,6 +37,12 @@ public class PerformanceCharacter : MonoBehaviour
     /// <summary>角色映射表（角色名 → SpriteRenderer）</summary>
     private Dictionary<string, SpriteRenderer> characterMap = new Dictionary<string, SpriteRenderer>();
 
+    /// <summary>角色GameObject映射表（角色名 → GameObject）</summary>
+    private Dictionary<string, GameObject> characterGOs = new Dictionary<string, GameObject>();
+
+    /// <summary>角色预制体映射表（角色名 → 预制体）</summary>
+    private Dictionary<string, GameObject> characterPrefabMap = new Dictionary<string, GameObject>();
+
     private void Awake()
     {
         // 从预注册列表构建映射
@@ -40,7 +51,12 @@ public class PerformanceCharacter : MonoBehaviour
             if (go == null) continue;
             var sr = go.GetComponent<SpriteRenderer>();
             if (sr != null)
+            {
                 characterMap[go.name] = sr;
+                characterGOs[go.name] = go;
+            }
+            // 记录预制体（用于切换表情时实例化）
+            characterPrefabMap[go.name] = go;
         }
 
         // 从characterRoot子节点自动注册
@@ -50,7 +66,10 @@ public class PerformanceCharacter : MonoBehaviour
             {
                 var sr = child.GetComponent<SpriteRenderer>();
                 if (sr != null && !characterMap.ContainsKey(child.name))
+                {
                     characterMap[child.name] = sr;
+                    characterGOs[child.name] = child.gameObject;
+                }
             }
         }
     }
@@ -61,7 +80,11 @@ public class PerformanceCharacter : MonoBehaviour
         if (characterGO == null) return;
         var sr = characterGO.GetComponent<SpriteRenderer>();
         if (sr != null)
+        {
             characterMap[name] = sr;
+            characterGOs[name] = characterGO;
+        }
+        characterPrefabMap[name] = characterGO;
     }
 
     /// <summary>获取角色SpriteRenderer</summary>
@@ -69,6 +92,13 @@ public class PerformanceCharacter : MonoBehaviour
     {
         characterMap.TryGetValue(name, out var sr);
         return sr;
+    }
+
+    /// <summary>获取角色GameObject</summary>
+    public GameObject GetCharacterGameObject(string name)
+    {
+        characterGOs.TryGetValue(name, out var go);
+        return go;
     }
 
     /// <summary>
@@ -133,11 +163,21 @@ public class PerformanceCharacter : MonoBehaviour
         }
     }
 
-    /// <summary>切换角色表情/姿态Sprite</summary>
+    /// <summary>切换角色表情/姿态</summary>
+    /// <param name="name">角色名</param>
+    /// <param name="spriteName">Sprite资源名或预制体资源名</param>
+    /// <param name="abName">AB包名</param>
+    /// <param name="ct">取消令牌</param>
+    /// <remarks>
+    /// 如果角色预制体包含Animator组件，会销毁旧实例并实例化新预制体，
+    /// 新预制体会自动播放其默认动画。
+    /// </remarks>
     public async UniTask SetExpression(string name, string spriteName, string abName, CancellationToken ct)
     {
         var sr = GetCharacter(name);
-        if (sr == null)
+        var currentGO = GetCharacterGameObject(name);
+        
+        if (sr == null && currentGO == null)
         {
             LogSystem.Debug($"PerformanceCharacter: 未找到角色 [{name}]");
             return;
@@ -146,8 +186,49 @@ public class PerformanceCharacter : MonoBehaviour
         if (string.IsNullOrEmpty(spriteName))
             return;
 
+        // 尝试加载预制体（带动画）
+        GameObject prefab = await ABResMgr.Instance.LoadResAsync<GameObject>(abName, spriteName);
+        if (prefab != null)
+        {
+            // 保存旧位置和状态
+            Vector3 oldPosition = currentGO != null ? currentGO.transform.position : Vector3.zero;
+            Quaternion oldRotation = currentGO != null ? currentGO.transform.rotation : Quaternion.identity;
+            Vector3 oldScale = currentGO != null ? currentGO.transform.localScale : Vector3.one;
+            Transform parent = currentGO != null ? currentGO.transform.parent : transform;
+            
+            // 销毁旧实例
+            if (currentGO != null)
+                GameObject.Destroy(currentGO);
+            
+            // 实例化新预制体
+            GameObject newGO = GameObject.Instantiate(prefab, parent);
+            newGO.transform.position = oldPosition;
+            newGO.transform.rotation = oldRotation;
+            newGO.transform.localScale = oldScale;
+            newGO.name = name;
+            
+            // 更新映射
+            var newSR = newGO.GetComponent<SpriteRenderer>();
+            if (newSR != null)
+            {
+                characterMap[name] = newSR;
+                characterGOs[name] = newGO;
+            }
+            
+            // 如果有Animator，自动播放默认动画
+            var animator = newGO.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.enabled = true;
+            }
+            
+            LogSystem.Info($"PerformanceCharacter: 角色 [{name}] 切换为预制体 [{spriteName}]");
+            return;
+        }
+
+        // 回退到Sprite切换（无动画）
         Sprite newSprite = await ABResMgr.Instance.LoadResAsync<Sprite>(abName, spriteName);
-        if (newSprite != null)
+        if (newSprite != null && sr != null)
             sr.sprite = newSprite;
     }
 

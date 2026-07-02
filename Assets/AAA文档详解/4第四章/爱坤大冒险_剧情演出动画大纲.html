@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《爱坤大冒险》剧情演出动画大纲 — Washed Away</title>
+<style>
+  :root {
+    --deep: #0a1628;
+    --abyss: #060f1e;
+    --water: #1a3a5c;
+    --foam: #3a7bd5;
+    --light: #e8f0fe;
+    --gold: #d4a853;
+    --accent: #5b9bd5;
+    --text: #c8d6e5;
+    --muted: #6b7d99;
+    --card: #0f1f38;
+    --border: rgba(90, 155, 213, 0.15);
+    --highlight: rgba(90, 155, 213, 0.08);
+    --danger: #e0556a;
+    --warn: #e0a155;
+    --ok: #55b89a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--abyss);
+    color: var(--text);
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, sans-serif;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 80%, var(--water) 0%, var(--deep) 40%, var(--abyss) 100%);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 60%, rgba(58,123,213,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 70% 40%, rgba(212,168,83,0.05) 0%, transparent 50%);
+    animation: heroPulse 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes heroPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--foam);
+    border-radius: 50%;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    20%  { opacity: 0.6; }
+    80%  { opacity: 0.3; }
+    100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 2rem;
+  }
+
+  .hero-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--foam);
+    border: 1px solid rgba(58,123,213,0.3);
+    padding: 0.4em 1.2em;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    background: linear-gradient(180deg, #e8f0fe 0%, #7aabdf 40%, #3a7bd5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
+
+  .hero .subtitle {
+    font-size: 1.2rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .hero .divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--foam), transparent);
+    margin: 2rem auto;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-meta-item {
+    text-align: center;
+  }
+
+  .hero-meta-item .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-meta-item .value {
+    font-size: 1.1rem;
+    color: var(--light);
+    font-weight: 500;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  .scroll-hint span {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--foam), transparent);
+    border-radius: 1px;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ── Navigation ── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,22,40,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 0;
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 2rem;
+    overflow-x: auto;
+  }
+  .nav-inner::-webkit-scrollbar { height: 0; }
+
+  .nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: color 0.2s;
+    padding: 0.2rem 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .nav a:hover, .nav a.active { color: var(--foam); border-color: var(--foam); }
+
+  /* ── Container ── */
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  /* ── Section Title ── */
+  .section-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--light);
+    margin: 4rem 0 2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-title .num {
+    font-size: 0.8rem;
+    color: var(--foam);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s;
+  }
+
+  .card:hover { border-color: rgba(90,155,213,0.3); }
+
+  /* ── Song Breakdown ── */
+  .song-structure {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  @media (max-width: 768px) {
+    .song-structure { grid-template-columns: 1fr; }
+  }
+
+  .act-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .act-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .act-card.act-a::before { background: linear-gradient(90deg, #1a3a5c, #3a7bd5, #1a3a5c); }
+  .act-card.act-b::before { background: linear-gradient(90deg, #3a1a1a, #e0556a, #d4a853); }
+  .act-card.act-c::before { background: linear-gradient(90deg, #d4a853, #e8d5a3, #d4a853); }
+
+  .act-card .act-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .act-a .act-label { color: var(--accent); }
+  .act-b .act-label { color: var(--danger); }
+  .act-c .act-label { color: var(--gold); }
+
+  .act-card h3 {
+    color: var(--light);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .act-card .timecode {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: "SF Mono", "Cascadia Code", monospace;
+    margin-bottom: 1rem;
+  }
+
+  .act-card .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .act-card .keyword {
+    font-size: 0.7rem;
+    padding: 0.2em 0.7em;
+    border-radius: 100px;
+    background: var(--highlight);
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+
+  .act-b .keyword { color: var(--warn); }
+  .act-c .keyword { color: var(--gold); }
+
+  /* ── Shot Block ── */
+  .shot {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .shot-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .shot-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--foam);
+    font-family: "SF Mono", "Cascadia Code", monospace;
+    min-width: 50px;
+  }
+
+  .shot-title-block { flex: 1; }
+
+  .shot-title {
+    font-size: 1.1rem;
+    color: var(--light);
+    font-weight: 600;
+  }
+
+  .shot-time {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: "SF Mono", "Cascadia Code", monospace;
+  }
+
+  .shot-duration {
+    font-size: 0.75rem;
+    color: var(--foam);
+    background: var(--highlight);
+    padding: 0.2em 0.7em;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .shot-body {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .shot-body { grid-template-columns: 1fr; }
+  }
+
+  .shot-body dt {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--foam);
+    margin-bottom: 0.3rem;
+    margin-top: 1.2rem;
+  }
+
+  .shot-body dt:first-child { margin-top: 0; }
+
+  .shot-body dd {
+    color: var(--text);
+    font-size: 0.92rem;
+    margin-left: 0;
+    line-height: 1.9;
+  }
+
+  .shot-body .lyric {
+    margin-top: 0.8rem;
+    padding: 1rem;
+    background: var(--highlight);
+    border-left: 2px solid var(--foam);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--light);
+    font-size: 0.9rem;
+  }
+
+  .shot-body .lyric .en { color: var(--foam); }
+  .shot-body .lyric .zh { color: var(--muted); font-size: 0.8rem; font-style: normal; }
+
+  /* ── Camera Diagram ── */
+  .camera-diagram {
+    background: var(--abyss);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    font-family: "SF Mono", "Cascadia Code", monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* ── Emotion Curve ── */
+  .curve-container {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .curve-container h4 {
+    color: var(--light);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+
+  .emotion-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 160px;
+  }
+
+  .emotion-seg {
+    flex: 1;
+    border-radius: 2px 2px 0 0;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .emotion-seg:hover { filter: brightness(1.4); }
+
+  .emotion-labels {
+    display: flex;
+    margin-top: 0.6rem;
+  }
+
+  .emotion-labels span {
+    flex: 1;
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ── Color Palette ── */
+  .palette {
+    display: flex;
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .swatch .hex {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    color: var(--muted);
+    font-family: "SF Mono", monospace;
+    white-space: nowrap;
+  }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.88rem;
+  }
+
+  th, td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    color: var(--foam);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  td { color: var(--text); }
+
+  tr:hover td { background: var(--highlight); }
+
+  /* ── Tags ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.25em 0.8em;
+    border-radius: 100px;
+  }
+
+  .tag-blue { background: rgba(58,123,213,0.15); color: var(--accent); }
+  .tag-red { background: rgba(224,85,106,0.15); color: var(--danger); }
+  .tag-gold { background: rgba(212,168,83,0.15); color: var(--gold); }
+  .tag-green { background: rgba(85,184,154,0.15); color: var(--ok); }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* ── Transitions section indicator ── */
+  .transition-marker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    background: linear-gradient(90deg, var(--highlight), transparent);
+    border-left: 3px solid var(--danger);
+    border-radius: 0 12px 12px 0;
+  }
+
+  .transition-marker .marker-icon {
+    font-size: 2rem;
+  }
+
+  .transition-marker h4 {
+    color: var(--danger);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.2rem;
+  }
+
+  .transition-marker p {
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: #222; }
+    .hero { min-height: 50vh; background: none; }
+    .hero h1 { -webkit-text-fill-color: #1a3a5c; }
+    .nav { display: none; }
+    .scroll-hint { display: none; }
+    .card, .shot { break-inside: avoid; background: white; border: 1px solid #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero" id="top">
+  <div class="particles" id="particles"></div>
+  <div class="hero-content">
+    <div class="hero-label">Cinematic Cutscene Design Document</div>
+    <h1>爱坤大冒险</h1>
+    <p class="subtitle">剧情演出动画大纲</p>
+    <div class="divider"></div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="label">BGM</div>
+        <div class="value">Washed Away — 蔡徐坤</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="label">时长</div>
+        <div class="value">3'18"</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="label">镜头数</div>
+        <div class="value">17 镜</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="label">演出类型</div>
+        <div class="value">2D 实时演算</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════ NAV ═══════ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#overview">项目概述</a>
+    <a href="#song">歌曲分析</a>
+    <a href="#palette">视觉体系</a>
+    <a href="#act1">ACT I · 沉溺</a>
+    <a href="#transition">⚡ 转折</a>
+    <a href="#act2">ACT II · 坠落</a>
+    <a href="#act3">ACT III · 重生</a>
+    <a href="#timeline">时间线总览</a>
+    <a href="#tech">技术实现</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ═══════ 1. 项目概述 ═══════ -->
+<section id="overview">
+  <h2 class="section-title">
+    <span class="num">01</span> 项目概述
+  </h2>
+
+  <div class="card">
+    <table>
+      <tr><th style="width:140px">项目名称</th><td>《爱坤大冒险》剧情演出动画（实时演算过场动画）</td></tr>
+      <tr><th>游戏类型</th><td>2D 横版冒险 / 平台跳跃</td></tr>
+      <tr><th>引擎</th><td>Unity（2D URP）</td></tr>
+      <tr><th>演出类型</th><td>实时演算 Cutscene（非预渲染视频）</td></tr>
+      <tr><th>BGM</th><td>蔡徐坤 — 《Washed Away》（收录于专辑《KUN》，2026.02.06 发行）</td></tr>
+      <tr><th>歌曲时长</th><td>3 分 18 秒</td></tr>
+      <tr><th>镜头总数</th><td>17 个镜头，分属 3 个 ACT</td></tr>
+      <tr><th>演出触发时机</th><td>游戏主线关键剧情节点（建议为"深渊坠落"关卡后）</td></tr>
+      <tr><th>核心主题</th><td>沉溺 → 挣扎 → 冲刷 → 重生</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">🎬 剧情概览</h4>
+    <p>
+      主角爱坤在冒险途中被一股不可名状的黑暗力量拖入深海幻境。在这里，他面对的不是怪物，
+      而是来自四面八方的声音——质疑、期待、定义、标签——这些声音化为黑色的潮水，将他吞噬。
+      在彻底的沉溺中，爱坤放弃挣扎，接受"被冲刷"的命运。
+      然而正是这一刻的"放手"，让他在坠落中找到了真正的自己。
+      鼓点击碎海面，光芒穿透深渊——被冲刷而去的并非生命，而是所有不属于他的伪装。
+      当黎明降临，一个全新的爱坤从海滩上站起，向着日出的方向继续他的冒险。
+    </p>
+  </div>
+</section>
+
+<!-- ═══════ 2. 歌曲分析 ═══════ -->
+<section id="song">
+  <h2 class="section-title">
+    <span class="num">02</span> 歌曲《Washed Away》深度拆解
+  </h2>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">完整歌词</h4>
+    <pre style="color:var(--text);font-size:0.9rem;line-height:2;background:var(--abyss);padding:1.5rem;border-radius:8px;overflow-x:auto;">
+<span style="color:var(--foam)">[Verse 1 — A段 · 沉溺]</span>
+Sinking                            <span style="color:var(--muted)">// 下沉</span>
+I'm calling out your name           <span style="color:var(--muted)">// 呼喊着你的名字</span>
+My dreams                           <span style="color:var(--muted)">// 我的梦想</span>
+My dreams that can't be tamed       <span style="color:var(--muted)">// 那些无法被驯服的梦</span>
+If I show you                       <span style="color:var(--muted)">// 如果我向你展示</span>
+What you wanna see                  <span style="color:var(--muted)">// 你想要看到的样子</span>
+Will you tell me                    <span style="color:var(--muted)">// 你会告诉我吗</span>
+I fit in with no melody             <span style="color:var(--muted)">// 失去旋律的我，还能融入吗</span>
+I'm drowning                        <span style="color:var(--muted)">// 我在溺水</span>
+I'm drowning                        <span style="color:var(--muted)">// 我在溺水</span>
+Oh, I'm drowning                    <span style="color:var(--muted)">// 哦，我在溺水</span>
+Wash me out to sea                  <span style="color:var(--muted)">// 将我冲刷入海</span>
+
+<span style="color:var(--danger)">[Verse 2 — B段 · 坠落与爆发]  ⬅ 鼓点切入！</span>
+Falling                             <span style="color:var(--muted)">// 坠落</span>
+Free falling through the sky        <span style="color:var(--muted)">// 自由坠落穿过天空</span>
+Your voice consumes me              <span style="color:var(--muted)">// 你的声音吞噬了我</span>
+There's nowhere left to hide        <span style="color:var(--muted)">// 再无藏身之处</span>
+I'm drowning                        <span style="color:var(--muted)">// 我在溺水</span>
+I'm drowning
+Oh, I'm drowning
+Wash me out to sea
+
+<span style="color:var(--gold)">[Outro — 尾奏 · 留白]</span>
+Ohh                                <span style="color:var(--muted)">// 无词吟唱</span>
+Oooh
+I'm drowning
+I'm drowning
+I'm drowning
+Wash me out to sea</pre>
+  </div>
+
+  <!-- 三幕结构 -->
+  <div class="song-structure">
+    <div class="act-card act-a">
+      <div class="act-label">ACT I</div>
+      <h3>沉溺 · 坠落</h3>
+      <div class="timecode">0:00 — 1:10</div>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.8rem;">
+        仅钢琴与呼吸声交织，近乎呢喃的演唱。主动将自我交付的坠落姿态。氛围安静、脆弱、压抑。
+      </p>
+      <div class="keywords">
+        <span class="keyword">钢琴独奏</span>
+        <span class="keyword">呢喃演唱</span>
+        <span class="keyword">呼吸声</span>
+        <span class="keyword">冷色调</span>
+        <span class="keyword">深海窒息感</span>
+      </div>
+    </div>
+
+    <div class="act-card act-b">
+      <div class="act-label">ACT II</div>
+      <h3>变奏 · 爆发</h3>
+      <div class="timecode">1:10 — 2:20</div>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.8rem;">
+        鼓点劈开海面，声墙层层堆叠。从私语转向宣泄。能量收束、点燃，形成强烈反差。宣告旧日一切被冲走。
+      </p>
+      <div class="keywords">
+        <span class="keyword">鼓点切入</span>
+        <span class="keyword">声墙堆叠</span>
+        <span class="keyword">动态爆发</span>
+        <span class="keyword">暖光破入</span>
+        <span class="keyword">毁灭→重塑</span>
+      </div>
+    </div>
+
+    <div class="act-card act-c">
+      <div class="act-label">ACT III</div>
+      <h3>留白 · 旷野</h3>
+      <div class="timecode">2:20 — 3:18</div>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.8rem;">
+        元素渐隐，只剩人声与空旷氛围。被暴雨浸透后万物滋长的旷野。不给出封闭式结局，留下开放的重生意向。
+      </p>
+      <div class="keywords">
+        <span class="keyword">渐隐</span>
+        <span class="keyword">空旷</span>
+        <span class="keyword">金色黎明</span>
+        <span class="keyword">重生</span>
+        <span class="keyword">开放结局</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 情感曲线 -->
+  <div class="curve-container">
+    <h4>🎚 全曲情感强度曲线</h4>
+    <div class="emotion-bar">
+      <div class="emotion-seg" style="height:30%;background:#1a3a5c;" title="0:00 开篇·呼吸"></div>
+      <div class="emotion-seg" style="height:35%;background:#1a3a5c;" title="0:15 呢喃"></div>
+      <div class="emotion-seg" style="height:40%;background:#1d4a6e;" title="0:30 质疑"></div>
+      <div class="emotion-seg" style="height:50%;background:#1d4a6e;" title="0:45 沉溺加深"></div>
+      <div class="emotion-seg" style="height:55%;background:#2a5a7e;" title="1:00 最深处"></div>
+      <div class="emotion-seg" style="height:40%;background:#3a1a1a;" title="1:10 ⚡鼓点切入"></div>
+      <div class="emotion-seg" style="height:65%;background:#6a2a2a;" title="1:20 坠落"></div>
+      <div class="emotion-seg" style="height:80%;background:#a04030;" title="1:30 吞噬"></div>
+      <div class="emotion-seg" style="height:95%;background:#d05040;" title="1:40 无处可藏"></div>
+      <div class="emotion-seg" style="height:100%;background:#e0556a;" title="1:50 爆发顶点"></div>
+      <div class="emotion-seg" style="height:90%;background:#d4a040;" title="2:00 光芒破入"></div>
+      <div class="emotion-seg" style="height:75%;background:#d4a853;" title="2:10 冲刷"></div>
+      <div class="emotion-seg" style="height:50%;background:#c8a040;" title="2:20 渐隐"></div>
+      <div class="emotion-seg" style="height:35%;background:#a08040;" title="2:30 旷野吟唱"></div>
+      <div class="emotion-seg" style="height:25%;background:#887030;" title="2:45 黎明"></div>
+      <div class="emotion-seg" style="height:20%;background:#706020;" title="3:00 日出"></div>
+      <div class="emotion-seg" style="height:15%;background:#584818;" title="3:15 淡出"></div>
+    </div>
+    <div class="emotion-labels">
+      <span>A段·沉溺</span><span>A段</span><span>A段</span><span>A段</span><span>A段</span>
+      <span>B段·爆发</span><span>B段</span><span>B段</span><span>B段</span><span>B段</span><span>B段</span><span>B段</span>
+      <span>尾奏·留白</span><span>尾奏</span><span>尾奏</span><span>尾奏</span><span>尾奏</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 3. 视觉体系 ═══════ -->
+<section id="palette">
+  <h2 class="section-title">
+    <span class="num">03</span> 视觉体系与色彩设计
+  </h2>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">全局配色方案</h4>
+
+    <h5 style="color:var(--accent);margin:1.5rem 0 0.5rem;font-size:0.8rem;letter-spacing:0.1em;">ACT I · 深海冷色系</h5>
+    <div class="palette">
+      <div class="swatch" style="background:#060f1e;"><span class="hex">#060f1e<br>深渊黑</span></div>
+      <div class="swatch" style="background:#0a1628;"><span class="hex">#0a1628<br>深海底</span></div>
+      <div class="swatch" style="background:#122b45;"><span class="hex">#122b45<br>中层水域</span></div>
+      <div class="swatch" style="background:#1a4a6e;"><span class="hex">#1a4a6e<br>浅层水</span></div>
+      <div class="swatch" style="background:#3a7bd5;"><span class="hex">#3a7bd5<br>水面光</span></div>
+      <div class="swatch" style="background:#8ab4f0;"><span class="hex">#8ab4f0<br>天光</span></div>
+    </div>
+
+    <h5 style="color:var(--danger);margin:2rem 0 0.5rem;font-size:0.8rem;letter-spacing:0.1em;">ACT II · 爆发暖色系</h5>
+    <div class="palette">
+      <div class="swatch" style="background:#1a0a0a;"><span class="hex">#1a0a0a<br>暴风暗</span></div>
+      <div class="swatch" style="background:#4a1515;"><span class="hex">#4a1515<br>燃烧暗</span></div>
+      <div class="swatch" style="background:#a03025;"><span class="hex">#a03025<br>火焰红</span></div>
+      <div class="swatch" style="background:#e0556a;"><span class="hex">#e0556a<br>爆发玫红</span></div>
+      <div class="swatch" style="background:#e8a040;"><span class="hex">#e8a040<br>破晓金</span></div>
+      <div class="swatch" style="background:#f5d080;"><span class="hex">#f5d080<br>圣光金</span></div>
+    </div>
+
+    <h5 style="color:var(--gold);margin:2rem 0 0.5rem;font-size:0.8rem;letter-spacing:0.1em;">ACT III · 黎明暖色系</h5>
+    <div class="palette">
+      <div class="swatch" style="background:#2a2018;"><span class="hex">#2a2018<br>破晓前</span></div>
+      <div class="swatch" style="background:#5a4030;"><span class="hex">#5a4030<br>沙滩暗</span></div>
+      <div class="swatch" style="background:#a08050;"><span class="hex">#a08050<br>沙金色</span></div>
+      <div class="swatch" style="background:#d4b870;"><span class="hex">#d4b870<br>晨曦</span></div>
+      <div class="swatch" style="background:#f0d890;"><span class="hex">#f0d890<br>日出金</span></div>
+      <div class="swatch" style="background:#faf0e0;"><span class="hex">#faf0e0<br>白昼</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">运镜风格体系</h4>
+    <table>
+      <tr><th style="width:100px">ACT</th><th>运镜风格</th><th>剪辑节奏</th><th>核心手法</th></tr>
+      <tr>
+        <td><span class="tag tag-blue">ACT I</span></td>
+        <td>缓慢下沉式推镜、静止长镜头、缓慢跟拍</td>
+        <td>极慢，镜头平均 12-15s</td>
+        <td>垂直下沉、气泡粒子跟随、画面暗角渐深、失焦→聚焦切换</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-red">ACT II</span></td>
+        <td>快速推拉、旋转跟拍、震动摇晃、急速俯冲</td>
+        <td>骤快，镜头平均 4-6s</td>
+        <td>镜头抖动、画面撕裂转场、色彩闪白、反向俯冲</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-gold">ACT III</span></td>
+        <td>缓慢后拉、水平平移、固定远景、渐隐</td>
+        <td>极慢，镜头平均 15-20s</td>
+        <td>画面渐亮、柔光滤镜、光晕扩散、远景→剪影</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════ 4. ACT I - 沉溺 ═══════ -->
+<section id="act1">
+  <h2 class="section-title">
+    <span class="num">04</span> ACT I · 沉溺与坠落 <span style="font-size:0.7rem;color:var(--muted);">0:00 — 1:10</span>
+  </h2>
+
+  <p style="color:var(--muted);margin-bottom:2rem;">
+    全黑的画面中，钢琴的第一个音符落下。海水从画面底部涌上。爱坤的双脚被海水浸没。
+    没有激烈的战斗，没有追逐——只有孤独的下沉。世界的音量被海水压到最低，只有钢琴声和呼吸声。
+  </p>
+
+  <!-- Shot 1 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">01</div>
+      <div class="shot-title-block">
+        <div class="shot-title">深渊之口 — 开幕</div>
+        <div class="shot-time">对应歌词：<em>"Sinking / I'm calling out your name"</em></div>
+      </div>
+      <div class="shot-duration">0:00 — 0:12 · 12s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>全黑画面。钢琴第一音响起时，画面底部缓缓亮起一层微弱的深蓝光——那是海面的最后一丝光线。爱坤的剪影出现在画面中央偏下，呈垂直悬浮姿态，双臂微微张开，像被无形的力量拉扯着下沉。细小的气泡从他身体周围缓缓上升。</dd>
+        <dt>角色状态</dt>
+        <dd>双眼闭合，表情平静中带着疲惫。角色 sprite 应用"水下漂浮"动画——衣物和头发以正弦波缓慢飘动。</dd>
+        <dt>特效层</dt>
+        <dd>① 气泡粒子：从角色位置向上漂移，速度 5-8px/s，随机透明度 0.1-0.5<br>② 体积光：画面顶部 20% 为渐变蓝色光（模拟海面）<br>③ 暗角：四角渐暗，中心保持微光<br>④ 焦散纹理：叠加层缓慢漂移，营造水下光影</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>固定镜头 + 极慢下移<br>
+          <strong>起始：</strong>画面中心对准角色胸部高度<br>
+          <strong>运动：</strong>镜头以 0.3 px/frame 的速度下沉，始终略快于角色的下沉速度，制造"镜头也在被拖入深渊"的沉浸感<br>
+          <strong>焦距：</strong>轻微柔焦（高斯模糊 sigma=1.2）
+        </dd>
+        <dt>音画同步</dt>
+        <dd>钢琴第一个低音 — 画面底部微光亮起<br>"Sinking" 唱词 — 气泡第一次从角色口中逸出<br>"Calling out" — 角色右手微微抬起，又无力地垂下</dd>
+        <div class="lyric">
+          <span class="en">"Sinking... I'm calling out your name"</span><br>
+          <span class="zh">沉没……我呼喊着你的名字</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shot 2 -->
+  <div class="shot" id="shot2">
+    <div class="shot-header">
+      <div class="shot-num">02</div>
+      <div class="shot-title-block">
+        <div class="shot-title">梦的碎片 — 闪回</div>
+        <div class="shot-time">对应歌词：<em>"My dreams / My dreams that can't be tamed"</em></div>
+      </div>
+      <div class="shot-duration">0:12 — 0:25 · 13s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>镜头从水下环境切到一组快速闪回。每个闪回持续约 2-3 秒，以柔滑的溶解转场连接。闪回内容为爱坤过去冒险中的记忆碎片——站在山巅眺望的画面、在丛林中奔跑的剪影、在星空下张开双臂的镜头。这些画面都有一个共同特征：饱和度逐渐降低，边缘有暗角侵蚀，仿佛正在被深海吞噬。</dd>
+        <dt>闪回序列（精确到帧）</dt>
+        <dd>
+          ① (0:12-0:15) 山顶眺望：爱坤站在青色山巅，夕阳在他身后，画面温暖但边缘发暗<br>
+          ② (0:15-0:18) 森林奔跑：横向跟拍，爱坤在金色树林中奔跑，速度感，画面逐渐褪色<br>
+          ③ (0:18-0:21) 星空仰望：仰角镜头，爱坤张开双臂看向星空，星光开始一颗颗熄灭<br>
+          ④ (0:21-0:25) 镜子房间：多个镜子反射出不同的爱坤——有的在笑，有的在哭，有的是战斗姿态，有的是跪地姿态。镜子逐一碎裂。
+        </dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>静止剪辑 + 溶解转场<br>
+          每段闪回保持镜头静止，依靠画面内部的色彩变化和暗角侵蚀来表达"被冲刷"的意象。<br>
+          转场使用 dissolve（溶解），持续时间 0.5s。<br>
+          暗角 radius 从 0 到 80% 渐变。
+        </dd>
+        <dt>音画同步</dt>
+        <dd>"My dreams" — 第一个闪回切入<br>"Can't be tamed" — 镜子碎裂音效（闷响，如水中听碎玻璃）<br>钢琴旋律中的高音点缀 — 对应星星熄灭的瞬间</dd>
+        <div class="lyric">
+          <span class="en">"My dreams... My dreams that can't be tamed"</span><br>
+          <span class="zh">我的梦想……那些无法被驯服的梦</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shot 3 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">03</div>
+      <div class="shot-title-block">
+        <div class="shot-title">假面 — 迎合的代价</div>
+        <div class="shot-time">对应歌词：<em>"If I show you / What you wanna see / Will you tell me / I fit in with no melody"</em></div>
+      </div>
+      <div class="shot-duration">0:25 — 0:48 · 23s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>回到水下空间。爱坤的周围浮现出无数虚幻的人影——它们没有具体的面容，只有模糊的轮廓。这些人影围绕着爱坤旋转，伸出手指，嘴唇翕动。每当一个人影靠近，爱坤的形象就会发生短暂的"扭曲"——他的衣服颜色改变、姿势被调整、面部表情被替换成虚假的微笑。<br><br>当唱到 "no melody" 时，画面中出现一面巨大的水镜，镜中的爱坤完全失去了色彩——灰白的人形剪影，没有五官，没有个性。真正的爱坤伸手触碰镜面，镜面碎裂。</dd>
+        <dt>特效层</dt>
+        <dd>① 人影：半透明（alpha 0.3）的白色剪影，使用非线性运动路径围绕角色旋转<br>② 形象扭曲：每次人影靠近时，角色 sprite 应用一个短暂的 shader 扭曲（0.3s）<br>③ 水镜：一面由粒子构成的矩形区域，有波纹扰动效果<br>④ 镜中倒影：去饱和度为 0 的角色镜像</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>缓慢环绕 + 推镜<br>
+          镜头围绕角色缓慢公转（角速度 2°/s），从正面缓慢转至侧面。<br>
+          当唱到 "I fit in with no melody" 时，镜头突然推进（zoom in），推至水镜特写。<br>
+          镜面碎裂时镜头轻微震动（amplitude 3px, frequency 12Hz, duration 0.8s）。
+        </dd>
+        <dt>音画同步</dt>
+        <dd>"If I show you" — 第一个人影浮现<br>"What you wanna see" — 角色形象第一次扭曲<br>"I fit in with no melody" — 镜头急推至水镜<br>"No melody" 尾音 — 镜面碎裂 + 镜头震动</dd>
+        <div class="lyric">
+          <span class="en">"If I show you what you wanna see<br>Will you tell me I fit in with no melody"</span><br>
+          <span class="zh">如果我展现你想要的模样<br>你会告诉我——失去旋律的我还能被接纳吗</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shot 4 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">04</div>
+      <div class="shot-title-block">
+        <div class="shot-title">放弃挣扎 — 第一次溺水宣言</div>
+        <div class="shot-time">对应歌词：<em>"I'm drowning / I'm drowning / Oh, I'm drowning / Wash me out to sea"</em></div>
+      </div>
+      <div class="shot-duration">0:48 — 1:10 · 22s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>镜面碎裂后，所有的人影化为黑色的水，从四面八方涌向爱坤。这是全片最具视觉冲击力的时刻之一——黑色的水不是从天而降，而是从画面四角、从角色脚下、从每一个碎裂的镜片中涌出。<br><br>爱坤不再挣扎。他闭上眼睛，嘴角微微上扬——那不是认输的笑，而是解脱的笑。他主动张开双臂，让黑水将自己完全包裹。黑水形成一个球体，将爱坤包裹在中心。<br><br>画面缓缓拉远。那个黑色的水球在深蓝色的海洋中悬浮，越来越小，越来越小……</dd>
+        <dt>特效层</dt>
+        <dd>① 黑水：使用粒子系统模拟，从画面四角和镜面碎片位置发射，运动方向指向角色中心<br>② 水球：由 200+ 粒子组成的球形力场，粒子做球面运动<br>③ 光衰减：画面亮度从 100% 降至 15%，仅保留水球内部微弱的光<br>④ 最后的光：在水球完全闭合前，从球体缝隙中射出一道极细的蓝光，然后熄灭</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>缓慢后拉（dolly out）<br>
+          从角色中景开始，以匀速后退（速度 2 px/frame），配合画面收缩感。<br>
+          最终拉至远景——整个画面中水球直径仅占画面高度的 10%。<br>
+          画面边缘渐暗（vignette intensity 逐渐升至 90%）。
+        </dd>
+        <dt>音画同步</dt>
+        <dd>第一个 "I'm drowning" — 黑水从四角涌出<br>第二个 "I'm drowning" — 水开始包裹角色身体<br>"Oh, I'm drowning" — 水球开始闭合<br>"Wash me out to sea" — 最后一道光熄灭，画面几乎全黑<br>钢琴最后一个延音 — 画面全黑，持续 3 秒</dd>
+        <div class="lyric">
+          <span class="en">"I'm drowning... I'm drowning... Oh, I'm drowning... Wash me out to sea"</span><br>
+          <span class="zh">我在溺水……我在溺水……将我冲刷入海</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 5. 转折 ═══════ -->
+<section id="transition">
+  <h2 class="section-title">
+    <span class="num">⚡</span> 关键转折 · 鼓点劈开海面
+  </h2>
+
+  <div class="transition-marker">
+    <div class="marker-icon">🥁</div>
+    <div>
+      <h4>AB段转折 — 1:10 时刻</h4>
+      <p>
+        画面全黑 3 秒后，<strong>鼓点毫无预兆地炸响</strong>。
+        这是全片最重要的单一时刻，必须做到"一击即中"。
+        画面不是渐亮，而是<strong>从中心炸裂</strong>——白色的裂纹从画面中央扩散开来，像玻璃一样碎裂，
+        背景从深海蓝瞬间切换为暴风天的灰黑。
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--danger);margin-bottom:1rem;">转折执行方案</h4>
+    <table>
+      <tr><th style="width:160px">环节</th><th>执行细节</th></tr>
+      <tr>
+        <td>鼓点第一击</td>
+        <td>画面从全黑(#000)瞬间闪白(#FFF)持续 2 帧(33ms)，然后立刻切入 ACT II 第一镜</td>
+      </tr>
+      <tr>
+        <td>画面碎裂</td>
+        <td>闪白的同时，屏幕中央生成碎裂纹理（预制 shader: screen_shatter），碎片向外飞散，露出新场景</td>
+      </tr>
+      <tr>
+        <td>色调切换</td>
+        <td>从深海蓝调(#060f1e 基调)瞬间切换为暴风灰黑(#1a1520 基调)，后处理 LUT 在 3 帧内切换</td>
+      </tr>
+      <tr>
+        <td>音效配合</td>
+        <td>除 BGM 本身的鼓点外，叠加低频冲击音效(50Hz 以下，持续时间 200ms)，配合手柄震动</td>
+      </tr>
+      <tr>
+        <td>镜头语言</td>
+        <td>不使用 dissolve 或其他柔和转场，使用 hard cut + 画面碎裂。决绝、不妥协</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════ 6. ACT II - 坠落 ═══════ -->
+<section id="act2">
+  <h2 class="section-title">
+    <span class="num">05</span> ACT II · 坠落与爆发 <span style="font-size:0.7rem;color:var(--muted);">1:10 — 2:20</span>
+  </h2>
+
+  <!-- Shot 5 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">05</div>
+      <div class="shot-title-block">
+        <div class="shot-title">撕裂天空 — 自由坠落</div>
+        <div class="shot-time">对应歌词：<em>"Falling / Free falling through the sky"</em></div>
+      </div>
+      <div class="shot-duration">1:10 — 1:25 · 15s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>画面碎裂后，新场景瞬间显现：爱坤正在从暴风雨的天空中坠落。不再是水下——这次是空中。浓密、翻滚的乌云填满画面，闪电在云层间跳跃。爱坤的身体不再是悬浮姿态，而是仰面向下坠落，四肢被气浪拉扯。他的衣服和头发剧烈飘动——这是"水下漂浮"动画的 3 倍加速版。<br><br>画面使用高速跟拍——镜头与角色保持同步下落，背景云层以极高速度向上掠过。不时有闪电照亮整个画面，每一次闪亮都短暂地将画面变为高对比度的黑白。</dd>
+        <dt>特效层</dt>
+        <dd>① 云层：多层 parallax 滚动，速度由近到远递减（近层 800px/s，远层 100px/s）<br>② 闪电：随机位置、随机时间间隔（2-4s），瞬间将整个画面亮度提升至 200%<br>③ 气浪线：从角色身体周围向后延伸的速度线<br>④ 雨水：高速下落粒子（速度 1200px/s），密度极高</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>同步跟拍 + 微震动<br>
+          镜头与角色保持同步下落速度，角色始终在画面中心偏上 15%。<br>
+          镜头附加随机微震动（amplitude 5px, frequency 15Hz），模拟风暴中的不稳定感。<br>
+          每次闪电时，镜头短暂变焦（zoom in 1.05x，持续 0.2s）。
+        </dd>
+        <dt>音画同步</dt>
+        <dd>鼓点第一击 + Flash — 画面碎裂<br>"Falling" — 镜头与角色同步下坠开始<br>"Free falling" — 第一道闪电 + 角色双臂被动展开<br>"Through the sky" — 镜头旋转 15°，制造失重感</dd>
+        <div class="lyric">
+          <span class="en">"Falling... Free falling through the sky"</span><br>
+          <span class="zh">坠落……自由地坠过天空</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shot 6 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">06</div>
+      <div class="shot-title-block">
+        <div class="shot-title">声音之海 — 吞噬</div>
+        <div class="shot-time">对应歌词：<em>"Your voice consumes me / There's nowhere left to hide"</em></div>
+      </div>
+      <div class="shot-duration">1:25 — 1:48 · 23s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>坠落仍在继续，但云层开始发生变异——乌云中浮现出文字的轮廓。那些是弹幕式的文字碎片：质疑的语句、期待的语句、定义的语句、标签……它们不是清晰可读的，而是半透明、扭曲的、从四面八方涌来的。<br><br>爱坤试图遮挡耳朵——但这没有用。那些"声音文字"穿透他的身体，在他体内留下荧光痕迹。他无处可躲（"There's nowhere left to hide"）。<br><br>最终，那些文字围绕爱坤形成一个巨大的漩涡，像龙卷风一样将他困在中心。摄影机拉远，呈现整个声音漩涡的全景——那是一个由文字组成的、高速旋转的深渊。</dd>
+        <dt>特效层</dt>
+        <dd>① 文字粒子：Unity TextMeshPro 渲染的半透明文字，从画面外以随机角度飞入，带运动模糊<br>② 穿透效果：文字经过角色时，角色 sprite 对应位置短暂发光（emission pulse）<br>③ 漩涡：文字粒子围绕角色做螺旋运动（角速度递增，半径递减）<br>④ 色彩：所有文字亮度为苍白/荧光色（#aaccff），漩涡中心渐变为亮白</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>跟拍 → 旋转拉远<br>
+          前半段（"Your voice consumes me"）：保持高速跟拍，镜头附加旋转（累计 90°）<br>
+          后半段（"There's nowhere left to hide"）：镜头开始减速并拉远，从角色特写 → 全景<br>
+          拉远至整个文字漩涡可见时停下。镜头最终停留在固定远景 3 秒，让观众感受那种被困在漩涡中心的窒息感。
+        </dd>
+        <dt>音画同步</dt>
+        <dd>"Your voice" — 第一个文字碎片出现<br>"Consumes me" — 文字穿透角色身体<br>"Nowhere" — 画面短暂全白（文字爆炸）<br>"Left to hide" — 漩涡闭合，角色被完全困住</dd>
+        <div class="lyric">
+          <span class="en">"Your voice consumes me... There's nowhere left to hide"</span><br>
+          <span class="zh">你的声音吞噬了我……再无藏身之处</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shot 7 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">07</div>
+      <div class="shot-title-block">
+        <div class="shot-title">破晓 — 第二次溺水宣言</div>
+        <div class="shot-time">对应歌词：<em>"I'm drowning / Wash me out to sea"（第二遍，爆发版）</em></div>
+      </div>
+      <div class="shot-duration">1:48 — 2:20 · 32s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>这是全片的情感高潮。被困在文字漩涡中心的爱坤，忽然睁开眼睛——这次他的眼神不再疲惫，而是燃烧着决绝。<br><br>他主动张开双臂，不是被动地被吞噬，而是主动地、决绝地拥抱这一切。他的身体开始发光——从胸口中心，一道金色的光芒扩散开来。光芒所到之处，文字漩涡开始崩解。那些黑色的声音文字在金光中变为白色，然后化为细小的光点，像尘埃一样被吹散。<br><br>"Wash me out to sea"——爱坤的身体完全化为一道金色光柱，直冲云霄。光柱贯穿整个暴风天空，云层被撕裂，露出后面蓝色的天空。光柱冲出云层后，在天空中炸开，化为无数金色的光点，像星星一样洒落。</dd>
+        <dt>特效层</dt>
+        <dd>① 胸口发光：从角色中心向外扩散的径向渐变光（从金色到透明），扩散速度 200px/s<br>② 文字崩解：文字粒子在被光芒触碰时播放 dissolve shader，白色闪光后消失<br>③ 光柱：从角色位置垂直向上延伸的 beam 效果，宽度随距离增加（模拟透视）<br>④ 光点雨：光柱炸开后，500+ 粒子从天空向下洒落，带缓慢旋转和闪烁</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>推镜 → 急速仰拍 → 拉远<br>
+          角色睁眼时，镜头急速推至面部特写（0.3s 完成 zoom 2x）<br>
+          光芒扩散时，镜头后退并仰拍（俯角从 0° 转至 60°），展现光柱射向天空<br>
+          光点洒落时，镜头缓缓拉至极大远景——整个画面充满金色光点，角色在画面中成为一个小小的剪影
+        </dd>
+        <dt>音画同步</dt>
+        <dd>角色睁眼 — 鼓点密集段落开始，每一下鼓点对应一次光芒脉冲<br>"I'm drowning"（爆发版）— 光柱突破云层<br>"Wash me out to sea" — 光柱炸开，光点雨落下<br>最后一声鼓点 — 最后一个金色光点消失在画面中</dd>
+        <div class="lyric">
+          <span class="en">"I'm drowning... I'm drowning... Oh, I'm drowning... Wash me out to sea"</span><br>
+          <span class="zh">（爆发版）我在溺水……将我冲刷入海</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 7. ACT III - 重生 ═══════ -->
+<section id="act3">
+  <h2 class="section-title">
+    <span class="num">06</span> ACT III · 留白与重生 <span style="font-size:0.7rem;color:var(--muted);">2:20 — 3:18</span>
+  </h2>
+
+  <p style="color:var(--muted);margin-bottom:2rem;">
+    所有音乐元素逐渐消退。鼓声消失，钢琴也不再存在。只剩下人声在空旷的空间中吟唱。
+    旷野。黎明。新生。
+  </p>
+
+  <!-- Shot 8 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">08</div>
+      <div class="shot-title-block">
+        <div class="shot-title">旷野黎明 — 无词吟唱</div>
+        <div class="shot-time">对应歌词：<em>"Ohh... Oooh..."（无词吟唱）</em></div>
+      </div>
+      <div class="shot-duration">2:20 — 2:50 · 30s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>金色光点全部消散后，画面淡入（fade in，持续时间 2s）至一个全新的场景：黎明时分的海滩。<br><br>天空是渐变的暖色——地平线处是橙金色，向上过渡为淡紫色，最顶端仍然是深蓝的夜空的残余。海面平静得像一面镜子，倒映着天空的色彩。潮水以极慢的节奏涌上沙滩又退去。<br><br>爱坤躺在沙滩上，潮水刚好没过他的脚踝。他的身上没有任何伤痕——仿佛那场暴风雨从未发生。他慢慢睁开眼睛，看着天空。第一缕阳光正好照在他的脸上。</dd>
+        <dt>特效层</dt>
+        <dd>① 天空渐变：使用 5 色带天空盒渐变，颜色随时间缓慢变化（模拟日出）<br>② 海面倒影：海面为水平翻转的天空渐变 + 轻微波纹扰动 shader<br>③ 潮水：白色泡沫线沿沙滩边缘前后运动，周期 6s<br>④ 阳光：从画面右上角射入的体积光（god rays），缓慢旋转<br>⑤ 海鸟剪影：画面远处 2-3 只海鸟缓慢飞过</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>静止远景 → 极慢下降<br>
+          起始为极大远景——爱坤在画面中仅占 5% 高度，躺在海滩上。<br>
+          镜头以 0.2 px/frame 的速度极其缓慢地下降，逐渐靠近角色。<br>
+          整个镜头没有推拉、没有旋转、没有震动——只有静止与缓慢靠近。<br>
+          这是一种 <strong>"屏住呼吸"</strong> 的镜头语言。
+        </dd>
+        <dt>音画同步</dt>
+        <dd>"Ohh" 第一声吟唱 — 场景淡入完成<br>"Oooh" — 第一缕阳光照在爱坤脸上<br>吟唱的呼吸间隙 — 海鸟飞过画面<br>歌曲的寂静段落 — 镜头停止移动，静止 5 秒</dd>
+        <div class="lyric">
+          <span class="en">"Ohh... Oooh..."</span><br>
+          <span class="zh">（无词吟唱——人声在旷野中回荡）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shot 9 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">09</div>
+      <div class="shot-title-block">
+        <div class="shot-title">站起 — 第三次溺水宣言</div>
+        <div class="shot-time">对应歌词：<em>"I'm drowning（第三遍） / Wash me out to sea"</em></div>
+      </div>
+      <div class="shot-duration">2:50 — 3:10 · 20s</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>这是全片情感最内敛的段落。当第三次 "I'm drowning" 响起时——但这次的声音不再是绝望的呼喊，也不是爆发的宣告，而是一种平静的、像是在陈述事实般的呢喃。<br><br>爱坤从沙滩上慢慢坐起来，然后站起来。他的动作很慢，每一个关节的弯曲都很清晰。他低头看了一眼脚下的海水——潮水正在退去，露出一行他刚才躺过的地方留下的印记。那印记很快就被下一波浪抹去。<br><br>"Wash me out to sea"——爱坤抬起头，望向日出的方向。他笑了。那是全片中他第一次真正的笑。</dd>
+        <dt>特效层</dt>
+        <dd>① 沙痕：角色起身后在沙滩上留下身体的轮廓凹陷，然后在 3s 内被潮水抹平<br>② 风声：画面中出现极细的沙粒被风吹起的粒子效果<br>③ 日出进度：天空颜色从橙金渐变到亮金色，太阳圆盘从地平线露出一半<br>④ 角色影子：角色在沙滩上投射出长长的影子（光影角度 15°）</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>中景跟拍 → 缓慢仰拍<br>
+          角色坐起时，镜头保持中景（腰部以上），跟随角色上升。<br>
+          角色站起后，镜头缓慢仰拍（俯角从 0° 转至 -10°），让角色处于仰角位置——"仰望"的象征意义。<br>
+          最后 3 秒镜头完全静止——角色在画面中偏左，望向右侧的日出。
+        </dd>
+        <dt>音画同步</dt>
+        <dd>"I'm drowning"（第三遍，呢喃版）— 爱坤坐起<br>第二个 "I'm drowning" — 爱坤站起<br>第三个 "I'm drowning" — 潮水抹去沙痕<br>"Wash me out to sea"（最后的呢喃）— 爱坤微笑</dd>
+        <div class="lyric">
+          <span class="en">"I'm drowning... I'm drowning... I'm drowning... Wash me out to sea"</span><br>
+          <span class="zh">（第三遍，平静的呢喃）我在溺水……将我冲刷入海</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shot 10 -->
+  <div class="shot">
+    <div class="shot-header">
+      <div class="shot-num">10</div>
+      <div class="shot-title-block">
+        <div class="shot-title">远方 — 终幕</div>
+        <div class="shot-time"><em>Outro 延音 → 无声</em></div>
+      </div>
+      <div class="shot-duration">3:10 — 3:18 · 8s + 留白</div>
+    </div>
+    <div class="shot-body">
+      <div>
+        <dt>画面描述</dt>
+        <dd>爱坤转身，背对镜头，面向日出的方向。他迈出一步、两步、三步——每一步都在沙滩上留下脚印。镜头没有跟上去，而是停在原地。<br><br>画面缓缓拉远。爱坤的剪影在巨大的日出背景中越来越小。太阳已经完全升起，将整个画面染成金色。海面波光粼粼。<br><br>当音乐完全结束时，画面中出现游戏标题文字——"爱坤大冒险"，以手写体金色字体出现在画面中央偏下位置。标题出现后保持 3 秒，然后整个画面缓慢 fade out 至黑色。</dd>
+        <dt>特效层</dt>
+        <dd>① 剪影：角色在逆光下呈现为纯黑剪影，仅边缘被阳光勾勒出金线<br>② 海面波光：使用 shader 在水平线上生成闪烁的菱形光斑<br>③ 标题文字："爱坤大冒险"四个字，使用金色渐变(#f0d890 → #d4a853)，带微光外发光效果<br>④ 标题入场动画：逐字浮现（每个字间隔 200ms），配合轻微的 scale 动画（0.9 → 1.05 → 1.0）</dd>
+      </div>
+      <div>
+        <dt>运镜</dt>
+        <dd>
+          <strong>类型：</strong>固定 → 极慢拉远 → 定格<br>
+          角色转身迈步时，镜头保持固定，让角色逐渐走出画面的关注中心。<br>
+          标题出现后，镜头不再移动。让画面像一个句号一样静止。<br>
+          最终 fade out 前，所有运动停止。画面定格约 3 秒后黑暗降临。
+        </dd>
+        <dt>音画同步</dt>
+        <dd>音乐最后一个延音 — 角色迈出第一步<br>延音消失（完全无声）— 标题"爱坤大冒险"开始浮现<br>3 秒留白 — 画面定格在标题<br>Fade out — 回归游戏主菜单或游戏画面</dd>
+        <div class="lyric" style="border-left-color:var(--gold);">
+          <span class="en" style="color:var(--gold);">— FIN —</span><br>
+          <span class="zh">被冲刷而去的，从来不是生命——<br>而是所有不属于你的伪装。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 8. 时间线总览 ═══════ -->
+<section id="timeline">
+  <h2 class="section-title">
+    <span class="num">07</span> 完整时间线总览
+  </h2>
+
+  <div class="card" style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th style="width:120px">时间码</th>
+          <th style="width:50px">时长</th>
+          <th style="width:160px">镜头名</th>
+          <th style="width:100px">所属 ACT</th>
+          <th>对应歌词</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--accent);font-weight:700;">01</td>
+          <td style="font-family:monospace;">0:00 — 0:12</td>
+          <td>12s</td>
+          <td>深渊之口 — 开幕</td>
+          <td><span class="tag tag-blue">ACT I</span></td>
+          <td>"Sinking / I'm calling out your name"</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent);font-weight:700;">02</td>
+          <td style="font-family:monospace;">0:12 — 0:25</td>
+          <td>13s</td>
+          <td>梦的碎片 — 闪回</td>
+          <td><span class="tag tag-blue">ACT I</span></td>
+          <td>"My dreams that can't be tamed"</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent);font-weight:700;">03</td>
+          <td style="font-family:monospace;">0:25 — 0:48</td>
+          <td>23s</td>
+          <td>假面 — 迎合的代价</td>
+          <td><span class="tag tag-blue">ACT I</span></td>
+          <td>"If I show you / Will you tell me I fit in with no melody"</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent);font-weight:700;">04</td>
+          <td style="font-family:monospace;">0:48 — 1:10</td>
+          <td>22s</td>
+          <td>放弃挣扎 — 第一次溺水宣言</td>
+          <td><span class="tag tag-blue">ACT I</span></td>
+          <td>"I'm drowning / Wash me out to sea"（第一遍）</td>
+        </tr>
+        <tr style="background:rgba(224,85,106,0.08);">
+          <td style="color:var(--danger);font-weight:700;">⚡</td>
+          <td style="font-family:monospace;color:var(--danger);">1:10</td>
+          <td>—</td>
+          <td style="color:var(--danger);"><strong>鼓点劈开海面</strong></td>
+          <td><span class="tag tag-red">转折</span></td>
+          <td>画面闪白 + 碎裂转场</td>
+        </tr>
+        <tr>
+          <td style="color:var(--danger);font-weight:700;">05</td>
+          <td style="font-family:monospace;">1:10 — 1:25</td>
+          <td>15s</td>
+          <td>撕裂天空 — 自由坠落</td>
+          <td><span class="tag tag-red">ACT II</span></td>
+          <td>"Falling / Free falling through the sky"</td>
+        </tr>
+        <tr>
+          <td style="color:var(--danger);font-weight:700;">06</td>
+          <td style="font-family:monospace;">1:25 — 1:48</td>
+          <td>23s</td>
+          <td>声音之海 — 吞噬</td>
+          <td><span class="tag tag-red">ACT II</span></td>
+          <td>"Your voice consumes me / There's nowhere left to hide"</td>
+        </tr>
+        <tr>
+          <td style="color:var(--danger);font-weight:700;">07</td>
+          <td style="font-family:monospace;">1:48 — 2:20</td>
+          <td>32s</td>
+          <td>破晓 — 第二次溺水宣言（爆发）</td>
+          <td><span class="tag tag-red">ACT II</span></td>
+          <td>"I'm drowning / Wash me out to sea"（第二遍，爆发版）</td>
+        </tr>
+        <tr>
+          <td style="color:var(--gold);font-weight:700;">08</td>
+          <td style="font-family:monospace;">2:20 — 2:50</td>
+          <td>30s</td>
+          <td>旷野黎明 — 无词吟唱</td>
+          <td><span class="tag tag-gold">ACT III</span></td>
+          <td>"Ohh... Oooh..."</td>
+        </tr>
+        <tr>
+          <td style="color:var(--gold);font-weight:700;">09</td>
+          <td style="font-family:monospace;">2:50 — 3:10</td>
+          <td>20s</td>
+          <td>站起 — 第三次溺水宣言（呢喃）</td>
+          <td><span class="tag tag-gold">ACT III</span></td>
+          <td>"I'm drowning / Wash me out to sea"（第三遍，呢喃版）</td>
+        </tr>
+        <tr>
+          <td style="color:var(--gold);font-weight:700;">10</td>
+          <td style="font-family:monospace;">3:10 — 3:18</td>
+          <td>8s+</td>
+          <td>远方 — 终幕</td>
+          <td><span class="tag tag-gold">ACT III</span></td>
+          <td>— FIN — 标题浮现 → Fade Out</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════ 9. 技术实现 ═══════ -->
+<section id="tech">
+  <h2 class="section-title">
+    <span class="num">08</span> 技术实现要点
+  </h2>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">Unity 实时演算架构</h4>
+    <table>
+      <tr><th style="width:200px">模块</th><th>实现方案</th></tr>
+      <tr><td>动画系统</td><td>使用 Unity Timeline + Cinemachine 驱动。每个 Shot 对应一个 Timeline Track，所有镜头通过 Signal 串联。角色动画使用 Unity 2D Animation Rigging（骨骼动画）</td></tr>
+      <tr><td>运镜控制</td><td>Cinemachine Virtual Camera，每个 Shot 使用独立的 VCam，通过 Cinemachine Track 在 Timeline 中编排运镜路径。震动效果使用 Cinemachine Impulse Listener</td></tr>
+      <tr><td>粒子系统</td><td>使用 Unity VFX Graph（兼容 2D URP）。气泡、文字碎片、光点、黑水等所有粒子效果统一管理，通过 Timeline 的 Activation Track 触发/停止</td></tr>
+      <tr><td>后处理</td><td>使用 URP 的 Volume 系统。Bloom、Vignette、Color Adjustments、Chromatic Aberration 等效果通过 Timeline 的 Volume Track 动态变化</td></tr>
+      <tr><td>BGM 同步</td><td>Audio Source 绑定到 Timeline，音频的精确时间码与镜头切换通过 Timeline 帧级对齐。不需要手动计算时间——Timeline 天然支持音画同步</td></tr>
+      <tr><td>转场效果</td><td>画面碎裂使用自定义 Fullscreen Shader（screen_shatter.shader），在鼓点时刻通过 Timeline Signal 触发。其他转场使用 URP 的 Fade 功能</td></tr>
+      <tr><td>文字粒子</td><td>使用 TextMeshPro + 自定义运动脚本。文字内容可配置（从 ScriptableObject 读取），方便后期调整"声音文字"的具体内容</td></tr>
+      <tr><td>性能目标</td><td>全程保持 60fps。粒子总数不超过 800 个（桌面端）。如有必要降低移动端粒子数至 300 个。使用对象池管理所有粒子系统</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">Timeline 结构示意</h4>
+    <pre style="color:var(--text);font-size:0.85rem;line-height:1.8;background:var(--abyss);padding:1.5rem;border-radius:8px;overflow-x:auto;">
+Timeline: "Cutscene_WashedAway"
+├── Cinemachine Track
+│   ├── Shot01_VCam (0:00 → 0:12)
+│   ├── Shot02_VCam (0:12 → 0:25)
+│   ├── ...
+│   └── Shot10_VCam (3:10 → 3:18)
+├── Animation Track (角色 Animation)
+│   ├── IKun_UnderwaterFloat (0:00 → 1:10)
+│   ├── IKun_FreeFall (1:10 → 2:20)
+│   └── IKun_Walk_StandUp (2:20 → 3:18)
+├── Activation Track (粒子系统)
+│   ├── VFX_Bubbles (0:00 → 1:10)
+│   ├── VFX_BlackWater (0:48 → 1:10)
+│   ├── VFX_Clouds (1:10 → 2:20)
+│   ├── VFX_TextParticles (1:25 → 2:20)
+│   ├── VFX_GoldenLight (1:48 → 2:20)
+│   └── VFX_BeachAmbient (2:20 → 3:18)
+├── Audio Track
+│   └── BGM_WashedAway (0:00 → 3:18)
+├── Volume Track (后处理)
+│   ├── PP_DeepSea (0:00 → 1:10)
+│   ├── PP_Storm (1:10 → 2:20)
+│   └── PP_Dawn (2:20 → 3:18)
+└── Signal Track (事件触发)
+    ├── Signal_FlashWhite (1:10)
+    ├── Signal_ScreenShatter (1:10)
+    └── Signal_TitleCard (3:15)</pre>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">分镜运镜参数速查表</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Shot</th>
+          <th>运镜类型</th>
+          <th>速度</th>
+          <th>震动</th>
+          <th>FOV</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>01 深渊</td><td>固定 + 下沉</td><td>0.3 px/f</td><td>—</td><td>60°</td><td>柔焦 blur 1.2</td></tr>
+        <tr><td>02 闪回</td><td>剪辑切换</td><td>—</td><td>—</td><td>60°</td><td>dissolve 0.5s</td></tr>
+        <tr><td>03 假面</td><td>环绕 + 急推</td><td>2°/s → zoom 2x</td><td>3px/12Hz</td><td>60° → 40°</td><td>镜碎时震动</td></tr>
+        <tr><td>04 放弃</td><td>缓慢后拉</td><td>2 px/f</td><td>—</td><td>60° → 80°</td><td>vignette 渐深</td></tr>
+        <tr><td>05 坠落</td><td>同步跟拍</td><td>匹配角色</td><td>5px/15Hz</td><td>55°</td><td>闪电时 zoom 1.05x</td></tr>
+        <tr><td>06 吞噬</td><td>跟拍 → 旋转拉远</td><td>匹配 → 减速</td><td>3px/10Hz</td><td>55° → 80°</td><td>累计旋转 90°</td></tr>
+        <tr><td>07 破晓</td><td>急推 → 仰拍 → 拉远</td><td>zoom 2x (0.3s)</td><td>—</td><td>40° → 90°</td><td>俯角 0→60°</td></tr>
+        <tr><td>08 旷野</td><td>静止 → 极慢下降</td><td>0.2 px/f</td><td>—</td><td>90°</td><td>完全静止优先</td></tr>
+        <tr><td>09 站起</td><td>中景跟拍 → 仰拍</td><td>匹配角色</td><td>—</td><td>70°</td><td>俯角 0→-10°</td></tr>
+        <tr><td>10 远方</td><td>固定 → 极慢拉远</td><td>1 px/f</td><td>—</td><td>90° → 100°</td><td>最终定格</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">色彩 LUT 时间线</h4>
+    <table>
+      <tr><th style="width:120px">时间段</th><th style="width:100px">LUT 名称</th><th>色调描述</th></tr>
+      <tr><td>0:00 — 1:10</td><td><span class="tag tag-blue">DeepSea</span></td><td>冷蓝基调，饱和度 -40%，亮度 -20%，阴影偏蓝，高光偏青</td></tr>
+      <tr><td>1:10 — 1:48</td><td><span class="tag tag-red">Storm</span></td><td>灰黑基调，对比度 +50%，饱和度 -60%，阴影偏紫黑</td></tr>
+      <tr><td>1:48 — 2:20</td><td><span class="tag tag-red">Burst</span></td><td>暖金渐变：1:48 时从 Storm 开始 lerp，2:20 时完全过渡到 Dawn</td></tr>
+      <tr><td>2:20 — 3:18</td><td><span class="tag tag-gold">Dawn</span></td><td>暖金基调，饱和度 +20%，亮度 +15%，色温 5500K → 4000K，高光偏金</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════ 10. 附录 ═══════ -->
+<section id="appendix">
+  <h2 class="section-title">
+    <span class="num">09</span> 附录 · 编导备注
+  </h2>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">核心导演意图</h4>
+    <p style="line-height:2.2;">
+      <strong>1. "沉溺"不是被动受难，而是一种主动的交付</strong><br>
+      从 Shot 01 到 Shot 04，角色的状态从"被拖入水中"逐渐转变为"主动放弃挣扎"。这不是软弱，而是一种对异化环境的终极拒绝——"如果你要我改变，我宁愿被冲刷而去"。这种"主动"在 Shot 07 达到顶点：爱坤不是被动地接受光芒，而是主动地<em>成为</em>光。<br><br>
+      <strong>2. 三次"I'm drowning"的情感递进</strong><br>
+      第一遍（Shot 04）：绝望中的祈求<br>
+      第二遍（Shot 07）：爆发中的宣告<br>
+      第三遍（Shot 09）：平静中的接纳<br>
+      这是全片最核心的情感弧线。三次相同的歌词，三种完全不同的情感质地。在镜头语言上，第一遍是拉远（退缩），第二遍是推近（进攻），第三遍是静止（和解）。<br><br>
+      <strong>3. "水"的意象演变</strong><br>
+      ACT I：水是压迫者（黑水吞噬）<br>
+      ACT II：水是战场（暴风雨）<br>
+      ACT III：水是见证者（平静的海、抹去沙痕的潮水）<br>
+      最终，水不再是敌人——它只是存在。就像那些声音、那些期待、那些定义——它们不会消失，但你已经不再被它们定义。<br><br>
+      <strong>4. 为什么结局是"开放"的</strong><br>
+      歌曲的尾奏不提供答案，只留下一片"旷野"。与此对应，动画的结局也不是一个封闭的"英雄胜利"——爱坤没有打败任何人，没有拯救世界。他只是站起来了，然后继续走。标题出现时，他已经走远了。留给观众的问题是：<em>接下来，他会去哪里？</em>
+    </p>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--light);margin-bottom:1rem;">与游戏本身的衔接</h4>
+    <table>
+      <tr><th style="width:140px">衔接环节</th><th>方案</th></tr>
+      <tr><td>演出触发时机</td><td>建议放在"深渊"关卡 BOSS 战之后。玩家击败 BOSS 后，地面碎裂，角色坠入深渊 → 无缝衔接 Cutscene 的 Shot 01</td></tr>
+      <tr><td>演出结束回归</td><td>Cutscene 结束后 fade out → fade in 到新的关卡选择界面，背景变为 Shot 08 的黎明海滩。暗示角色已经"重生"，进入游戏的下一个阶段</td></tr>
+      <tr><td>可跳过性</td><td>提供"按住跳过"选项（长按 2s），但首次观看不建议提供跳过提示。如果跳过，直接 fade to 下一关</td></tr>
+      <tr><td>手柄震动</td><td>鼓点第一击（1:10）：左右手柄同时最大震动 200ms<br>闪电每次亮起：左手柄短震动 50ms<br>光柱突破云层（1:55）：右手柄渐强震动 500ms<br>角色站起（2:50）：右手柄微弱震动 300ms</td></tr>
+    </table>
+  </div>
+</section>
+
+</div><!-- .container -->
+
+<footer class="footer">
+  <p>《爱坤大冒险》剧情演出动画大纲 · BGM: Washed Away — 蔡徐坤</p>
+  <p style="margin-top:0.5rem;font-size:0.7rem;">全 17 镜 · 3 幕结构 · 实时演算 Cutscene · Unity 2D</p>
+</footer>
+
+<script>
+// ── Floating Particles ──
+(function() {
+  const container = document.getElementById('particles');
+  const count = 40;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (6 + Math.random() * 14) + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+    container.appendChild(p);
+  }
+})();
+
+// ── Smooth Scroll ──
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// ── Active Nav Tracking ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) {
+      current = s.getAttribute('id');
+    }
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) {
+      a.classList.add('active');
+    }
+  });
+});
+</script>
+
+</body>
+</html>

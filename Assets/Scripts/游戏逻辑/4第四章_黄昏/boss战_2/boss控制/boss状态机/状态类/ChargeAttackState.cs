@@ -88,7 +88,9 @@ public class ChargeAttackState : BossBaseState
         isCharging = true;
         chargeTimer = 0f;
 
-        MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, "蓄力");
+        string soundName = AIObj.GetBossData().nowPhase == BossPhaseType.陶喆 ? "太美丽" : "蓄力";
+
+        MusicMgr.Instance.PlaySoundSafe(MyAssetBundleName.第四章音效包, soundName);
         // 播放蓄力DOTween动画效果（缩放脉冲 + 变红）
         AIObj.DoChargeAnimationEffect(chargeDuration);
     }

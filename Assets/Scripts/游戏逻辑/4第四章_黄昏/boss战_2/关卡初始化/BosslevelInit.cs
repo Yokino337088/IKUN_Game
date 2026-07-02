@@ -8,7 +8,7 @@ public class BosslevelInit : MonoBehaviour
     
     void Start()
     {
-        MusicMgr.Instance.ChangeBKMusicValue(0.08f);
+        MusicMgr.Instance.ChangeBKMusicValue(0.2f);
         MusicMgr.Instance.ChangeSoundValue(0.2f);
         UIMgr.Instance.ShowPanel<FourBossPanel>(MyAssetBundleName.第四章UI面板包);
 
@@ -17,6 +17,10 @@ public class BosslevelInit : MonoBehaviour
         else
             UIMgr.Instance.ShowPanel<FourBossPhonePanel>(MyAssetBundleName.第四章UI面板包, null, E_UILayer.Top);
 
-        MusicMgr.Instance.PlayBKMusic(MyAssetBundleName.开始场景音乐包, "飞机场");
+        MusicMgr.Instance.PlayBKMusic(MyAssetBundleName.第四章音乐包, "找自己");
+
+        
     }
+
+    
 }
