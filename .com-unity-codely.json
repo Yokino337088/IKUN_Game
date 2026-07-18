@@ -1,10 +1,10 @@
 {
-  "unity_port": 52173,
+  "unity_port": -1,
   "stream_port": 52319,
   "created_date": "2026-06-23T11:34:36.3727590Z",
   "project_path": "D:/Unity_Project/IKUN_Game/Assets",
   "reloading": false,
-  "reason": "ready",
+  "reason": "stopped",
   "seq": 1,
-  "last_heartbeat": "2026-07-18T03:56:27.6861826Z"
+  "last_heartbeat": "2026-07-18T04:00:50.8573667Z"
 }
