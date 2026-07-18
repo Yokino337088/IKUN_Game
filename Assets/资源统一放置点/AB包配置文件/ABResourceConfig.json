@@ -191,6 +191,11 @@
             "ABPackageName": "sound_general"
         },
         {
+            "ResourceName": "美",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/美.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
             "ResourceName": "太",
             "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/太.mp3",
             "ABPackageName": "sound_general"
@@ -201,13 +206,13 @@
             "ABPackageName": "sound_general"
         },
         {
-            "ResourceName": "美",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/美.mp3",
-            "ABPackageName": "sound_general"
-        },
-        {
             "ResourceName": "AboutPanel",
             "ResourcePath": "Assets/资源统一放置点/UI/UI面板/开始场景/AboutPanel.prefab",
+            "ABPackageName": "ui_panel_begin"
+        },
+        {
+            "ResourceName": "SelectLevelPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/开始场景/SelectLevelPanel.prefab",
             "ABPackageName": "ui_panel_begin"
         },
         {
@@ -216,18 +221,8 @@
             "ABPackageName": "ui_panel_begin"
         },
         {
-            "ResourceName": "FourBossPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPanel.prefab",
-            "ABPackageName": "ui_panel_four"
-        },
-        {
-            "ResourceName": "MazePCPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazePCPanel.prefab",
-            "ABPackageName": "ui_panel_four"
-        },
-        {
-            "ResourceName": "FourBossPhonePanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPhonePanel.prefab",
+            "ResourceName": "MazeTipsPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazeTipsPanel.prefab",
             "ABPackageName": "ui_panel_four"
         },
         {
@@ -236,23 +231,33 @@
             "ABPackageName": "ui_panel_four"
         },
         {
-            "ResourceName": "MazeTipsPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazeTipsPanel.prefab",
-            "ABPackageName": "ui_panel_four"
-        },
-        {
             "ResourceName": "MazePhonePanel",
             "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazePhonePanel.prefab",
             "ABPackageName": "ui_panel_four"
         },
         {
-            "ResourceName": "StoryPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/StoryPanel.prefab",
-            "ABPackageName": "ui_panel_load"
+            "ResourceName": "MazePCPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazePCPanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "FourBossPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "FourBossPhonePanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPhonePanel.prefab",
+            "ABPackageName": "ui_panel_four"
         },
         {
             "ResourceName": "LodingPanel",
             "ResourcePath": "Assets/资源统一放置点/UI/UI面板/LodingPanel.prefab",
+            "ABPackageName": "ui_panel_load"
+        },
+        {
+            "ResourceName": "StoryPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/StoryPanel.prefab",
             "ABPackageName": "ui_panel_load"
         }
     ]

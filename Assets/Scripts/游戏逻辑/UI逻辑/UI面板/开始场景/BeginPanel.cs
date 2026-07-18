@@ -38,7 +38,8 @@ public class BeginPanel : BasePanel
         this.AddAllControlsAnimation();
         myDropdown = GetControl<Dropdown>("drop音乐选择");
         
-
+        //安卓端的AB包加载有点问题，如果直接显示面板的话，那么按钮的材质就会丢失，所以必须先把材质从AB包当中加载出来
+        //然后再把材质的shader给设置好，这样才能正常显示
         ABResMgr.Instance.LoadResAsync<Material>(MyAssetBundleName.开始场景材质包, "按钮材质", (mat) =>
         {
             mat.shader = Shader.Find("Custom/ButtonSelectEffect");
@@ -75,7 +76,10 @@ public class BeginPanel : BasePanel
         switch (btnName)
         {
             case "btn开始游戏":
-
+                UIMgr.Instance.HidePanelWithAnimation<BeginPanel>(E_HideType.淡出, () =>
+                {
+                    UIMgr.Instance.ShowPanel<SelectLevelPanel>(MyAssetBundleName.开始场景UI面板包);
+                }, 0.3f);
                 break;
             case "btn代码开源":
                 UIMgr.Instance.HidePanelWithAnimation<BeginPanel>(E_HideType.淡出, () =>

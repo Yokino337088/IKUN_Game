@@ -65,3 +65,10 @@ Thumbs.db
 /ProjectSettings_dst/
 /.gitattributes_dst
 /ignore.conf
+
+# Unity Version Control / Plastic SCM local workspace metadata
+/.plastic/
+/.uvcs-backup/
+
+# Keep the project version-control mode under source control.
+!/ProjectSettings/VersionControlSettings.asset

@@ -8,7 +8,6 @@
   <Project Path="Unity.VisualScripting.Flow.csproj" />
   <Project Path="UniTask.TextMeshPro.csproj" />
   <Project Path="Cn.Tuanjie.Codely.Editor.csproj" />
-  <Project Path="Unity.PlasticSCM.Editor.csproj" />
   <Project Path="Unity.2D.Psdimporter.Editor.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Unity.VisualScripting.Core.csproj" />
@@ -60,6 +59,5 @@
   <Project Path="Unity.InternalAPIEditorBridge.005.csproj" />
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
   <Project Path="Unity.Collections.DocCodeSamples.csproj" />
-  <Project Path="Unity.CollabProxy.Editor.csproj" />
   <Project Path="UniTask.Addressables.csproj" />
 </Solution>
