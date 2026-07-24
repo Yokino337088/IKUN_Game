@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allStoryLines:
   - {fileID: 11400000, guid: 3f34bc77e93ba6e4480f035b4cdfc031, type: 2}
+  - {fileID: 11400000, guid: 11ab843e170886049a1b6cfa5281f83f, type: 2}

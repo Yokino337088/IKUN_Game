@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 /// </summary>
 public static class MyAssetBundleName
 {
+    #region 第一章
+    public const string 第一章UI面板包 = "ui_panel_one";
+
+    public const string 第一章音乐包 = "music_one";
+    #endregion
+
     #region 开始场景
     public const string 开始场景音乐包 = "music_begin";
 

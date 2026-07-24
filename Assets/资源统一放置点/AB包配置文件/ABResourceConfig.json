@@ -259,6 +259,16 @@
             "ResourceName": "StoryPanel",
             "ResourcePath": "Assets/资源统一放置点/UI/UI面板/StoryPanel.prefab",
             "ABPackageName": "ui_panel_load"
+        },
+        {
+            "ResourceName": "RhythmCatchHUDPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第一章/RhythmCatchHUDPanel.prefab",
+            "ABPackageName": "ui_panel_one"
+        },
+        {
+            "ResourceName": "RhythmCatchMobilePanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第一章/RhythmCatchMobilePanel.prefab",
+            "ABPackageName": "ui_panel_one"
         }
     ]
 }

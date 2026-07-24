@@ -14,6 +14,13 @@ using UnityEngine.UI;
 /// </summary>
 public class SelectLevelPanel : BasePanel
 {
+    [SerializeField]
+    private Image btn确定;
+
+    [SerializeField]
+    private Image btn返回;
+
+
     /// <summary>
     /// 游戏设计中固定存在的章节数量。
     /// 当前需求为五章，因此 Inspector 中的章节配置数量也必须为五项。
@@ -158,6 +165,15 @@ public class SelectLevelPanel : BasePanel
     protected override void Awake()
     {
         base.Awake();
+
+        //安卓端的AB包加载有点问题，如果直接显示面板的话，那么按钮的材质就会丢失，所以必须先把材质从AB包当中加载出来
+        //然后再把材质的shader给设置好，这样才能正常显示
+        ABResMgr.Instance.LoadResAsync<Material>(MyAssetBundleName.开始场景材质包, "按钮材质", (mat) =>
+        {
+            mat.shader = Shader.Find("Custom/ButtonSelectEffect");
+            btn确定.material = mat;
+            btn返回.material = mat;
+        });
 
         // 允许通过 Inspector 直接赋值；未赋值时再通过 BasePanel 收集的控件名称自动查找。
         if (chapterInfoImg == null)

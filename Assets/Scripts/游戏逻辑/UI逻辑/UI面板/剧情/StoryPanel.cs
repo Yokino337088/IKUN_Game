@@ -17,7 +17,7 @@ public class StoryPanel : BasePanel
 
     //打一个字的时间
 
-    public float typeSpeed = 0.1f;
+    public float typeSpeed = 0.01f;
 
     public override void ShowMe()
     {
@@ -66,7 +66,7 @@ public class StoryPanel : BasePanel
     private void OnStoryEnded()
     {
         //隐藏该面板
-        UIMgr.Instance.HidePanelWithAnimation<StoryPanel>(E_HideType.缩放退出, () =>
+        UIMgr.Instance.HidePanelWithAnimation<StoryPanel>(E_HideType.淡出, () =>
         {
             //这里去触发关卡初始化的事件，实现解耦
             EventCenter.Instance.EventTrigger(MyEventTypeString.StoryEndAndLevelInit);

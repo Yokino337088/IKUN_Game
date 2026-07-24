@@ -14,6 +14,9 @@ public static class MyEventTypeString
 
     public const string MazeTask2InitEvent = "MazeTask2InitEvent";
 
+    /// <summary>
+    /// 对话结束并且初始化关卡的事件
+    /// </summary>
     public const string StoryEndAndLevelInit = "StoryEndAndLevelInit";
 
     public const string boss死亡事件 = "boss死亡事件";

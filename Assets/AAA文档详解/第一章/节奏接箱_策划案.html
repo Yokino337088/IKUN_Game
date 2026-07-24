@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第一章：节奏接箱 — 策划案</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --card: #ffffff;
+    --text: #2c2c2c;
+    --text-secondary: #5a5a5a;
+    --accent: #e8753a;
+    --accent2: #4a90d9;
+    --accent3: #50b86c;
+    --accent4: #c084fc;
+    --accent5: #f59e0b;
+    --border: #e8e4df;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: "PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",sans-serif;
+    --mono: "SF Mono","Fira Code","Cascadia Code",monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, #fef3ee 0%, #f0e6fc 40%, #e6f0fc 70%, #fef9ec 100%);
+    padding: 80px 40px 72px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 90%, transparent 30%, rgba(232,117,58,0.06));
+  }
+  .hero h1 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #1e1e1e;
+    position: relative;
+  }
+  .hero h1 .icon { font-size: 2.8rem; vertical-align: middle; margin: 0 6px; }
+  .hero .subtitle {
+    margin-top: 14px;
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.06em;
+    position: relative;
+  }
+  .hero .tags {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .tag {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .tag-music  { background: #ede9fe; color: #7c3aed; }
+  .tag-catch  { background: #fff7ed; color: #ea580c; }
+  .tag-casual { background: #ecfdf5; color: #059669; }
+  .tag-rhythm { background: #eff6ff; color: #2563eb; }
+
+  /* ── Container & Cards ── */
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 40px 44px;
+    margin-top: 36px;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: var(--shadow-lg); }
+
+  h2 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.03em;
+  }
+  h2 .emoji { font-size: 1.5rem; }
+  h3 {
+    font-size: 1.18rem;
+    font-weight: 700;
+    margin: 28px 0 12px;
+    color: #333;
+    letter-spacing: 0.02em;
+  }
+  h4 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin: 18px 0 8px;
+    color: #444;
+  }
+
+  p { margin-bottom: 12px; color: var(--text-secondary); }
+
+  /* ── 设计亮点 grid ── */
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-top: 16px;
+  }
+  .highlight-item {
+    background: linear-gradient(135deg, #faf9f6, #f5f3f0);
+    border-radius: var(--radius-sm);
+    padding: 22px 20px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .highlight-item .icon-lg { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .highlight-item strong { display: block; font-size: 1rem; margin-bottom: 4px; }
+  .highlight-item span { font-size: 0.88rem; color: var(--text-secondary); }
+
+  /* ── 流程图 ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    padding: 20px;
+    background: #fafaf8;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--border);
+  }
+  .flow-step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 18px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 80px;
+    box-shadow: var(--shadow);
+  }
+  .flow-arrow {
+    font-size: 1.3rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ── 表格 ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.93rem;
+  }
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    font-weight: 700;
+    color: #444;
+    background: #faf9f6;
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  tr:hover td { background: #fefdfb; }
+
+  /* ── 箱子视觉示意 ── */
+  .box-demo {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .box-card {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 20px 14px;
+    border-radius: var(--radius-sm);
+    border: 2px solid transparent;
+    font-weight: 700;
+    font-size: 0.92rem;
+    transition: transform 0.15s;
+  }
+  .box-card:hover { transform: translateY(-3px); }
+  .box-normal  { background: #fff7ed; border-color: #fdba74;   color: #c2410c; }
+  .box-golden  { background: #fefce8; border-color: #fde047;   color: #a16207; }
+  .box-bomb    { background: #fef2f2; border-color: #fca5a5;   color: #b91c1c; }
+  .box-magnet  { background: #eff6ff; border-color: #93c5fd;   color: #1d4ed8; }
+  .box-shield  { background: #ecfdf5; border-color: #6ee7b7;   color: #047857; }
+
+  .box-card .box-icon { font-size: 2rem; display: block; margin-bottom: 6px; }
+
+  /* ── 音游HUD示意 ── */
+  .hud-demo {
+    background: linear-gradient(180deg, #1e1b2e, #2d2848);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin: 16px 0;
+    color: #e2e8f0;
+    font-family: var(--mono);
+    position: relative;
+    overflow: hidden;
+  }
+  .hud-demo::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent, transparent 48px,
+      rgba(255,255,255,0.015) 48px, rgba(255,255,255,0.015) 49px
+    );
+    pointer-events: none;
+  }
+  .hud-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+    position: relative;
+    z-index: 1;
+  }
+  .hud-label { color: #94a3b8; font-size: 0.82rem; letter-spacing: 0.05em; }
+  .hud-value { color: #f1f5f9; font-size: 1.1rem; font-weight: 700; }
+  .hud-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: #334155;
+    margin: 6px 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .hud-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+  .hud-bar-fill.combo { background: linear-gradient(90deg, #f59e0b, #fbbf24); width: 72%; }
+  .hud-bar-fill.health{ background: linear-gradient(90deg, #22c55e, #4ade80); width: 85%; }
+  .hud-bar-fill.score { background: linear-gradient(90deg, #a78bfa, #c4b5fd); width: 54%; }
+
+  .beat-indicator {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    position: relative;
+    z-index: 1;
+    justify-content: center;
+  }
+  .beat-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #475569;
+    transition: all 0.1s;
+  }
+  .beat-dot.active { background: #facc15; box-shadow: 0 0 12px #facc15; transform: scale(1.3); }
+  .beat-dot.strong { background: #f97316; box-shadow: 0 0 16px #f97316; transform: scale(1.5); }
+
+  /* ── 音符对照 ── */
+  .note-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .note-item {
+    background: #faf9f6;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    border-left: 4px solid var(--accent);
+  }
+  .note-item strong { display: block; font-size: 0.95rem; margin-bottom: 4px; }
+  .note-item span { font-size: 0.85rem; color: var(--text-secondary); }
+
+  /* ── 难度表 ── */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 600px) { .diff-grid { grid-template-columns: 1fr; } }
+  .diff-card {
+    border-radius: var(--radius-sm);
+    padding: 20px 16px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .diff-easy   { background: #ecfdf5; border-color: #a7f3d0; }
+  .diff-normal { background: #eff6ff; border-color: #bfdbfe; }
+  .diff-hard   { background: #fef2f2; border-color: #fecaca; }
+  .diff-card .diff-icon { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+  .diff-card strong { font-size: 1.05rem; }
+  .diff-card p { font-size: 0.84rem; margin-top: 6px; }
+
+  /* ── List ── */
+  ul, ol { margin: 8px 0 12px 20px; color: var(--text-secondary); }
+  li { margin-bottom: 6px; }
+
+  .highlight {
+    background: linear-gradient(180deg, transparent 55%, #fde68a 55%);
+    padding: 0 4px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #b0ada6;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── 响应式 ── */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 20px 44px; }
+    .hero h1 { font-size: 1.7rem; }
+    .container { padding: 0 16px 48px; }
+    .card { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <h1>
+    <span class="icon">🎵</span>节奏接箱<span class="icon">📦</span>
+  </h1>
+  <p class="subtitle">Rhythm Catcher · 当音游节拍遇上接物玩法</p>
+  <div class="tags">
+    <span class="tag tag-music">音游节奏</span>
+    <span class="tag tag-catch">接物玩法</span>
+    <span class="tag tag-casual">休闲关卡</span>
+    <span class="tag tag-rhythm">关卡策划</span>
+  </div>
+</section>
+
+<div class="container">
+
+<!-- ═══════════════ 1. 设计概述 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">🎯</span>一、设计概述</h2>
+
+  <h3>1.1 核心概念</h3>
+  <p>
+    <strong>「节奏接箱」</strong>是一款将<span class="highlight">下落式音游节拍判定</span>与<span class="highlight">接物休闲玩法</span>深度融合的关卡。
+    玩家操控角色在场景底部水平移动，接住从天而降的箱子——但箱子的<strong>生成时机、下落速度、种类变换</strong>全部由背景音乐的节奏轨驱动。
+  </p>
+  <p>
+    这不仅仅是「听着音乐接箱子」，而是让音乐节拍<strong>直接决定</strong>游戏的每一个交互瞬间——错过一个节拍，就意味着错过一个箱子；完美踩中节拍，就能触发炫酷的连击反馈。
+  </p>
+
+  <h3>1.2 设计亮点</h3>
+  <div class="highlight-grid">
+    <div class="highlight-item">
+      <span class="icon-lg">🎼</span>
+      <strong>节拍驱动生成</strong>
+      <span>箱子按BPM精确生成，强拍出金箱</span>
+    </div>
+    <div class="highlight-item">
+      <span class="icon-lg">🔥</span>
+      <strong>连击系统</strong>
+      <span>连续精准接取构建Combo，得分倍增</span>
+    </div>
+    <div class="highlight-item">
+      <span class="icon-lg">🌈</span>
+      <strong>视听同步</strong>
+      <span>背景脉冲、粒子特效与节拍完美对齐</span>
+    </div>
+    <div class="highlight-item">
+      <span class="icon-lg">⚡</span>
+      <strong>动态谱面</strong>
+      <span>歌曲不同段落对应不同箱子下落模式</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 2. 融合机制 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">🔗</span>二、音游 × 接箱：融合机制详解</h2>
+
+  <h3>2.1 核心融合思路</h3>
+  <p>
+    传统接物游戏的问题是：<em>箱子出现时机随机，缺乏节奏感，长时间游玩易疲劳</em>。<br>
+    音游的问题是：<em>判定严格、上手门槛高、休闲玩家望而却步</em>。
+  </p>
+  <p>
+    <strong>融合方案：</strong>保留接物玩法「左右移动、接取掉落物」的<strong>直观操作</strong>，同时将音游的<strong>节拍判定、Combo、谱面设计</strong>嫁接到箱子生成逻辑中。玩家无需精确按键——只要在正确的时机处于正确的位置，就能获得音游级别的满足感。
+  </p>
+
+  <h3>2.2 节拍-箱子映射规则</h3>
+  <table>
+    <tr><th>节拍类型</th><th>节拍位置</th><th>生成的箱子</th><th>分值</th></tr>
+    <tr>
+      <td><strong>强拍 (Downbeat)</strong></td>
+      <td>第 1 拍、第 3 拍</td>
+      <td>🥇 金色宝箱</td>
+      <td>×3 基础分</td>
+    </tr>
+    <tr>
+      <td><strong>弱拍 (Offbeat)</strong></td>
+      <td>第 2 拍、第 4 拍</td>
+      <td>📦 普通木箱</td>
+      <td>×1 基础分</td>
+    </tr>
+    <tr>
+      <td><strong>八分音符</strong></td>
+      <td>拍间半拍</td>
+      <td>💎 小宝石</td>
+      <td>×0.5（但计入Combo）</td>
+    </tr>
+    <tr>
+      <td><strong>重音 (Accent)</strong></td>
+      <td>鼓点/镲片</td>
+      <td>🧲 道具箱</td>
+      <td>触发道具效果</td>
+    </tr>
+    <tr>
+      <td><strong>休止符</strong></td>
+      <td>段落间隙</td>
+      <td>💣 炸弹箱（需躲避！）</td>
+      <td>扣血</td>
+    </tr>
+  </table>
+
+  <h3>2.3 音乐段落 → 箱子模式</h3>
+  <table>
+    <tr><th>歌曲段落</th><th>箱子模式</th><th>密度</th><th>特点</th></tr>
+    <tr><td>🎵 前奏 / Intro</td><td>稀疏教学模式</td><td>低</td><td>只有普通箱，引导玩家熟悉操作</td></tr>
+    <tr><td>🎵 主歌 / Verse</td><td>标准节拍模式</td><td>中</td><td>节拍=箱子，稳定节奏</td></tr>
+    <tr><td>🎵 预副歌 / Pre-Chorus</td><td>密度递增模式</td><td>中→高</td><td>逐步引入宝石和道具箱</td></tr>
+    <tr><td>🎵 副歌 / Chorus (Drop)</td><td>狂潮模式</td><td>极高</td><td>全类型箱齐发，金箱频繁出现</td></tr>
+    <tr><td>🎵 间奏 / Bridge</td><td>变速模式</td><td>波动</td><td>速度变化 + 横向移动挑战</td></tr>
+    <tr><td>🎵 尾声 / Outro</td><td>收束模式</td><td>递减</td><td>最后的金箱雨，冲刺高分</td></tr>
+  </table>
+
+  <h3>2.4 融合架构图</h3>
+  <div class="flow">
+    <div class="flow-step">🎼 音乐文件<br><small>BPM/节拍分析</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">📋 谱面数据<br><small>Beat Map</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">📦 箱子生成器<br><small>时机/类型/位置</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">🎮 玩家交互<br><small>移动/接取</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">✅ 判定系统<br><small>精准/完美/Miss</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">✨ 反馈输出<br><small>特效/音效/得分</small></div>
+  </div>
+</div>
+
+<!-- ═══════════════ 3. 箱子种类 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">📦</span>三、箱子种类设计</h2>
+
+  <div class="box-demo">
+    <div class="box-card box-normal">
+      <span class="box-icon">📦</span>
+      普通木箱
+      <small style="display:block;margin-top:4px;font-weight:400;">基础分 +1 · 弱拍生成</small>
+    </div>
+    <div class="box-card box-golden">
+      <span class="box-icon">🥇</span>
+      金色宝箱
+      <small style="display:block;margin-top:4px;font-weight:400;">基础分 ×3 · 强拍生成</small>
+    </div>
+    <div class="box-card box-bomb">
+      <span class="box-icon">💣</span>
+      炸弹箱
+      <small style="display:block;margin-top:4px;font-weight:400;">扣血 · 休止符生成</small>
+    </div>
+    <div class="box-card box-magnet">
+      <span class="box-icon">🧲</span>
+      磁铁箱
+      <small style="display:block;margin-top:4px;font-weight:400;">自动吸附箱子 5秒</small>
+    </div>
+    <div class="box-card box-shield">
+      <span class="box-icon">🛡️</span>
+      护盾箱
+      <small style="display:block;margin-top:4px;font-weight:400;">抵挡一次炸弹伤害</small>
+    </div>
+  </div>
+
+  <h4>💎 特殊道具：宝石 (Eighth-Note Gem)</h4>
+  <p>
+    在八分音符位置掉落的小颗宝石，单个分值低，但<strong>连续接取可大幅积累 Combo 数</strong>。
+    宝石不计入「接取数」但计入「Combo 连击」，是高手冲击 S 评价的关键。
+  </p>
+</div>
+
+<!-- ═══════════════ 4. 判定系统 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">⚖️</span>四、判定系统</h2>
+
+  <h3>4.1 接取判定</h3>
+  <table>
+    <tr><th>判定等级</th><th>时间窗口</th><th>得分倍率</th><th>特效</th><th>Combo</th></tr>
+    <tr>
+      <td>🌈 <strong>PERFECT</strong></td>
+      <td>±40ms（严格踩拍）</td>
+      <td>×2.0</td>
+      <td>彩虹爆裂 + 屏幕微闪</td>
+      <td>+1</td>
+    </tr>
+    <tr>
+      <td>✨ <strong>GREAT</strong></td>
+      <td>±90ms</td>
+      <td>×1.5</td>
+      <td>金色粒子</td>
+      <td>+1</td>
+    </tr>
+    <tr>
+      <td>👍 <strong>GOOD</strong></td>
+      <td>±150ms</td>
+      <td>×1.0</td>
+      <td>绿色提示</td>
+      <td>+1</td>
+    </tr>
+    <tr>
+      <td>😐 <strong>MISS</strong></td>
+      <td>箱子落地未接</td>
+      <td>×0</td>
+      <td>红色碎屑</td>
+      <td>归零！</td>
+    </tr>
+    <tr>
+      <td>💥 <strong>BOMB</strong></td>
+      <td>接到炸弹箱</td>
+      <td>−1 ❤️</td>
+      <td>屏幕震动 + 红色闪烁</td>
+      <td>归零！</td>
+    </tr>
+  </table>
+
+  <h3>4.2 Combo 连击系统</h3>
+  <p>
+    Combo 是音游的灵魂。连续成功接取会累积 Combo 计数：
+  </p>
+  <ul>
+    <li><strong>0~9 Combo：</strong>无加成（普通状态）</li>
+    <li><strong>10~29 Combo：</strong>×1.5 得分倍率 — 背景开始微微发光</li>
+    <li><strong>30~49 Combo：</strong>×2.0 得分倍率 — 背景粒子效果增强</li>
+    <li><strong>50~99 Combo：</strong>×2.5 得分倍率 — 屏幕边缘出现彩色光晕</li>
+    <li><strong>100+ Combo：</strong>×3.0 得分倍率 — 全屏绚丽特效 + 观众欢呼声</li>
+  </ul>
+  <p style="color:#b91c1c; font-weight:600;">⚠ 一次 MISS 或接到炸弹 = Combo 立即归零！</p>
+
+  <h3>4.3 HUD 界面示意</h3>
+  <div class="hud-demo">
+    <div class="hud-row">
+      <span class="hud-label">SCORE</span>
+      <span class="hud-value">128,450</span>
+    </div>
+    <div class="hud-bar"><div class="hud-bar-fill score"></div></div>
+    <div class="hud-row">
+      <span class="hud-label">COMBO</span>
+      <span class="hud-value" style="color:#fbbf24;">37 ✦</span>
+    </div>
+    <div class="hud-bar"><div class="hud-bar-fill combo"></div></div>
+    <div class="hud-row">
+      <span class="hud-label">MULTIPLIER</span>
+      <span class="hud-value" style="color:#c4b5fd;">×2.0</span>
+    </div>
+    <div class="hud-row">
+      <span class="hud-label">❤️❤️❤️🤍🤍</span>
+      <span class="hud-value" style="font-size:0.9rem;">3 / 5</span>
+    </div>
+    <div class="beat-indicator">
+      <span class="beat-dot strong"></span>
+      <span class="beat-dot"></span>
+      <span class="beat-dot active"></span>
+      <span class="beat-dot"></span>
+      <span class="beat-dot"></span>
+      <span class="beat-dot"></span>
+      <span class="beat-dot active"></span>
+      <span class="beat-dot"></span>
+    </div>
+    <p style="text-align:center;font-size:0.75rem;color:#64748b;margin-top:12px;">
+      ▲ 底部节拍指示器：黄点=当前拍 · 橙点=强拍 · 灰点=弱拍位置
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════ 5. 玩家操作 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">🎮</span>五、玩家操作设计</h2>
+
+  <h3>5.1 核心操作</h3>
+  <table>
+    <tr><th>操作</th><th>输入方式</th><th>效果</th></tr>
+    <tr><td>⬅️➡️ 左右移动</td><td>方向键 / A D / 触屏滑动</td><td>玩家角色沿底部横向移动</td></tr>
+    <tr><td>⬆️ 冲刺</td><td>上方向键 / W / 双击</td><td>短暂加速移动（有冷却）</td></tr>
+    <tr><td>🔄 吸附道具</td><td>空格 / 点击道具图标</td><td>激活已收集的道具效果</td></tr>
+  </table>
+
+  <h3>5.2 操作手感优化</h3>
+  <ul>
+    <li><strong>平滑移动：</strong>角色移动带缓入缓出（Lerp），手感流畅不僵硬</li>
+    <li><strong>接取判定区：</strong>角色头顶上方有半透明「接取光环」，光环范围内的箱子自动判定</li>
+    <li><strong>视觉预判：</strong>箱子下落轨迹有淡淡的虚线提示 + 地面投影，帮助玩家预判落点</li>
+    <li><strong>触屏适配：</strong>支持左右半屏点击移动、全屏滑动跟随两种模式</li>
+  </ul>
+</div>
+
+<!-- ═══════════════ 6. 视听同步 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">🎨</span>六、视听同步设计</h2>
+
+  <h3>6.1 背景与节拍同步</h3>
+  <table>
+    <tr><th>元素</th><th>同步方式</th></tr>
+    <tr><td>🌅 背景色调</td><td>随歌曲段落切换色调：前奏暖橙 → 主歌天蓝 → 副歌紫红 → 尾声金黄</td></tr>
+    <tr><td>💫 背景粒子</td><td>强拍时粒子爆发一次，Combo越高粒子越密集</td></tr>
+    <tr><td>📐 UI 脉冲</td><td>Combo 数字在拍点上微微放大缩小（Kick Scale）</td></tr>
+    <tr><td>🕺 角色动画</td><td>角色在强拍自动做小跳跃动画，接到箱子有接取动画</td></tr>
+    <tr><td>🌈 判断线（可选）</td><td>屏幕底部有一条水平节拍线，随 BPM 闪烁，踩拍接箱=PERFECT</td></tr>
+  </table>
+
+  <h3>6.2 音效反馈层级</h3>
+  <ol>
+    <li><strong>背景音乐层：</strong>始终播放的关卡 BGM（可选多首）</li>
+    <li><strong>节拍提示层：</strong>底鼓/拍手音效作为节拍提示（可独立调节音量）</li>
+    <li><strong>接取反馈层：</strong>PERFECT / GREAT / GOOD / MISS 各有不同音效</li>
+    <li><strong>Combo 提示层：</strong>Combo 里程碑（10/30/50/100）时播放升调音效</li>
+    <li><strong>道具触发层：</strong>磁铁启动、护盾破碎各有独特音效</li>
+  </ol>
+</div>
+
+<!-- ═══════════════ 7. 关卡流程 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">🗺️</span>七、关卡流程设计</h2>
+
+  <div class="flow">
+    <div class="flow-step">🎬 开场动画<br><small>3秒</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">📖 教学引导<br><small>前奏段</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">🎵 主歌<br><small>标准接取</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">🔥 副歌<br><small>狂潮模式</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">🌉 间奏<br><small>变速挑战</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">🔥 副歌2<br><small>最终狂潮</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">🏁 结算<br><small>评级展示</small></div>
+  </div>
+
+  <h3>7.1 评级标准</h3>
+  <table>
+    <tr><th>评级</th><th>条件</th><th>奖励</th></tr>
+    <tr><td>🏆 <strong>S</strong></td><td>接取率 ≥ 95% + 最大Combo ≥ 100</td><td>⭐️⭐️⭐️ + 隐藏曲解锁</td></tr>
+    <tr><td>🥇 <strong>A</strong></td><td>接取率 ≥ 85% + 最大Combo ≥ 50</td><td>⭐️⭐️⭐️</td></tr>
+    <tr><td>🥈 <strong>B</strong></td><td>接取率 ≥ 70%</td><td>⭐️⭐️</td></tr>
+    <tr><td>🥉 <strong>C</strong></td><td>接取率 ≥ 50%</td><td>⭐️</td></tr>
+    <tr><td>❌ <strong>D</strong></td><td>接取率 &lt; 50%</td><td>无</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════ 8. 难度 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">📊</span>八、难度分级</h2>
+
+  <div class="diff-grid">
+    <div class="diff-card diff-easy">
+      <span class="diff-icon">🌱</span>
+      <strong>轻松模式</strong>
+      <p>
+        BPM: 80~100<br>
+        箱子密度: 低<br>
+        判定宽松 (±200ms)<br>
+        无炸弹箱<br>
+        5条命<br>
+        适合初次体验
+      </p>
+    </div>
+    <div class="diff-card diff-normal">
+      <span class="diff-icon">🎵</span>
+      <strong>标准模式</strong>
+      <p>
+        BPM: 120~140<br>
+        箱子密度: 中<br>
+        标准判定 (±150ms)<br>
+        炸弹箱出现<br>
+        3条命<br>
+        推荐默认体验
+      </p>
+    </div>
+    <div class="diff-card diff-hard">
+      <span class="diff-icon">🔥</span>
+      <strong>狂热模式</strong>
+      <p>
+        BPM: 160~180<br>
+        箱子密度: 极高<br>
+        严格判定 (±90ms)<br>
+        炸弹箱频繁<br>
+        1条命！<br>
+        终极挑战
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ 9. 技术实现 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">⚙️</span>九、技术实现要点</h2>
+
+  <h3>9.1 谱面编辑器（Beat Map Editor）</h3>
+  <p>
+    推荐制作一个简单的<strong>可视化谱面编辑器</strong>，允许策划在时间轴上拖拽放置不同种类的箱子，并与音频波形对照：
+  </p>
+  <ul>
+    <li>导入音频文件 → 自动分析 BPM 和节拍点（使用 Unity 的 AudioSource.GetSpectrumData）</li>
+    <li>时间轴上显示波形 + 节拍网格线</li>
+    <li>拖拽放置：普通箱 / 金箱 / 炸弹 / 道具 / 宝石</li>
+    <li>导出为 ScriptableObject 谱面数据，运行时加载</li>
+  </ul>
+
+  <h3>9.2 核心数据结构（伪代码）</h3>
+  <pre style="background:#faf9f6;padding:18px;border-radius:8px;font-size:0.85rem;overflow-x:auto;font-family:var(--mono);line-height:1.7;border:1px solid var(--border);">
+// 单个箱子生成指令
+BeatNote {
+    float   beatTime;      // 在第几拍生成（如 4.5 = 第4拍半）
+    BoxType type;          // 箱子类型
+    float   laneX;         // 掉落横向位置 (0~1 归一化)
+    bool    isStrongBeat;  // 是否强拍
+}
+
+// 谱面数据（一首歌对应一个）
+BeatMap {
+    float   bpm;           // 歌曲 BPM
+    float   duration;      // 总时长(秒)
+    List&lt;BeatNote&gt; notes;   // 所有箱子生成指令
+    List&lt;SectionMark&gt; sections; // 段落标记（前奏/主歌/副歌...）
+}
+</pre>
+
+  <h3>9.3 Unity 实现建议</h3>
+  <ul>
+    <li><strong>箱子对象池：</strong>高频生成/销毁，必须使用 Object Pool 避免 GC 抖动</li>
+    <li><strong>节拍同步：</strong>使用 AudioSettings.dspTime 而非 Time.time，确保音频精确同步</li>
+    <li><strong>判定窗口：</strong>用协程检测箱子落地时间 vs 玩家位置重合时间</li>
+    <li><strong>视觉反馈：</strong>使用 DOTween 做 UI 动画（Combo 弹跳、屏幕脉冲）</li>
+  </ul>
+</div>
+
+<!-- ═══════════════ 10. 总结 ═══════════════ -->
+<div class="card">
+  <h2><span class="emoji">💡</span>十、总结：为什么这个融合能成功？</h2>
+
+  <p>
+    「节奏接箱」不是生硬地把音游和接物拼在一起，而是让<strong>音乐的节拍结构成为关卡的内在骨架</strong>：
+  </p>
+
+  <div class="note-grid">
+    <div class="note-item">
+      <strong>🎯 降低音游门槛</strong>
+      <span>不需要精确按键，只需「移动到正确位置」——操作维度从「时机+按键」简化为「时机+位置」</span>
+    </div>
+    <div class="note-item">
+      <strong>📈 提升接物深度</strong>
+      <span>Combo系统 + 节拍判定 + 箱子种类，让原本单调的接物玩法有了策略性和挑战性</span>
+    </div>
+    <div class="note-item">
+      <strong>🎵 强化音乐沉浸</strong>
+      <span>玩家的每一次接取都与音乐节拍对齐，自然而然产生「在演奏音乐」的心流体验</span>
+    </div>
+    <div class="note-item">
+      <strong>♻️ 谱面=关卡</strong>
+      <span>每首歌就是一个新关卡，内容生产成本低、可复玩性强，非常适合休闲手游</span>
+    </div>
+  </div>
+
+  <p style="margin-top:20px; text-align:center; font-size:1.1rem; font-weight:700; color:#333;">
+    🎵 听音乐 · 接箱子 · 冲 Combo · 拿 S 评价 🏆
+  </p>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  IKUN_Game 关卡策划文档 · 第一章：节奏接箱 · 生成于 2026-07-19
+</div>
+
+</body>
+</html>
