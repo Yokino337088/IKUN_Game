@@ -490,6 +490,11 @@ public class SelectLevelPanel : BasePanel
         }
 
         isLoadingChapter = true;
+        // 进入关卡前立即停止开始场景的背景音乐，并清空播放列表防止自动切到下一首
+        MusicMgr.Instance.StopBKMusicAndClearList();
+        MusicMgr.Instance.Dispose();
+        //隐藏面板
+        UIMgr.Instance.HidePanelWithAnimation<SelectLevelPanel>(E_HideType.淡出);
         //调用框架代码
         SceneMgr.Instance.LoadSceneAsyn(chapter.SceneName);
     }

@@ -232,6 +232,19 @@ namespace TangmenFramework
         }
 
         /// <summary>
+        /// 释放指定AB包的引用计数。引用计数归零时AB包会被自动卸载。
+        /// 如果AB包不在已加载列表中则安全跳过。
+        /// </summary>
+        /// <param name="abName">AB包名称。</param>
+        public void ReleaseResIfExists(string abName)
+        {
+            if (string.IsNullOrEmpty(abName))
+                return;
+
+            ABMgr.Instance.ReleaseResIfExists(abName);
+        }
+
+        /// <summary>
         /// 获取AB包的引用计数
         /// </summary>
         /// <param name="abName">AB包名称</param>

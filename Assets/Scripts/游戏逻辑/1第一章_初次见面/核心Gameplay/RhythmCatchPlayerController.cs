@@ -55,6 +55,14 @@ public class RhythmCatchPlayerController : MonoBehaviour
         _catchCollider = GetComponent<BoxCollider2D>();
         if (_catchCollider == null)
             _catchCollider = gameObject.AddComponent<BoxCollider2D>();
+        _catchCollider.isTrigger = true;
+
+        // 必须有 Rigidbody2D 才能与掉落物的 Trigger 碰撞体触发 OnTriggerEnter2D。
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+            rb = gameObject.AddComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.simulated = true;
     }
 
     private void OnEnable()

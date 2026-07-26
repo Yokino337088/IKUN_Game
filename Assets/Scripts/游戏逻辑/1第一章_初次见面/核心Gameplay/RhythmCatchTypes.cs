@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 /// <summary>节奏接箱中的掉落物类型。</summary>
@@ -47,27 +47,44 @@ public sealed class RhythmCatchBeatNote
 [Serializable]
 public sealed class RhythmCatchSectionMark
 {
+    [Tooltip("段落开始的拍数。")]
     [Min(0f)] public float startBeat;
+    [Tooltip("段落类型（前奏/主歌/副歌等）。")]
     public RhythmCatchSectionType section = RhythmCatchSectionType.Intro;
 }
 
 /// <summary>玩法层发送给 HUD 的完整只读快照。</summary>
 public struct RhythmCatchHudSnapshot
 {
+    /// <summary>当前关卡运行状态。</summary>
     public RhythmCatchGameState state;
+    /// <summary>当前歌曲段落类型。</summary>
     public RhythmCatchSectionType section;
+    /// <summary>当前总分数（含跨歌曲累计）。</summary>
     public int score;
+    /// <summary>当前连击数。</summary>
     public int combo;
+    /// <summary>本歌曲历史最大连击数。</summary>
     public int maxCombo;
+    /// <summary>当前分数倍率（已废弃，保留兼容）。</summary>
     public float scoreMultiplier;
+    /// <summary>当前生命值。</summary>
     public int health;
+    /// <summary>最大生命值。</summary>
     public int maxHealth;
+    /// <summary>是否持有护盾。</summary>
     public bool hasShield;
+    /// <summary>磁铁剩余时间（秒）。</summary>
     public float magnetRemaining;
+    /// <summary>当前歌曲已播放秒数。</summary>
     public float elapsedSeconds;
+    /// <summary>当前歌曲总时长（秒）。</summary>
     public float durationSeconds;
+    /// <summary>当前接取率（0~1）。</summary>
     public float catchRate;
+    /// <summary>评级字符串（S/A/B/C/D）。</summary>
     public string grade;
+    /// <summary>倒计时剩余秒数。</summary>
     public int countdown;
     /// <summary>当前歌曲名（多歌曲模式）。</summary>
     public string songName;

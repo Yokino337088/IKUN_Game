@@ -345,6 +345,21 @@ namespace TangmenFramework
             bkMusic.Stop();
         }
 
+        /// <summary>
+        /// 停止背景音乐并清空音乐列表，防止 CheckBGMusicFinished 自动切到下一首。
+        /// 适用于离开开始场景、进入关卡等需要彻底结束当前音乐播放的场景。
+        /// </summary>
+        public void StopBKMusicAndClearList()
+        {
+            if (bkMusic != null)
+            {
+                bkMusic.Stop();
+                bkMusic.clip = null;
+            }
+            musicList = null;
+            currentABName = null;
+        }
+
         //暂停背景音乐
         public void PauseBKMusic()
         {

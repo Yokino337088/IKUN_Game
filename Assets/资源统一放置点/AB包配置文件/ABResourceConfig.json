@@ -26,6 +26,11 @@
             "ABPackageName": "font"
         },
         {
+            "ResourceName": "STHUPO SDF",
+            "ResourcePath": "Assets/资源统一放置点/TMP字体/STHUPO SDF.asset",
+            "ABPackageName": "font"
+        },
+        {
             "ResourceName": "TextMeshPro/Distance Field",
             "ResourcePath": "Assets/TextMesh Pro/Shaders/TMP_SDF.shader",
             "ABPackageName": "font"
@@ -36,19 +41,9 @@
             "ABPackageName": "font"
         },
         {
-            "ResourceName": "STHUPO SDF",
-            "ResourcePath": "Assets/资源统一放置点/TMP字体/STHUPO SDF.asset",
-            "ABPackageName": "font"
-        },
-        {
             "ResourceName": "T_BulletComments",
             "ResourcePath": "Assets/资源统一放置点/Excel导表管理/json数据/T_BulletComments.json",
             "ABPackageName": "json_four"
-        },
-        {
-            "ResourceName": "按钮材质",
-            "ResourcePath": "Assets/资源统一放置点/材质/开始场景/按钮材质.mat",
-            "ABPackageName": "material_begin"
         },
         {
             "ResourceName": "练习室",
@@ -56,8 +51,13 @@
             "ABPackageName": "material_begin"
         },
         {
-            "ResourceName": "飞机场",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/飞机场.mp3",
+            "ResourceName": "按钮材质",
+            "ResourcePath": "Assets/资源统一放置点/材质/开始场景/按钮材质.mat",
+            "ABPackageName": "material_begin"
+        },
+        {
+            "ResourceName": "王妃",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/王妃.mp3",
             "ABPackageName": "music_begin"
         },
         {
@@ -66,8 +66,8 @@
             "ABPackageName": "music_begin"
         },
         {
-            "ResourceName": "王妃",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/王妃.mp3",
+            "ResourceName": "飞机场",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/开始场景/飞机场.mp3",
             "ABPackageName": "music_begin"
         },
         {
@@ -76,13 +76,13 @@
             "ABPackageName": "music_begin"
         },
         {
-            "ResourceName": "Washed Away",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/第四章/Washed Away.mp3",
+            "ResourceName": "因为你",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/第四章/因为你.mp3",
             "ABPackageName": "music_four"
         },
         {
-            "ResourceName": "因为你",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/第四章/因为你.mp3",
+            "ResourceName": "Washed Away",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/背景音乐/第四章/Washed Away.mp3",
             "ABPackageName": "music_four"
         },
         {
@@ -96,8 +96,18 @@
             "ABPackageName": "sound_four"
         },
         {
-            "ResourceName": "鬼叫3",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/鬼叫3.mp3",
+            "ResourceName": "鬼叫1",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/鬼叫1.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "蓄力",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/蓄力.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "胡彦斌",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/陶喆/胡彦斌.mp3",
             "ABPackageName": "sound_four"
         },
         {
@@ -111,33 +121,8 @@
             "ABPackageName": "sound_four"
         },
         {
-            "ResourceName": "歌剧",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/歌剧.mp3",
-            "ABPackageName": "sound_four"
-        },
-        {
-            "ResourceName": "鬼叫1",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/鬼叫1.mp3",
-            "ABPackageName": "sound_four"
-        },
-        {
-            "ResourceName": "胡彦斌",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/陶喆/胡彦斌.mp3",
-            "ABPackageName": "sound_four"
-        },
-        {
-            "ResourceName": "格挡",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/格挡.mp3",
-            "ABPackageName": "sound_four"
-        },
-        {
-            "ResourceName": "哦啊啊",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/陶喆/哦啊啊.mp3",
-            "ABPackageName": "sound_four"
-        },
-        {
-            "ResourceName": "升降梯",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/升降梯.mp3",
+            "ResourceName": "太美丽",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/陶喆/太美丽.mp3",
             "ABPackageName": "sound_four"
         },
         {
@@ -146,28 +131,33 @@
             "ABPackageName": "sound_four"
         },
         {
-            "ResourceName": "太美丽",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/陶喆/太美丽.mp3",
+            "ResourceName": "升降梯",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/升降梯.mp3",
             "ABPackageName": "sound_four"
         },
         {
-            "ResourceName": "蓄力",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/蓄力.mp3",
+            "ResourceName": "哦啊啊",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/陶喆/哦啊啊.mp3",
             "ABPackageName": "sound_four"
         },
         {
-            "ResourceName": "落地",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/落地.mp3",
-            "ABPackageName": "sound_general"
+            "ResourceName": "歌剧",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/歌剧.mp3",
+            "ABPackageName": "sound_four"
         },
         {
-            "ResourceName": "打字机",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/打字机.mp3",
-            "ABPackageName": "sound_general"
+            "ResourceName": "格挡",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/格挡.mp3",
+            "ABPackageName": "sound_four"
         },
         {
-            "ResourceName": "鸡你太美",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/鸡你太美.mp3",
+            "ResourceName": "鬼叫3",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/第四章/AudioClip/鬼叫3.mp3",
+            "ABPackageName": "sound_four"
+        },
+        {
+            "ResourceName": "你干嘛",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/你干嘛.wav",
             "ABPackageName": "sound_general"
         },
         {
@@ -181,13 +171,8 @@
             "ABPackageName": "sound_general"
         },
         {
-            "ResourceName": "鸡",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/鸡.wav",
-            "ABPackageName": "sound_general"
-        },
-        {
-            "ResourceName": "你",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/你.mp3",
+            "ResourceName": "太",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/太.mp3",
             "ABPackageName": "sound_general"
         },
         {
@@ -196,14 +181,34 @@
             "ABPackageName": "sound_general"
         },
         {
-            "ResourceName": "太",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/太.mp3",
+            "ResourceName": "你",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/你.mp3",
             "ABPackageName": "sound_general"
         },
         {
-            "ResourceName": "你干嘛",
-            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/你干嘛.wav",
+            "ResourceName": "鸡你太美",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/鸡你太美.mp3",
             "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "打字机",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/打字机.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "鸡",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/鸡.wav",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "落地",
+            "ResourcePath": "Assets/资源统一放置点/音频资源/音效/通用音效/落地.mp3",
+            "ABPackageName": "sound_general"
+        },
+        {
+            "ResourceName": "BeginPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/开始场景/BeginPanel.prefab",
+            "ABPackageName": "ui_panel_begin"
         },
         {
             "ResourceName": "AboutPanel",
@@ -213,11 +218,6 @@
         {
             "ResourceName": "SelectLevelPanel",
             "ResourcePath": "Assets/资源统一放置点/UI/UI面板/开始场景/SelectLevelPanel.prefab",
-            "ABPackageName": "ui_panel_begin"
-        },
-        {
-            "ResourceName": "BeginPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/开始场景/BeginPanel.prefab",
             "ABPackageName": "ui_panel_begin"
         },
         {
@@ -231,18 +231,8 @@
             "ABPackageName": "ui_panel_four"
         },
         {
-            "ResourceName": "MazePhonePanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazePhonePanel.prefab",
-            "ABPackageName": "ui_panel_four"
-        },
-        {
             "ResourceName": "MazePCPanel",
             "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazePCPanel.prefab",
-            "ABPackageName": "ui_panel_four"
-        },
-        {
-            "ResourceName": "FourBossPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPanel.prefab",
             "ABPackageName": "ui_panel_four"
         },
         {
@@ -251,13 +241,28 @@
             "ABPackageName": "ui_panel_four"
         },
         {
+            "ResourceName": "FourBossPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/FourBossPanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "MazePhonePanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/第四章/MazePhonePanel.prefab",
+            "ABPackageName": "ui_panel_four"
+        },
+        {
+            "ResourceName": "StoryPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/StoryPanel.prefab",
+            "ABPackageName": "ui_panel_load"
+        },
+        {
             "ResourceName": "LodingPanel",
             "ResourcePath": "Assets/资源统一放置点/UI/UI面板/LodingPanel.prefab",
             "ABPackageName": "ui_panel_load"
         },
         {
-            "ResourceName": "StoryPanel",
-            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/StoryPanel.prefab",
+            "ResourceName": "LevelSwitchPanel",
+            "ResourcePath": "Assets/资源统一放置点/UI/UI面板/关卡切换/LevelSwitchPanel.prefab",
             "ABPackageName": "ui_panel_load"
         },
         {

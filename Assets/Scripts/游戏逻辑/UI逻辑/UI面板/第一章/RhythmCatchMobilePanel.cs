@@ -33,7 +33,9 @@ public class RhythmCatchMobilePanel : BasePanel
         base.HideMe();
     }
 
-    //查找控件
+    /// <summary>
+    /// 通过 BasePanel.GetControl 按名称查找左右长按按钮控件。
+    /// </summary>
     private void ResolveControls()
     {
         _leftButton = GetControl<LongPressButton>("左移");
@@ -86,30 +88,37 @@ public class RhythmCatchMobilePanel : BasePanel
         _registered = false;
     }
 
+    /// <summary>左移按钮按下。</summary>
     private void OnLeftPointerDown()
     {
         _leftPressed = true;
         RefreshHorizontalInput();
     }
 
+    /// <summary>左移按钮释放。</summary>
     private void OnLeftPointerUp()
     {
         _leftPressed = false;
         RefreshHorizontalInput();
     }
 
+    /// <summary>右移按钮按下。</summary>
     private void OnRightPointerDown()
     {
         _rightPressed = true;
         RefreshHorizontalInput();
     }
 
+    /// <summary>右移按钮释放。</summary>
     private void OnRightPointerUp()
     {
         _rightPressed = false;
         RefreshHorizontalInput();
     }
 
+    /// <summary>
+    /// 根据左右按钮状态计算水平输入值：仅左按=-1，仅右按=+1，同时按或都不按=0。
+    /// </summary>
     private void RefreshHorizontalInput()
     {
         // 两侧同时按住时互相抵消；释放任意一侧后立即恢复另一侧方向。
@@ -122,6 +131,10 @@ public class RhythmCatchMobilePanel : BasePanel
         SendHorizontalInput(direction);
     }
 
+    /// <summary>
+    /// 通过框架 EventCenter 发送水平输入事件，与 PC 键盘共用同一事件通道。
+    /// </summary>
+    /// <param name="value">-1=左, 0=无, +1=右。</param>
     private static void SendHorizontalInput(float value)
     {
         // 与 PC InputMgr 完全复用同一个框架事件，玩家控制器无需关心输入来自键盘还是 UGUI。

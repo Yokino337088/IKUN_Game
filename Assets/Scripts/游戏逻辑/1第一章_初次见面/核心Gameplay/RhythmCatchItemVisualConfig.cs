@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 /// <summary>
@@ -30,13 +30,20 @@ public class RhythmCatchItemVisualConfig : ScriptableObject
     {
         switch (type)
         {
-            case RhythmCatchItemType.Normal:  return normalSprite;
-            case RhythmCatchItemType.Gold:    return goldSprite;
-            case RhythmCatchItemType.Gem:     return gemSprite;
-            case RhythmCatchItemType.Bomb:    return bombSprite;
-            case RhythmCatchItemType.Magnet:  return magnetSprite;
-            case RhythmCatchItemType.Shield:  return shieldSprite;
-            default:                          return normalSprite;
+            case RhythmCatchItemType.Normal:  
+                return normalSprite;
+            case RhythmCatchItemType.Gold:    
+                return goldSprite;
+            case RhythmCatchItemType.Gem:     
+                return gemSprite;
+            case RhythmCatchItemType.Bomb:    
+                return bombSprite;
+            case RhythmCatchItemType.Magnet:  
+                return magnetSprite;
+            case RhythmCatchItemType.Shield:  
+                return shieldSprite;
+            default:                          
+                return normalSprite;
         }
     }
 }

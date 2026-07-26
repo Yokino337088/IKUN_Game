@@ -37,5 +37,18 @@ public class SingletonAutoMono<T> : MonoBehaviour where T:MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 销毁单例实例及其挂载的 GameObject。
+    /// 调用后下次访问 Instance 会重新创建。
+    /// </summary>
+    public static void DestroyInstance()
+    {
+        if (instance != null)
+        {
+            Destroy(instance.gameObject);
+            instance = null;
+        }
+    }
+
 }
 }

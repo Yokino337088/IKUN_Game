@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 /// <summary>
@@ -33,13 +33,23 @@ public class RhythmCatchFallingItem : MonoBehaviour
     private float _hitY;
     private float _baseVisualScale = 1f;
     private bool _isRunning;
+    private bool _isResolved;
     private BoxCollider2D _itemCollider;
+    private Rigidbody2D _rb;
 
     private void Awake()
     {
         _itemCollider = GetComponent<BoxCollider2D>();
         if (_itemCollider == null)
             _itemCollider = gameObject.AddComponent<BoxCollider2D>();
+        _itemCollider.isTrigger = true;
+
+        // 必须挂 Rigidbody2D（Kinematic），否则两个 Trigger 之间不会触发 OnTriggerEnter2D。
+        _rb = GetComponent<Rigidbody2D>();
+        if (_rb == null)
+            _rb = gameObject.AddComponent<Rigidbody2D>();
+        _rb.bodyType = RigidbodyType2D.Kinematic;
+        _rb.simulated = true;
     }
 
     public RhythmCatchBeatNote Note => _note;
@@ -69,6 +79,7 @@ public class RhythmCatchFallingItem : MonoBehaviour
 
         transform.position = spawnPosition;
         transform.rotation = Quaternion.identity;
+        _isResolved = false;
         ApplyAppearance();
         // 隐藏地面落点阴影
         if (landingShadow != null)
@@ -111,12 +122,12 @@ public class RhythmCatchFallingItem : MonoBehaviour
 
         Vector3 position = transform.position;
 
-        // 命中拍之前按 DSP 时间直接插值；超过判定线后继续下落，给 MISS 留出视觉反馈时间。
+        // 按 DSP 时间驱动物体下落；超过命中拍后继续下落作为视觉反馈。
         position.y = dspTime <= _hitDspTime
             ? Mathf.Lerp(_spawnY, _hitY, travelProgress)
             : _hitY - (float)(dspTime - _hitDspTime) * missedFallSpeed;
 
-        // 磁铁只吸附安全物体，不吸附炸弹和磁铁本身；吸附也不会修改目标命中时间。
+        // 磁铁吸附。
         if (_gameManager.IsMagnetActive && ItemType != RhythmCatchItemType.Bomb && ItemType != RhythmCatchItemType.Magnet && _player != null && dspTime < _hitDspTime)
             position.x = Mathf.MoveTowards(position.x, _player.transform.position.x, magnetFollowSpeed * Time.deltaTime);
 
@@ -124,24 +135,31 @@ public class RhythmCatchFallingItem : MonoBehaviour
         transform.Rotate(0f, 0f, GetRotationSpeed() * Time.deltaTime, Space.Self);
         UpdateLandingShadow(travelProgress);
 
-        // 自动接取从目标拍开始检测：使用 2D 物理碰撞体检测，覆盖玩家接取区域。
-        if (dspTime < _hitDspTime)
-            return;
-
-        if (_player != null && _player.CatchCollider != null && _itemCollider != null
-            && _itemCollider.bounds.Intersects(_player.CatchCollider.bounds))
+        // 超出 GOOD 窗口仍未接住 → 按 MISS / 炸弹躲避处理。
+        if (!_isResolved && dspTime > _hitDspTime + _gameManager.GoodWindowSeconds)
         {
-            _gameManager.ResolveCatch(this, (float)Math.Abs(dspTime - _hitDspTime));
-            return;
-        }
-
-        // 超出 GOOD 窗口仍未覆盖则结算。炸弹未被接到代表成功躲避，不产生 MISS。
-        if (dspTime > _hitDspTime + _gameManager.GoodWindowSeconds)
-        {
+            _isResolved = true;
             if (ItemType == RhythmCatchItemType.Bomb)
                 _gameManager.ResolveBombAvoided(this);
             else
                 _gameManager.ResolveMiss(this);
+        }
+    }
+
+    /// <summary>
+    /// 玩家碰撞体触碰到掉落物时触发接取判定。
+    /// 替换了原来的手动 bounds.Intersects 判定线机制。
+    /// </summary>
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!_isRunning || _isResolved || _gameManager == null || _player == null)
+            return;
+
+        if (other == _player.CatchCollider)
+        {
+            _isResolved = true;
+            double dspTime = AudioSettings.dspTime;
+            _gameManager.ResolveCatch(this, (float)Math.Abs(dspTime - _hitDspTime));
         }
     }
 

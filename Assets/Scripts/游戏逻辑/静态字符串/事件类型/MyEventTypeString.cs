@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// 第四章事件类型
+/// </summary>
 public static class MyEventTypeString
 {
     public const string PlayerFindPathEvent = "PlayerFindPathEvent";

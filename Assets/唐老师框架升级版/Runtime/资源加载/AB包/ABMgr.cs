@@ -741,6 +741,21 @@ namespace TangmenFramework
         }
 
         /// <summary>
+        /// 安全释放资源：仅当AB包已被加载时才减少引用计数。
+        /// 与 <see cref="ReleaseRes"/> 不同，此方法在AB包未加载时静默跳过，不会报错。
+        /// </summary>
+        public void ReleaseResIfExists(string abName)
+        {
+            if (string.IsNullOrEmpty(abName))
+                return;
+
+            if (!abRefCount.ContainsKey(abName) || abRefCount[abName] <= 0)
+                return;
+
+            ReleaseRes(abName);
+        }
+
+        /// <summary>
         /// 获取AB包的引用计数
         /// </summary>
         public int GetRefCount(string abName)

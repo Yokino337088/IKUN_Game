@@ -12,9 +12,13 @@ public class RhythmCatchGameManager : MonoBehaviour
     public static RhythmCatchGameManager Instance { get; private set; }
 
     [Header("Scene References")]
+    [Tooltip("当前歌曲的谱面数据（BeatMap），包含所有音符、BPM 和段落标记。")]
     [SerializeField] private RhythmCatchBeatMap beatMap;
+    [Tooltip("玩家控制器，负责水平移动和接取区域碰撞体。")]
     [SerializeField] private RhythmCatchPlayerController player;
+    [Tooltip("掉落物生成器，负责从对象池创建和回收掉落物。")]
     [SerializeField] private RhythmCatchSpawner spawner;
+    [Tooltip("用于播放歌曲的 AudioSource 组件。")]
     [SerializeField] private AudioSource musicSource;
 
     [Header("Music - 方式一：直接拖曳（优先）")]
@@ -30,14 +34,21 @@ public class RhythmCatchGameManager : MonoBehaviour
     [Header("Level Timing")]
     [Tooltip("场景加载后是否自动开始。第一章改为 false，由剧情对话结束后的 InitLevel 事件驱动。")]
     [SerializeField] private bool autoStart = false;
+    [Tooltip("开始前的倒计时秒数，同时也是 AudioSource.PlayScheduled 的提前量。")]
     [SerializeField, Min(0f)] private float countdownSeconds = 3f;
-    [SerializeField, Min(0.001f)] private float perfectWindowSeconds = 0.04f;
-    [SerializeField, Min(0.001f)] private float greatWindowSeconds = 0.09f;
-    [SerializeField, Min(0.001f)] private float goodWindowSeconds = 0.15f;
+    [Tooltip("Perfect 判定的最大时间误差（秒），误差在此范围内即为 Perfect。")]
+    [SerializeField, Min(0.001f)] private float perfectWindowSeconds = 0.1f;
+    [Tooltip("Great 判定的最大时间误差（秒），介于 Perfect 和此值之间为 Great。")]
+    [SerializeField, Min(0.001f)] private float greatWindowSeconds = 0.2f;
+    [Tooltip("Good 判定的最大时间误差（秒），超过此值未接到则算 Miss。")]
+    [SerializeField, Min(0.001f)] private float goodWindowSeconds = 0.35f;
 
     [Header("Rules")]
+    [Tooltip("玩家最大生命值，归零时关卡失败。当前版本玩家无敌，此值仅做保留。")]
     [SerializeField, Min(1)] private int maxHealth = 5;
+    [Tooltip("接住普通箱子的基础分数，Gold 箱子为此值的 2 倍。")]
     [SerializeField, Min(1)] private int normalBaseScore = 100;
+    [Tooltip("磁铁道具的持续时间（秒），期间掉落物会被吸附到玩家位置。")]
     [SerializeField, Min(0f)] private float magnetDurationSeconds = 5f;
 
     [Header("Multi-Song Playlist (第一章多曲连播)")]
@@ -50,6 +61,10 @@ public class RhythmCatchGameManager : MonoBehaviour
     [Tooltip("全部歌曲完成后，跳转到下一个关卡的场景名称（留空则只显示回到开始场景）。")]
     [SerializeField] 
     private string nextLevelSceneName = "";
+
+    [Header("Floating Score Popup")]
+    [Tooltip("加分数字预制体（挂 FloatingScoreText 组件，含 TMP_Text）。从对象池获取。")]
+    [SerializeField] private FloatingScoreText scorePopupPrefab;
 
     [Header("Sound Effects")]
     [Tooltip("音效所在的 AssetBundle 名称（如 sound_general）。")]
@@ -100,27 +115,46 @@ public class RhythmCatchGameManager : MonoBehaviour
     /// <summary>当前歌曲的实际时长（秒）。有音乐时取音乐长度，无音乐时取谱面时长。</summary>
     private float _songDuration;
 
+    /// <summary>运行时复制的谱面音符列表，按 beat 升序排列。</summary>
     private readonly List<RhythmCatchBeatNote> _runtimeNotes = new List<RhythmCatchBeatNote>();
 
+    /// <summary>当前关卡运行状态。</summary>
     private RhythmCatchGameState _state = RhythmCatchGameState.Ready;
+    /// <summary>当前歌曲段落类型（前奏/主歌/副歌等）。</summary>
     private RhythmCatchSectionType _currentSection = RhythmCatchSectionType.Intro;
+    /// <summary>歌曲开始播放的 DSP 时间（倒计时结束时刻）。</summary>
     private double _songStartDspTime;
+    /// <summary>磁铁效果结束的 DSP 时间。</summary>
     private double _magnetEndDspTime;
+    /// <summary>下一个待生成的音符索引。</summary>
     private int _nextNoteIndex;
+    /// <summary>上一次触发的整拍索引，用于防止同一拍重复触发。</summary>
     private int _lastBeatIndex = -1;
+    /// <summary>当前歌曲累计分数。</summary>
     private int _score;
+    /// <summary>当前连击数。</summary>
     private int _combo;
+    /// <summary>本歌曲历史最大连击数。</summary>
     private int _maxCombo;
+    /// <summary>当前生命值。</summary>
     private int _health;
+    /// <summary>已接住的计入评级的掉落物数量。</summary>
     private int _caughtRatedNotes;
+    /// <summary>谱面中计入评级的掉落物总数。</summary>
     private int _totalRatedNotes;
+    /// <summary>是否持有护盾。</summary>
     private bool _hasShield;
+    /// <summary>是否正在异步加载音乐。</summary>
     private bool _isLoadingMusic;
+    /// <summary>下一次 HUD 刷新的 unscaledTime 时间点。</summary>
     private float _nextHudRefreshTime;
 
     public RhythmCatchGameState State => _state;
+    /// <summary>当前歌曲的谱面数据。</summary>
     public RhythmCatchBeatMap BeatMap => beatMap;
+    /// <summary>Good 判定的最大时间误差（秒），超过此值未接到即算 Miss。</summary>
     public float GoodWindowSeconds => goodWindowSeconds;
+    /// <summary>磁铁效果是否激活中。</summary>
     public bool IsMagnetActive => AudioSettings.dspTime < _magnetEndDspTime;
     /// <summary>当前歌曲名（多曲模式显示）。</summary>
     public string CurrentSongName { get; private set; }
@@ -131,6 +165,7 @@ public class RhythmCatchGameManager : MonoBehaviour
     /// <summary>跨歌曲累计总分。</summary>
     public int TotalAccumulatedScore => _totalAccumulatedScore;
 
+    /// <summary>初始化单例并防止场景中存在多个实例。</summary>
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -142,6 +177,7 @@ public class RhythmCatchGameManager : MonoBehaviour
         Instance = this;
     }
 
+    /// <summary>场景启动后根据 autoStart 决定是否自动开始关卡，否则只广播初始 HUD。</summary>
     private void Start()
     {
         if (autoStart)
@@ -150,12 +186,16 @@ public class RhythmCatchGameManager : MonoBehaviour
             BroadcastHud();
     }
 
+    /// <summary>销毁时释放静态实例引用。</summary>
     private void OnDestroy()
     {
         if (Instance == this)
             Instance = null;
     }
 
+    /// <summary>
+    /// 主循环：处理间奏切歌、倒计时、音符生成、节拍/段落事件、关卡结算和 HUD 刷新。
+    /// </summary>
     private void Update()
     {
         double dspTime = AudioSettings.dspTime;
@@ -344,7 +384,8 @@ public class RhythmCatchGameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 掉落物到达判定线并覆盖玩家时调用。
+    /// 玩家碰撞体触碰到掉落物时调用（通过 OnTriggerEnter2D）。
+    /// 根据 DSP 时间误差计算判定，累加 Combo 和分数，处理道具效果。
     /// </summary>
     public void ResolveCatch(RhythmCatchFallingItem item, float timingErrorSeconds)
     {
@@ -366,7 +407,12 @@ public class RhythmCatchGameManager : MonoBehaviour
 
         float judgementMultiplier = GetJudgementMultiplier(judgement);
         float comboMultiplier = GetComboMultiplier(_combo);
-        _score += Mathf.RoundToInt(GetBaseScore(item.ItemType) * judgementMultiplier * comboMultiplier);
+        int addedScore = Mathf.RoundToInt(GetBaseScore(item.ItemType) * judgementMultiplier * comboMultiplier);
+        _score += addedScore;
+
+        // 生成浮动加分数字（仅当实际加分 > 0 且预制体已配置）。
+        if (addedScore > 0 && scorePopupPrefab != null)
+            SpawnScorePopup(addedScore, item.transform.position, GetScoreColor(item.ItemType));
 
         // 宝石只积累 Combo，不进入策划案评级所使用的"接取率"。
         if (item.ItemType != RhythmCatchItemType.Gem)
@@ -452,6 +498,9 @@ public class RhythmCatchGameManager : MonoBehaviour
         musicSource = source;
     }
 
+    /// <summary>
+    /// 每首歌曲的初始化入口：清理上一局残留、复制谱面、设置 DSP 时间基准、播放音乐并进入倒计时。
+    /// </summary>
     private void BeginLevelInternal()
     {
         spawner.DespawnAll();
@@ -497,9 +546,9 @@ public class RhythmCatchGameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// 根据当前 DSP 时间，将已到达生成时刻的音符从谱面送入生成器。
     /// </summary>
-    /// <param name="dspTime"></param>
+    /// <param name="dspTime">当前音频 DSP 时间。</param>
     private void SpawnDueNotes(double dspTime)
     {
         while (_nextNoteIndex < _runtimeNotes.Count)
@@ -517,6 +566,10 @@ public class RhythmCatchGameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 处理节拍脉冲事件：检测整拍切换并通过 EventCenter 广播，供背景动画等模块使用。
+    /// </summary>
+    /// <param name="songBeat">当前歌曲已播放的拍数。</param>
     private void ProcessBeatPulse(float songBeat)
     {
         int beatIndex = Mathf.FloorToInt(songBeat);
@@ -529,6 +582,10 @@ public class RhythmCatchGameManager : MonoBehaviour
         EventCenter.Instance.EventTrigger<int, bool>(RhythmCatchEventNames.BeatTriggered, beatIndex, isStrongBeat);
     }
 
+    /// <summary>
+    /// 根据当前拍数判断歌曲段落（Intro/Verse/Chorus 等），段落变化时刷新 HUD。
+    /// </summary>
+    /// <param name="songBeat">当前歌曲已播放的拍数。</param>
     private void ProcessSection(float songBeat)
     {
         RhythmCatchSectionType section = RhythmCatchSectionType.Intro;
@@ -554,11 +611,18 @@ public class RhythmCatchGameManager : MonoBehaviour
     // 状态 & 判定助手
     // ──────────────────────────────────────────────
 
+    /// <summary>
+    /// 设置当前关卡状态。
+    /// </summary>
+    /// <param name="newState">目标状态。</param>
     private void SetState(RhythmCatchGameState newState)
     {
         _state = newState;
     }
 
+    /// <summary>
+    /// 关卡结算：禁用玩家控制、切换状态为 Finished 并广播最终 HUD。
+    /// </summary>
     private void FinishLevel()
     {
         player.SetControlEnabled(false);
@@ -566,6 +630,11 @@ public class RhythmCatchGameManager : MonoBehaviour
         BroadcastHud();
     }
 
+    /// <summary>
+    /// 根据 DSP 时间误差返回节拍判定结果。
+    /// </summary>
+    /// <param name="errorSeconds">碰撞时间与命中拍 DSP 时间的差的绝对值。</param>
+    /// <returns>Perfect / Great / Good。</returns>
     private RhythmCatchJudgement GetJudgement(float errorSeconds)
     {
         if (errorSeconds <= perfectWindowSeconds) return RhythmCatchJudgement.Perfect;
@@ -573,6 +642,9 @@ public class RhythmCatchGameManager : MonoBehaviour
         return RhythmCatchJudgement.Good;
     }
 
+    /// <summary>
+    /// 根据判定结果返回分数倍率。
+    /// </summary>
     private float GetJudgementMultiplier(RhythmCatchJudgement judgement)
     {
         switch (judgement)
@@ -584,6 +656,9 @@ public class RhythmCatchGameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 根据当前 Combo 数返回连击分数倍率。
+    /// </summary>
     private float GetComboMultiplier(int combo)
     {
         if (combo >= 50) return 2.0f;
@@ -592,6 +667,9 @@ public class RhythmCatchGameManager : MonoBehaviour
         return 1.0f;
     }
 
+    /// <summary>
+    /// 根据掉落物类型返回基础分（Gold 为普通 2 倍，Gem 0 分）。
+    /// </summary>
     private int GetBaseScore(RhythmCatchItemType itemType)
     {
         switch (itemType)
@@ -645,6 +723,43 @@ public class RhythmCatchGameManager : MonoBehaviour
         if (rate >= 0.70f) return "B";
         if (rate >= 0.50f) return "C";
         return "D";
+    }
+
+    /// <summary>
+    /// 从框架对象池获取 FloatingScoreText 实例并显示加分。
+    /// </summary>
+    private void SpawnScorePopup(int score, Vector3 worldPosition, Color color)
+    {
+        GameObject pooledObj = GOPoolMgr.Instance.GetObj(scorePopupPrefab.gameObject);
+        if (pooledObj == null)
+            return;
+
+        FloatingScoreText popup = pooledObj.GetComponent<FloatingScoreText>();
+        if (popup != null)
+            popup.Show(score, worldPosition, color);
+    }
+
+    /// <summary>
+    /// 根据掉落物类型返回对应的 TMP 文字颜色。
+    /// </summary>
+    private static Color GetScoreColor(RhythmCatchItemType itemType)
+    {
+        switch (itemType)
+        {
+            case RhythmCatchItemType.Gold:
+                return new Color(1f, 0.85f, 0.1f);    // 金色
+            case RhythmCatchItemType.Gem:
+                return new Color(0.2f, 0.9f, 1f);     // 青色
+            case RhythmCatchItemType.Magnet:
+                return new Color(0.75f, 0.3f, 1f);    // 紫色
+            case RhythmCatchItemType.Shield:
+                return new Color(0.3f, 0.65f, 1f);    // 浅蓝
+            case RhythmCatchItemType.Bomb:
+                return new Color(1f, 0.2f, 0.2f);     // 红色
+            case RhythmCatchItemType.Normal:
+            default:
+                return new Color(0.9f, 0.95f, 1f);    // 银白
+        }
     }
 
     // ──────────────────────────────────────────────

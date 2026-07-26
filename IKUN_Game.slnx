@@ -21,10 +21,10 @@
   <Project Path="UnityEngine.TestRunner.csproj" />
   <Project Path="PsdPlugin.csproj" />
   <Project Path="Unity.Burst.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.2D.SpriteShape.Editor.csproj" />
   <Project Path="Unity.Collections.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.2D.Tilemap.Extras.Editor.csproj" />
   <Project Path="UniTask.DOTween.csproj" />
   <Project Path="Unity.Rider.Editor.csproj" />

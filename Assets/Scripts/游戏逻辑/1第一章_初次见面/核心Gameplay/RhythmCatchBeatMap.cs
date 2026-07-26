@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -73,6 +73,9 @@ public class RhythmCatchBeatMap : ScriptableObject
         return count;
     }
 
+    /// <summary>
+    /// Inspector 值变更时自动修复空引用，避免运行时 NullReferenceException。
+    /// </summary>
     private void OnValidate()
     {
         if (notes == null)

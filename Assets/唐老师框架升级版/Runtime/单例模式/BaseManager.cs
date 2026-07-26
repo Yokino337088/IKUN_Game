@@ -54,7 +54,10 @@ public abstract class BaseManager<T> where T:class//,new()
 
     public virtual void Dispose()
     {
-        instance = null;
+        lock (lockObj)
+        {
+            instance = null;
+        }
     }
 }
 }

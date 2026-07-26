@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 一首歌曲的完整配置 —— 将谱面、音乐资源、显示信息打包在一起。
